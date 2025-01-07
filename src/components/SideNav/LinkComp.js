@@ -2,7 +2,6 @@
 import { ExpandMore } from "@mui/icons-material";
 import { Stack, Typography } from "@mui/material";
 import Image from "next/image";
-import Library from "./Library/Library";
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,8 +10,8 @@ export default function LinkComp({ isOpen }) {
   return (
     <Stack
       sx={{
-        gap: "15px",
-        maxHeight: "350px",
+        gap: "10px",
+        maxHeight: "100%",
         overflowY: "auto",
         scrollbarWidth: "thin",
       }}
@@ -20,33 +19,42 @@ export default function LinkComp({ isOpen }) {
       <NavComp
         icon="/Icons/Goals.svg"
         title="Goals"
-        href="/Goals"
+        href="/goals"
         isOpen={isOpen}
       />
-      <NavComp icon="/Icons/Library.svg" title="Library" list isOpen={isOpen} />
+      <NavComp
+        icon="/Icons/Library.svg"
+        title="Library"
+        list={[
+          { title: "Course Bank", href: "/library/courseBank" },
+          { title: "All Questions", href: "/library/allQuestions" },
+          { title: "All Subjects", href: "/library/allSubjects" },
+        ]}
+        isOpen={isOpen}
+      />
       <NavComp
         icon="/Icons/Institute.svg"
         title="Institute"
-        href="/Institute"
+        href="/institute"
         isOpen={isOpen}
       />
       <NavComp
         icon="/Icons/Students.svg"
         title="Students"
-        href="/Students"
+        href="/students"
         isOpen={isOpen}
       />
       <NavComp
         icon="/Icons/Settings.svg"
         title="Settings"
-        href="/Settings"
+        href="/settings"
         isOpen={isOpen}
       />
     </Stack>
   );
 }
 
-const NavComp = ({ icon, title, list, href,isOpen }) => {
+const NavComp = ({ icon, title, list, href, isOpen }) => {
   const [List, setList] = useState(false);
 
   const toggleLibrary = () => {
@@ -63,32 +71,32 @@ const NavComp = ({ icon, title, list, href,isOpen }) => {
             onClick={toggleLibrary}
             sx={{
               minHeight: "40px",
-              overflowY: list && List ? "none" : "none",
-              padding: "10px 20px 10px 20px",
+              padding: "10px 20px",
               cursor: "pointer",
               backgroundColor:
                 pathname === href
                   ? "var(--primary-color-text3)"
                   : "transparent",
-              borderRadius: "30px",
+              borderRadius: "20px",
               "&:hover": {
                 backgroundColor: "var(--primary-color-text3)",
                 borderRadius: "30px",
               },
-              // backgroundColor: list && List ? "var(--primary-color-text3)" : "transparent",
             }}
           >
             <Stack flexDirection="row">
               <Stack
                 sx={{ flexDirection: "row", alignItems: "center", gap: "10px" }}
               >
-                <Stack height={16} width={16}>                <Image src={icon} alt={title} width={16} height={16} /></Stack>
+                <Stack height={16} width={16}>
+                  <Image src={icon} alt={title} width={16} height={16} />
+                </Stack>
                 {!isOpen && (
                   <Typography
                     sx={{
                       fontFamily: "Lato",
                       fontSize: "14px",
-                      fontWeight: "400",
+                      fontWeight: "600",
                       color: "var(--primary-color-text1)",
                     }}
                   >
@@ -113,11 +121,34 @@ const NavComp = ({ icon, title, list, href,isOpen }) => {
                   sx={{
                     height: "100px",
                     width: "100px",
-                    padding: "0px 15px 0px 15px",
+                    pl: "14px",
+                    mt: "10px",
                     justifyContent: "center",
                   }}
                 >
-                  <Library />
+                  {list.map((item, index) => (
+                    <Link href={item.href} key={index} passHref>
+                      <Stack
+                        sx={{
+                          width: "180px",
+                          borderRadius: "6px",
+                          padding: "12px",
+                          gap: "8px",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontFamily: "Lato",
+                            fontSize: "14px",
+                            fontWeight: "700",
+                            color: "var(--text3)",
+                          }}
+                        >
+                          {item.title}
+                        </Typography>
+                      </Stack>
+                    </Link>
+                  ))}
                 </Stack>
               )}
             </Stack>
