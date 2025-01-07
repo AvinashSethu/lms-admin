@@ -1,8 +1,8 @@
-import { Menu, MenuItem, Stack, Typography } from "@mui/material";
+import { Avatar, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function Account({isSideNavOpen}) {
+export default function Account({ isSideNavOpen }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -30,41 +30,55 @@ export default function Account({isSideNavOpen}) {
         }}
       >
         <Stack sx={{ flexDirection: "row", alignItems: "center", gap: "12px" }}>
-          <Image src="/Images/avatar.svg" alt="avatar" width={45} height={45} />
-          {!isSideNavOpen && (<Typography
-            sx={{
-              fontFamily: "Lato",
-              fontSize: "14px",
-              fontWeight: "700",
-              color: "var(--primary-color)",
-            }}
-          >
-            Abishek
-          </Typography>)}
+          <Avatar src="/Images/avatar.svg" />
+          {!isSideNavOpen && (
+            <Typography
+              sx={{
+                fontFamily: "Lato",
+                fontSize: "14px",
+                fontWeight: "700",
+                color: "var(--primary-color)",
+              }}
+            >
+              Abishek
+            </Typography>
+          )}
         </Stack>
-        {!isSideNavOpen && (<Image
-          src="/Icons/More.svg"
-          alt="more"
-          width={18}
-          height={18}
-          style={{
-            transform: open ? "rotate(180deg)" : "rotate(0)",
-            transition: "all .5s ease",
-          }}
-        />)}
+        {!isSideNavOpen && (
+          <Image
+            src="/Icons/More.svg"
+            alt="more"
+            width={18}
+            height={18}
+            style={{
+              transform: open ? "rotate(180deg)" : "rotate(0)",
+              transition: "all .5s ease",
+            }}
+          />
+        )}
       </Stack>
 
       <Menu
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        autoFocus={false}
         sx={{
           "& .MuiPaper-root": {
             width: "240px",
             marginTop: "-90px",
-            backgroundColor: "var(--library-expand)",
+            backgroundColor: "var(--sec-color-acc-2)",
             borderRadius: "6px",
             color: "var(--text3)",
+            "& .MuiMenuItem-root" : {
+              "&:hover": {
+                backgroundColor:"var(--sec-color-acc-1)"
+              },
+              "&:active": {
+                backgroundColor:"var(--sec-color-acc-1) !important",
+                
+              }
+            }
           },
         }}
         elevation={0}
