@@ -1,9 +1,9 @@
 import SideNav from "@/components/SideNav/SideNav";
 
-export default function Home() {
+export default function Settings() {
   return (
-    <div>
+    <>
       <SideNav />
-    </div>
+    </>
   );
 }
