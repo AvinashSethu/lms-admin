@@ -2,7 +2,7 @@ import { Menu, MenuItem, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
-export default function Account({isOpen}) {
+export default function Account({isSideNavOpen}) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -25,24 +25,24 @@ export default function Account({isOpen}) {
           borderRadius: "41px",
           cursor: "pointer",
           padding: "3px 14px 3px 5px",
-          backgroundColor: open ? "var(--primary-color-text3)" : "transparent",
-          "&:hover": { backgroundColor: "var(--primary-color-text3)" },
+          backgroundColor: open ? "var(--primary-color-acc-2)" : "transparent",
+          "&:hover": { backgroundColor: "var(--primary-color-acc-2)" },
         }}
       >
         <Stack sx={{ flexDirection: "row", alignItems: "center", gap: "12px" }}>
           <Image src="/Images/avatar.svg" alt="avatar" width={45} height={45} />
-          {!isOpen && (<Typography
+          {!isSideNavOpen && (<Typography
             sx={{
               fontFamily: "Lato",
               fontSize: "14px",
               fontWeight: "700",
-              color: "var(--primary-color-text1)",
+              color: "var(--primary-color)",
             }}
           >
             Abishek
           </Typography>)}
         </Stack>
-        {!isOpen && (<Image
+        {!isSideNavOpen && (<Image
           src="/Icons/More.svg"
           alt="more"
           width={18}

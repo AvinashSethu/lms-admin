@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import Image from "next/image";
 
-export default function MasterLogo({isOpen}) {
+export default function MasterLogo({isSideNavOpen}) {
     return (
         <>
         <Stack
@@ -16,13 +16,13 @@ export default function MasterLogo({isOpen}) {
           width={60}
           height={26}
         />
-        {!isOpen && (<Typography
+        {!isSideNavOpen && (<Typography
           sx={{
             fontFamily: "Lato",
             fontSize: "14px",
             fontWeight: "700",
             letterSpacing: "0.3px",
-            color: "var(--primary-color-text1)",
+            color: "var(--primary-color)",
             whiteSpace:"nowrap"
           }}
         >

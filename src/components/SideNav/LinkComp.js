@@ -1,12 +1,12 @@
 "use client";
 import { ExpandMore } from "@mui/icons-material";
-import { Stack, Typography } from "@mui/material";
+import { Stack, Tooltip, Typography } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function LinkComp({ isOpen }) {
+export default function LinkComp({ isSideNavOpen }) {
   return (
     <Stack
       sx={{
@@ -20,7 +20,7 @@ export default function LinkComp({ isOpen }) {
         icon="/Icons/Goals.svg"
         title="Goals"
         href="/goals"
-        isOpen={isOpen}
+        isSideNavOpen={isSideNavOpen}
       />
       <NavComp
         icon="/Icons/Library.svg"
@@ -30,123 +30,121 @@ export default function LinkComp({ isOpen }) {
           { title: "All Questions", href: "/library/allQuestions" },
           { title: "All Subjects", href: "/library/allSubjects" },
         ]}
-        isOpen={isOpen}
+        isSideNavOpen={isSideNavOpen}
       />
       <NavComp
         icon="/Icons/Institute.svg"
         title="Institute"
         href="/institute"
-        isOpen={isOpen}
+        isSideNavOpen={isSideNavOpen}
       />
       <NavComp
         icon="/Icons/Students.svg"
         title="Students"
         href="/students"
-        isOpen={isOpen}
+        isSideNavOpen={isSideNavOpen}
       />
       <NavComp
         icon="/Icons/Settings.svg"
         title="Settings"
         href="/settings"
-        isOpen={isOpen}
+        isSideNavOpen={isSideNavOpen}
       />
     </Stack>
   );
 }
 
-const NavComp = ({ icon, title, list, href, isOpen }) => {
-  const [List, setList] = useState(false);
+const NavComp = ({ icon, title, list, href, isSideNavOpen }) => {
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   const toggleLibrary = () => {
-    setList(!List);
+    setIsNavOpen(!isNavOpen);
   };
+
+  useEffect(() => {
+    isSideNavOpen && setIsNavOpen(false);
+    !isSideNavOpen && setIsNavOpen(true);
+  }, [isSideNavOpen]);
+
   const pathname = usePathname();
 
   return (
-    <>
-      <Stack>
-        <Link href={href || "#"} passHref>
-          {" "}
+    <Stack>
+      <Tooltip title={title} disableHoverListener={!isSideNavOpen}>
+        <Link href={href || ""} passHref>
           <Stack
             onClick={toggleLibrary}
             sx={{
               minHeight: "40px",
               padding: "10px 20px",
               cursor: "pointer",
+              alignItems: !isSideNavOpen ? "" : "center",
               backgroundColor:
                 pathname === href
-                  ? "var(--primary-color-text3)"
+                  ? "var(--primary-color-acc-2)"
                   : "transparent",
               borderRadius: "20px",
               "&:hover": {
-                backgroundColor: "var(--primary-color-text3)",
-                borderRadius: "30px",
+                backgroundColor: "var(--primary-color-acc-2)",
               },
             }}
           >
-            <Stack flexDirection="row">
+            <Stack flexDirection="row" alignItems="center">
               <Stack
-                sx={{ flexDirection: "row", alignItems: "center", gap: "10px" }}
+                direction={"row"}
+                alignItems={"center"}
+                gap={"10px"}
+                height={"20px"}
               >
-                <Stack height={16} width={16}>
-                  <Image src={icon} alt={title} width={16} height={16} />
-                </Stack>
-                {!isOpen && (
+                <Image src={icon} alt={title} width={16} height={16} />
+                {!isSideNavOpen && (
                   <Typography
                     sx={{
                       fontFamily: "Lato",
                       fontSize: "14px",
                       fontWeight: "600",
-                      color: "var(--primary-color-text1)",
+                      color: "var(--primary-color)",
                     }}
                   >
                     {title}
                   </Typography>
                 )}
               </Stack>
-              {list && !isOpen && (
+              {list && !isSideNavOpen && (
                 <ExpandMore
                   sx={{
-                    color: "var(--primary-color-text1)",
+                    color: "var(--primary-color)",
                     marginLeft: "auto",
-                    transition: "all .5s ease",
-                    transform: List ? "rotate(180deg)" : "rotate(0deg)",
+                    transition: "all .3s ease",
+                    transform: isNavOpen ? "rotate(180deg)" : "rotate(0deg)",
                   }}
                 />
               )}
             </Stack>
             <Stack>
-              {List && list && (
+              {isNavOpen && list && (
                 <Stack
                   sx={{
-                    height: "100px",
-                    width: "100px",
                     pl: "14px",
                     mt: "10px",
                     justifyContent: "center",
+                    gap: "10px",
                   }}
                 >
                   {list.map((item, index) => (
                     <Link href={item.href} key={index} passHref>
-                      <Stack
+                      <Typography
                         sx={{
-                          width: "180px",
-                          borderRadius: "6px",
-                          padding: "12px",
-                          gap: "8px",
+                          fontFamily: "Lato",
+                          fontSize: "14px",
+                          pl: "14px",
+                          fontWeight: "700",
+                          color: "var(--text4)",
+                          whiteSpace: "nowrap",
                         }}
                       >
-                        <Typography
-                          sx={{
-                            fontFamily: "Lato",
-                            fontSize: "14px",
-                            fontWeight: "700",
-                            color: "var(--text3)",
-                          }}
-                        >
-                          {item.title}
-                        </Typography>
-                      </Stack>
+                        {item.title}
+                      </Typography>
                     </Link>
                   ))}
                 </Stack>
@@ -154,7 +152,7 @@ const NavComp = ({ icon, title, list, href, isOpen }) => {
             </Stack>
           </Stack>
         </Link>
-      </Stack>
-    </>
+      </Tooltip>
+    </Stack>
   );
 };

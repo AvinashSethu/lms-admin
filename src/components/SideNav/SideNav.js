@@ -8,9 +8,9 @@ import Image from "next/image";
 import { useState } from "react";
 
 export default function SideNav() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSideNavOpen, setIsSideNavOpen] = useState(false);
   const drawer = () => {
-    setIsOpen(!isOpen);
+    setIsSideNavOpen(!isSideNavOpen);
   }
   return (
     <>
@@ -18,17 +18,17 @@ export default function SideNav() {
         sx={{
           padding: "40px 10px 40px 30px",
           gap: "50px",
-          width: isOpen ? "100px" : "300px",
+          width: isSideNavOpen ? "100px" : "300px",
           height: "100vh",
           borderRight: "1px solid var(--border-color)",
-          // transition:"width .5s ease"
+          transition:"width .5s ease",
           position:"relative",
         }}
         
       >
-        <MasterLogo isOpen={isOpen}/>
-        <LinkComp isOpen={isOpen} />
-        <Account isOpen={isOpen}/>
+        <MasterLogo isSideNavOpen={isSideNavOpen}/>
+        <LinkComp isSideNavOpen={isSideNavOpen} />
+        <Account isSideNavOpen={isSideNavOpen}/>
         <Image
               src="/Icons/Drawer.svg"
               alt="openclose"
@@ -40,14 +40,11 @@ export default function SideNav() {
                 top: "11%",
                 right: "-12px",
                 cursor: "pointer",
-                transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                // translate: "50%",
+                transform: isSideNavOpen ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "all .4s ease",
               }}
             />
         </Stack>
-       
-        {/* <OpenCloseDrawer onClick={drawer} isOpen={isOpen}/> */}
     </>
   );
 }
