@@ -19,7 +19,7 @@ export default function Account({ isSideNavOpen }) {
         onClick={handleClick}
         sx={{
           flexDirection: "row",
-          alignItems: "center",
+          alignItems: "center" ,
           justifyContent: "space-between",
           marginTop: "auto",
           borderRadius: "41px",
