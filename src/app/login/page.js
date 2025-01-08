@@ -1,34 +1,18 @@
-import LoginBanner from "@/components/LoginPage/LoginBanner";
-import LoginPage from "@/components/LoginPage/LoginPage";
-import { Stack, Typography } from "@mui/material";
-
+import { Stack } from "@mui/material";
+import LoginBanner from "./component/LoginBanner";
+import LoginPage from "./component/LoginPage";
+import Head from "next/head";
+export const metadata = {
+  title:"Login page",
+};
 export default function Login() {
   return (
-    <>
     <Stack flexDirection="row">
-      <Stack
-        width="50%"
-        height="100vh"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <LoginPage />
-        <Typography
-          sx={{
-            marginTop: "auto",
-            marginRight: "auto",
-            fontFamily: "Lato",
-            fontSize: "16px",
-            fontWeight: "700",
-            color: "var(--text4)",
-            padding: "0px 0px 20px 20px",
-          }}
-        >
-          ©2025 @ Incrix Techlutions
-        </Typography>
-      </Stack>
+      <Head>
+        <title>Login</title>
+      </Head>
+      <LoginPage />
       <LoginBanner />
-      </Stack>
-    </>
+    </Stack>
   );
 }

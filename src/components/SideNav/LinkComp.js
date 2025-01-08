@@ -19,7 +19,7 @@ export default function LinkComp({ isSideNavOpen,sideNavOpen }) {
       <NavComp
         icon="/Icons/Goals.svg"
         title="Goals"
-        href="/goals"
+        href="/"
         isSideNavOpen={isSideNavOpen}
       />
       <NavComp
