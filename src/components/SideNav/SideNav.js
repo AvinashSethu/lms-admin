@@ -3,7 +3,6 @@ import { Stack } from "@mui/material";
 import Account from "./Account";
 import LinkComp from "./LinkComp";
 import MasterLogo from "./MasterLogo";
-import OpenCloseDrawer from "./OpenCloseDrawer";
 import Image from "next/image";
 import { useState } from "react";
 
