@@ -1,5 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function MasterLogo({isSideNavOpen}) {
     return (
@@ -9,13 +10,14 @@ export default function MasterLogo({isSideNavOpen}) {
           flexDirection: "row",
           gap: "15px",
         }}
-      >
+      ><Link href="/login">
         <Image
-          src="/Images/Masters-logo.svg"
+          src={process.env.NEXT_PUBLIC_LOGO_URL}
           alt="logo"
           width={60}
           height={26}
-        />
+        /></Link>
+         
         {!isSideNavOpen && (<Typography
           sx={{
             fontFamily: "Lato",

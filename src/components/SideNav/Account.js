@@ -1,4 +1,4 @@
-import { Avatar, Menu, MenuItem, Stack, Typography } from "@mui/material";
+import { Avatar, Menu, MenuItem, Stack, Tooltip, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -22,15 +22,15 @@ export default function Account({ isSideNavOpen }) {
           alignItems: "center" ,
           justifyContent: "space-between",
           marginTop: "auto",
-          borderRadius: "41px",
+          borderRadius: "23px",
           cursor: "pointer",
-          padding: "3px 14px 3px 5px",
+          padding: isSideNavOpen ? "9px": "3px 14px 3px 5px",
           backgroundColor: open ? "var(--primary-color-acc-2)" : "transparent",
           "&:hover": { backgroundColor: "var(--primary-color-acc-2)" },
         }}
       >
         <Stack sx={{ flexDirection: "row", alignItems: "center", gap: "12px" }}>
-          <Avatar src="/Images/avatar.svg" />
+          <Tooltip title="Account" disableHoverListener={!isSideNavOpen}><Avatar /></Tooltip>
           {!isSideNavOpen && (
             <Typography
               sx={{
@@ -70,15 +70,14 @@ export default function Account({ isSideNavOpen }) {
             backgroundColor: "var(--sec-color-acc-2)",
             borderRadius: "6px",
             color: "var(--text3)",
-            "& .MuiMenuItem-root" : {
+            "& .MuiMenuItem-root": {
               "&:hover": {
-                backgroundColor:"var(--sec-color-acc-1)"
+                backgroundColor: "var(--sec-color-acc-1)",
               },
               "&:active": {
-                backgroundColor:"var(--sec-color-acc-1) !important",
-                
-              }
-            }
+                backgroundColor: "var(--sec-color-acc-1) !important",
+              },
+            },
           },
         }}
         elevation={0}

@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function LinkComp({ isSideNavOpen }) {
+export default function LinkComp({ isSideNavOpen,sideNavOpen }) {
   return (
     <Stack
       sx={{
@@ -25,12 +25,14 @@ export default function LinkComp({ isSideNavOpen }) {
       <NavComp
         icon="/Icons/Library.svg"
         title="Library"
+        href="#"
         list={[
           { title: "Course Bank", href: "/library/courseBank" },
           { title: "All Questions", href: "/library/allQuestions" },
           { title: "All Subjects", href: "/library/allSubjects" },
         ]}
         isSideNavOpen={isSideNavOpen}
+        sideNavOpen={sideNavOpen}
       />
       <NavComp
         icon="/Icons/Institute.svg"
@@ -54,13 +56,15 @@ export default function LinkComp({ isSideNavOpen }) {
   );
 }
 
-const NavComp = ({ icon, title, list, href, isSideNavOpen }) => {
+const NavComp = ({ icon, title, list, href, isSideNavOpen,sideNavOpen }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   const toggleLibrary = () => {
-    setIsNavOpen(!isNavOpen);
+    setIsNavOpen((prev) => {
+      !prev && sideNavOpen && sideNavOpen()
+      return !prev
+    });
   };
-
   useEffect(() => {
     isSideNavOpen && setIsNavOpen(false);
     !isSideNavOpen && setIsNavOpen(true);
@@ -73,7 +77,7 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen }) => {
       <Tooltip title={title} disableHoverListener={!isSideNavOpen}>
         <Link href={href || ""} passHref>
           <Stack
-            onClick={toggleLibrary}
+            
             sx={{
               minHeight: "40px",
               padding: "10px 20px",
@@ -89,7 +93,8 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen }) => {
               },
             }}
           >
-            <Stack flexDirection="row" alignItems="center">
+            <Stack flexDirection="row" alignItems="center" onClick={toggleLibrary}>
+              
               <Stack
                 direction={"row"}
                 alignItems={"center"}
