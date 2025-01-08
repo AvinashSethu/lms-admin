@@ -1,7 +1,5 @@
 import { Geist, Geist_Mono, Lato } from "next/font/google";
 import "./globals.css";
-import Head from "next/head";
-// import SideNav from "../components/SideNav/SideNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,8 +20,8 @@ const lato = Lato({
 const title = process.env.NEXT_PUBLIC_COMPANY_NAME;
 
 export const metadata = {
-  default: {title},
-  template: `"%s" | ${title}`
+  default: title,
+  template: `"%s" | "title"`
 };
 
 export default function RootLayout({ children }) {
