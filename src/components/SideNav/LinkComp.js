@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function LinkComp({ isSideNavOpen,sideNavOpen }) {
+export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
   return (
     <Stack
       sx={{
@@ -56,13 +56,13 @@ export default function LinkComp({ isSideNavOpen,sideNavOpen }) {
   );
 }
 
-const NavComp = ({ icon, title, list, href, isSideNavOpen,sideNavOpen }) => {
+const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
   const toggleLibrary = () => {
     setIsNavOpen((prev) => {
-      !prev && sideNavOpen && sideNavOpen()
-      return !prev
+      !prev && sideNavOpen && sideNavOpen();
+      return !prev;
     });
   };
   useEffect(() => {
@@ -75,26 +75,26 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen,sideNavOpen }) => {
   return (
     <Stack>
       <Tooltip title={title} disableHoverListener={!isSideNavOpen}>
-        <Link href={href || ""} passHref>
-          <Stack
-            
-            sx={{
-              minHeight: "40px",
-              padding: "10px 20px",
-              cursor: "pointer",
-              alignItems: !isSideNavOpen ? "" : "center",
-              backgroundColor:
-                pathname === href
-                  ? "var(--primary-color-acc-2)"
-                  : "transparent",
-              borderRadius: "20px",
-              "&:hover": {
-                backgroundColor: "var(--primary-color-acc-2)",
-              },
-            }}
-          >
-            <Stack flexDirection="row" alignItems="center" onClick={toggleLibrary}>
-              
+        <Stack
+          sx={{
+            minHeight: "40px",
+            padding: "10px 20px",
+            cursor: "pointer",
+            alignItems: !isSideNavOpen ? "" : "center",
+            backgroundColor:
+              pathname === href ? "var(--primary-color-acc-2)" : "transparent",
+            borderRadius: "20px",
+            "&:hover": {
+              backgroundColor: "var(--primary-color-acc-2)",
+            },
+          }}
+        >
+          <Link href={href || ""} passHref>
+            <Stack
+              flexDirection="row"
+              alignItems="center"
+              onClick={toggleLibrary}
+            >
               <Stack
                 direction={"row"}
                 alignItems={"center"}
@@ -126,37 +126,37 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen,sideNavOpen }) => {
                 />
               )}
             </Stack>
-            <Stack>
-              {isNavOpen && list && (
-                <Stack
-                  sx={{
-                    pl: "14px",
-                    mt: "10px",
-                    justifyContent: "center",
-                    gap: "10px",
-                  }}
-                >
-                  {list.map((item, index) => (
-                    <Link href={item.href} key={index} passHref>
-                      <Typography
-                        sx={{
-                          fontFamily: "Lato",
-                          fontSize: "14px",
-                          pl: "14px",
-                          fontWeight: "700",
-                          color: "var(--text4)",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {item.title}
-                      </Typography>
-                    </Link>
-                  ))}
-                </Stack>
-              )}
-            </Stack>
+          </Link>
+          <Stack>
+            {isNavOpen && list && (
+              <Stack
+                sx={{
+                  pl: "14px",
+                  mt: "10px",
+                  justifyContent: "center",
+                  gap: "10px",
+                }}
+              >
+                {list.map((item, index) => (
+                  <Link href={item.href} key={index} passHref>
+                    <Typography
+                      sx={{
+                        fontFamily: "Lato",
+                        fontSize: "14px",
+                        pl: "14px",
+                        fontWeight: "700",
+                        color: "var(--text4)",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {item.title}
+                    </Typography>
+                  </Link>
+                ))}
+              </Stack>
+            )}
           </Stack>
-        </Link>
+        </Stack>
       </Tooltip>
     </Stack>
   );
