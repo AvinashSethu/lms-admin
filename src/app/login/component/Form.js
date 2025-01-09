@@ -1,6 +1,30 @@
+"use client";
+import { useState } from "react";
 import { Button, Stack, TextField, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 export default function Form() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    await fetch(`/api/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    }).then((res) => {
+      if (res.ok) {
+        router.push("/dashboard");
+      } else {
+        alert("Invalid email or password");
+      }
+    });
+  };
+
   return (
     <>
       <Stack
@@ -21,6 +45,7 @@ export default function Form() {
             variant="outlined"
             label=""
             placeholder="Enter your email"
+            onChange={(e) => setEmail(e.target.value)}
             sx={{
               "& .MuiInputBase-input": {
                 "&::placeholder": {
@@ -51,6 +76,7 @@ export default function Form() {
           </Typography>
           <TextField
             variant="outlined"
+            onChange={(e) => setPassword(e.target.value)}
             label=""
             placeholder="Enter your password"
             type="password"
@@ -89,6 +115,7 @@ export default function Form() {
               width: "350px",
             }}
             disableElevation
+            onClick={onSubmit}
           >
             Sign In
           </Button>

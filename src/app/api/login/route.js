@@ -27,10 +27,10 @@ export async function POST(request) {
       });
     }
     await createSession({
-      id,
+      userID: id,
       email,
     });
-    return Response.redirect(`${process.env.BASE_URL}/dashboard`);
+    return Response.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`);
   } catch (error) {
     console.log(error);
     return Response.error({
