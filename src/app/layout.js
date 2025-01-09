@@ -17,11 +17,13 @@ const lato = Lato({
   weight: ["400", "700"],
 });
 
-const title = process.env.NEXT_PUBLIC_COMPANY_NAME;
+const name = process.env.NEXT_PUBLIC_COMPANY_NAME;
 
 export const metadata = {
-  default: title,
-  template: `"%s" | "title"`
+  title: {
+    default: name,
+    template: "%s |" + name
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -30,6 +32,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${lato.variable}`}
       >
+        
         {children}
       </body>
     </html>

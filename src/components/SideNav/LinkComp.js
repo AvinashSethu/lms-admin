@@ -19,7 +19,7 @@ export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
       <NavComp
         icon="/Icons/Goals.svg"
         title="Goals"
-        href="/"
+        href="/dashboard"
         isSideNavOpen={isSideNavOpen}
       />
       <NavComp
@@ -37,19 +37,19 @@ export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
       <NavComp
         icon="/Icons/Institute.svg"
         title="Institute"
-        href="/institute"
+        href="/dashboard/institute"
         isSideNavOpen={isSideNavOpen}
       />
       <NavComp
         icon="/Icons/Students.svg"
         title="Students"
-        href="/students"
+        href="/dashboard/students"
         isSideNavOpen={isSideNavOpen}
       />
       <NavComp
         icon="/Icons/Settings.svg"
         title="Settings"
-        href="/settings"
+        href="/dashboard/settings"
         isSideNavOpen={isSideNavOpen}
       />
     </Stack>

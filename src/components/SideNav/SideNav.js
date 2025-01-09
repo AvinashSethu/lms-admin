@@ -16,7 +16,6 @@ export default function SideNav() {
   };
 
   return (
-    <>
     <Stack position="fixed">
       <Stack
         sx={{
@@ -48,7 +47,6 @@ export default function SideNav() {
           }}
         />
       </Stack>
-      </Stack>
-    </>
+    </Stack>
   );
 }
