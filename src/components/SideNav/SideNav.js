@@ -16,8 +16,8 @@ export default function SideNav() {
   };
 
   return (
-    <Stack position="fixed">
-      <Stack
+    <Stack bgcolor="var(--white)">
+      <Stack position="fixed"
         sx={{
           padding: "40px 10px 40px 30px",
           gap: "50px",
@@ -39,7 +39,7 @@ export default function SideNav() {
           onClick={drawer}
           style={{
             position: "absolute",
-            top: "11%",
+            top: "70px",
             right: "-12px",
             cursor: "pointer",
             transform: isSideNavOpen ? "rotate(180deg)" : "rotate(0deg)",
