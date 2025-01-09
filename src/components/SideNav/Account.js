@@ -1,9 +1,11 @@
+import { useRouter } from "next/navigation";
 import { Avatar, Menu, MenuItem, Stack, Tooltip, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
 
 export default function Account({ isSideNavOpen }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const router = useRouter();
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -100,7 +102,10 @@ export default function Account({ isSideNavOpen }) {
           Profile
         </MenuItem>
         <MenuItem
-          onClick={handleClose}
+          onClick={()=> {
+            router.push("/api/logout");
+            handleClose()
+          }}
           sx={{
             gap: "15px",
             fontFamily: "Lato",
