@@ -4,16 +4,19 @@ import { createSession } from "@/lib/session";
 
 export async function POST(request) {
   const { email, password } = await request.json();
+
   const params = {
     TableName: `${process.env.AWS_DB_NAME}admin`,
     FilterExpression: "email = :email",
     ExpressionAttributeValues: { ":email": email },
   };
+  
   try {
     const user = await dynamoDB.scan(params).promise();
     if (user.Items.length == 0) {
       return Response.error({
         status: 401,
+        success: false,
         body: "Unauthorized",
       });
     }
@@ -23,6 +26,7 @@ export async function POST(request) {
     if (!isPasswordCorrect) {
       return Response.error({
         status: 401,
+        success: false,
         body: "Unauthorized",
       });
     }
@@ -30,11 +34,16 @@ export async function POST(request) {
       userID: id,
       email,
     });
-    return Response.redirect(`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`);
+    return Response.json({
+      success: true,
+      status: 200,
+      message: "Login successful",
+    });
   } catch (error) {
     console.log(error);
     return Response.error({
       status: 500,
+      success: false,
       body: "Internal Server Error",
       message: error.message,
     });
