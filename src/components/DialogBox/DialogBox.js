@@ -20,6 +20,9 @@ export default function DialogBox({
       sx={{
         "& .MuiDialog-paper": {
           width: "600px",
+          borderRadius:"10px",
+          border:"1px solid",
+          borderColor:"var(--border-color)"
         },
       }}
     >
@@ -28,62 +31,16 @@ export default function DialogBox({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          fontFamily:"Lato",
+          fontSize:"20px",
+          fontWeight:"700",
+          paddingBottom:"0px"
         }}
       >
         {title}
         <Close onClick={onClose} sx={{ cursor: "pointer" }} />
       </DialogTitle>
-      <DialogContent
-        sx={{ display: "flex", gap: "20px", flexDirection: "column" }}
-      >
-        {children}
-        {/* 
-        <DialogContent sx={{ padding: "0px" }}>
-          <Typography
-            sx={{ fontFamily: "Lato", fontSize: "14px", color: "var(--text4)" }}
-          >
-            Select icon
-          </Typography>
-          <Stack flexDirection="row" justifyContent="center" gap={2}>
-            <Stack
-              alignItems="center"
-              justifyContent="center"
-              sx={{
-                width: "50px",
-                height: "50px",
-                backgroundColor: "var(--sec-color-acc-1)",
-                borderRadius: "15px",
-              }}
-            >
-              <Image src={icon1} alt="title" width={18} height={20} />
-            </Stack>
-            <Stack
-              alignItems="center"
-              justifyContent="center"
-              sx={{
-                width: "50px",
-                height: "50px",
-                backgroundColor: "var(--sec-color-acc-2)",
-                borderRadius: "15px",
-              }}
-            >
-              <Image src={icon2} alt="title" width={18} height={20} />
-            </Stack>
-            <Stack
-              alignItems="center"
-              justifyContent="center"
-              sx={{
-                width: "50px",
-                height: "50px",
-                backgroundColor: "var(--sec-color-acc-2)",
-                borderRadius: "15px",
-              }}
-            >
-              <Image src={icon3} alt="title" width={18} height={20} />
-            </Stack>
-          </Stack>
-        </DialogContent> */}
-      </DialogContent>
+      <DialogContent sx={{padding:"0px"}}>{children}</DialogContent>
       <DialogActions sx={{ justifyContent: "center" }}>
         <Button
           variant="text"

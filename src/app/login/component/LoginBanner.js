@@ -1,5 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import Image from "next/image";
+import loginBanner from "@/public/Images/LoginBanner.svg";
 
 export default function LoginBanner() {
   return (
@@ -10,7 +11,7 @@ export default function LoginBanner() {
     >
       <Stack alignItems="center" justifyContent="center" height="100vh">
         <Image
-          src="/Images/LoginBanner.svg"
+          src={loginBanner.src}
           alt="loginbanner"
           width={600}
           height={400}

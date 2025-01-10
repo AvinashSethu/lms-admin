@@ -72,6 +72,8 @@ export default function Account({ isSideNavOpen }) {
             backgroundColor: "var(--sec-color-acc-2)",
             borderRadius: "6px",
             color: "var(--text3)",
+            border:"1px solid",
+            borderColor:"var(--border-color)",
             "& .MuiMenuItem-root": {
               "&:hover": {
                 backgroundColor: "var(--sec-color-acc-1)",

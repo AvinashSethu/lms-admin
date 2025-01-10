@@ -1,5 +1,5 @@
-import Header from "@/components/Header/Header";
-import SideNav from "@/components/SideNav/SideNav";
+import Header from "@/src/components/Header/Header";
+import SideNav from "@/src/components/SideNav/SideNav";
 import { Stack } from "@mui/material";
 
 export default function Layout({ children }) {
