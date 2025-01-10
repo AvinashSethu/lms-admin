@@ -6,7 +6,6 @@ const secretKey = process.env.SESSION_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 const publicRoutes = [
   "/Images",
-  // "/login",
   "/mobile-not-supported",
   "/_next",
   "/api/login",
@@ -15,6 +14,7 @@ const publicRoutes = [
 export async function middleware(request) {
   const pathname = request.nextUrl.pathname;
   const { device } = userAgent(request);
+
   // Check if the device is a mobile
   if (device.type === "mobile") {
     // Redirect to the custom mobile-not-supported page
@@ -41,10 +41,6 @@ export async function middleware(request) {
       algorithms: ["HS256"],
     });
 
-    if (!payload) {
-      return loginRedirect(request);
-    }
-
     if (pathname === "/login") {
       return dashboardRedirect(request);
     }
@@ -64,6 +60,7 @@ export async function middleware(request) {
     return NextResponse.next({ headers: requestHeaders });
   } catch (error) {
     console.log(error);
+    await cookieStore.delete("session");
     return loginRedirect(request);
   }
 }
@@ -81,19 +78,4 @@ const loginRedirect = async (request) => {
 const dashboardRedirect = async (request) => {
   const dashboardUrl = new URL("/dashboard", request.url);
   return NextResponse.redirect(dashboardUrl);
-};
-
-const isValidSession = async (session) => {
-  try {
-    const { payload } = await jwtVerify(session, encodedKey, {
-      algorithms: ["HS256"],
-    });
-    if (payload.expiresAt < Date.now()) {
-      await cookieStore.delete("session");
-      return false;
-    }
-    return payload;
-  } catch (error) {
-    return false;
-  }
 };
