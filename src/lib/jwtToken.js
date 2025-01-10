@@ -8,7 +8,7 @@ export const createToken = async (payload) => {
   const jwt = new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setExpirationTime("2h")
+    .setExpirationTime("7d")
     .sign(encodedKey);
 
   return jwt;

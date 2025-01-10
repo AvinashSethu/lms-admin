@@ -24,7 +24,6 @@ export async function middleware(request) {
   }
 
   try {
-    
     const session = cookieStore.get("session")?.value;
 
     if (publicRoutes.some((prefix) => pathname.startsWith(prefix))) {
@@ -46,14 +45,7 @@ export async function middleware(request) {
       return dashboardRedirect(request);
     }
 
-    //Check expiry and delete session if expired
-    if (payload.expiresAt < Date.now()) {
-      await cookieStore.delete("session");
-      return loginRedirect(request);
-    }
-
     // Allow the request to proceed for authenticated users
-
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set("x-userID", payload.id);
     requestHeaders.set("x-email", payload.email);
