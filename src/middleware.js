@@ -14,6 +14,7 @@ const publicRoutes = [
 export async function middleware(request) {
   const pathname = request.nextUrl.pathname;
   const { device } = userAgent(request);
+  const cookieStore = await cookies();
 
   // Check if the device is a mobile
   if (device.type === "mobile") {
@@ -23,7 +24,7 @@ export async function middleware(request) {
   }
 
   try {
-    const cookieStore = await cookies();
+    
     const session = cookieStore.get("session")?.value;
 
     if (publicRoutes.some((prefix) => pathname.startsWith(prefix))) {
