@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
+import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 
 // const metadata = {
 //   title: "Home",
@@ -68,27 +69,7 @@ export default function Home() {
           <DialogContent
             sx={{ gap: "15px", display: "flex", flexDirection: "column" }}
           >
-            <TextField
-              variant="outlined"
-              placeholder="Enter  name"
-              sx={{
-                width: "100%",
-                "& .MuiOutlinedInput-root": {
-                  height: "40px",
-                  borderRadius: "5px",
-                  fontFamily: "Lato",
-                  fontWeight: "400",
-                  fontSize: "16px",
-                  "&.Mui-focused fieldset": {
-                    borderColor: "var(--sec-color)",
-                    borderWidth: "1px",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "var(--sec-color)",
-                  },
-                },
-              }}
-            ></TextField>
+            <StyledTextField placeholder="Enter name" />
             <Typography
               sx={{
                 fontFamily: "Lato",
@@ -104,30 +85,38 @@ export default function Home() {
                 sx={{
                   width: "50px",
                   height: "50px",
-                  backgroundColor: "var(--sec-color)",
+                  backgroundColor: "var(--sec-color-acc-2)",
                   borderRadius: "15px",
                   justifyContent: "center",
                   alignItems: "center",
-                  mask:`url(${gatecse_img.src}) no-repeat center`,
-                  "& img": {
-                      filter:
-                        "invert(29%) sepia(99%) saturate(723%) hue-rotate(336deg) brightness(90%) contrast(85%)",
-                    },
                   "&:hover": {
                     backgroundColor: "var(--sec-color-acc-1)",
+                    "& > div": {
+                      opacity: 1, 
+                    },
+                  },
+                  "&:focus": {
                     border: "1px solid",
                     borderColor: "var(--sec-color)",
-                    
-                    
+                    backgroundColor: "var(--sec-color-acc-1)",
+                    "& > div": {
+                      opacity: 1,
+                    },
                   },
                 }}
+                tabIndex={0}
               >
-                {/* <Image
-                  src={gatecse_img.src}
-                  alt="title"
-                  width={17.5}
-                  height={20}
-                /> */}
+                <Stack
+                  width="17.5px"
+                  height="20px"
+                  sx={{
+                    mask: `url(${gatecse_img.src}) no-repeat center`,
+                    "-webkit-mask": `url(${gatecse_img.src}) no-repeat center`,
+                    backgroundColor: "var(--sec-color)",
+                    opacity: "0.4",
+                    maskSize: "contain",
+                  }}
+                ></Stack>
               </Stack>
               <Stack
                 sx={{
@@ -137,23 +126,34 @@ export default function Home() {
                   borderRadius: "15px",
                   justifyContent: "center",
                   alignItems: "center",
-
                   "&:hover": {
                     backgroundColor: "var(--sec-color-acc-1)",
+                    "& > div": {
+                      opacity: 1, 
+                    },
+                  },
+                  "&:focus": {
                     border: "1px solid",
                     borderColor: "var(--sec-color)",
-                    "& path": {
-                      fill: "var(--sec-color)",
+                    backgroundColor: "var(--sec-color-acc-1)",
+                    "& > div": {
+                      opacity: 1,
                     },
                   },
                 }}
+                tabIndex={0}
               >
-                <Image
-                  src={placements_img.src}
-                  alt="title"
-                  width={17.5}
-                  height={20}
-                />
+                <Stack
+                  width="17.5px"
+                  height="20px"
+                  sx={{
+                    mask: `url(${placements_img.src}) no-repeat center`,
+                    "-webkit-mask": `url(${placements_img.src}) no-repeat center`,
+                    backgroundColor: "var(--sec-color)",
+                    opacity: "0.4",
+                    maskSize: "contain",
+                  }}
+                ></Stack>
               </Stack>
               <Stack
                 sx={{
@@ -163,23 +163,34 @@ export default function Home() {
                   borderRadius: "15px",
                   justifyContent: "center",
                   alignItems: "center",
-
                   "&:hover": {
                     backgroundColor: "var(--sec-color-acc-1)",
+                    "& > div": {
+                      opacity: 1, 
+                    },
+                  },
+                  "&:focus": {
                     border: "1px solid",
                     borderColor: "var(--sec-color)",
-                    "& path": {
-                      fill: "var(--sec-color)",
+                    backgroundColor: "var(--sec-color-acc-1)",
+                    "& > div": {
+                      opacity: 1,
                     },
                   },
                 }}
+                tabIndex={0}
               >
-                <Image
-                  src={banking_img.src}
-                  alt="title"
-                  width={17.5}
-                  height={20}
-                />
+                <Stack
+                  width="17.5px"
+                  height="20px"
+                  sx={{
+                    mask: `url(${banking_img.src}) no-repeat center`,
+                    "-webkit-mask": `url(${banking_img.src}) no-repeat center`,
+                    backgroundColor: "var(--sec-color)",
+                    opacity: "0.4",
+                    maskSize: "contain",
+                  }}
+                ></Stack>
               </Stack>
             </Stack>
           </DialogContent>
