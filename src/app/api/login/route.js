@@ -1,6 +1,6 @@
-import dynamoDB from "@/util/dbConnect";
-import { comparePassword } from "@/lib/jwtToken";
-import { createSession } from "@/lib/session";
+import dynamoDB from "@/src/util/dbConnect";
+import { comparePassword } from "@/src/lib/jwtToken";
+import { createSession } from "@/src/lib/session";
 
 export async function POST(request) {
   const { email, password } = await request.json();

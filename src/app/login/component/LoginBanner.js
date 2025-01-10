@@ -1,6 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import loginBanner from "@/public/Images/LoginBanner.svg";
+import incrix_logo from "@/public/Images/INCRIX_Logo.svg";
 
 export default function LoginBanner() {
   return (
@@ -43,7 +44,7 @@ export default function LoginBanner() {
           Powered by Incrix Softwares
         </Typography>
         <Image
-          src="/Images/INCRIX_Logo.svg"
+          src={incrix_logo.src}
           alt="incrixLOGO"
           width={120}
           height={25}

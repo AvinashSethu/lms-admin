@@ -2,6 +2,9 @@ import { useRouter } from "next/navigation";
 import { Avatar, Menu, MenuItem, Stack, Tooltip, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
+import more_img from "@/public/Icons/More.svg";
+import students_img from "@/public/Icons/Students.svg";
+import logout_img from "@/public/Icons/Logout.svg"
 
 export default function Account({ isSideNavOpen }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -48,7 +51,7 @@ export default function Account({ isSideNavOpen }) {
         </Stack>
         {!isSideNavOpen && (
           <Image
-            src="/Icons/More.svg"
+            src={more_img.src}
             alt="more"
             width={18}
             height={18}
@@ -96,7 +99,7 @@ export default function Account({ isSideNavOpen }) {
           }}
         >
           <Image
-            src="/Icons/Students.svg"
+            src={students_img.src}
             alt="profile"
             width={16}
             height={16}
@@ -115,7 +118,7 @@ export default function Account({ isSideNavOpen }) {
             fontWeight: "700",
           }}
         >
-          <Image src="/Icons/Logout.svg" alt="profile" width={16} height={16} />
+          <Image src={logout_img.src} alt="profile" width={16} height={16} />
           Logout
         </MenuItem>
       </Menu>

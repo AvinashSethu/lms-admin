@@ -5,6 +5,7 @@ import LinkComp from "./LinkComp";
 import MasterLogo from "./MasterLogo";
 import Image from "next/image";
 import { useState } from "react";
+import drawer_img from "@/public/Icons/Drawer.svg";
 
 export default function SideNav() {
   const [isSideNavOpen, setIsSideNavOpen] = useState(true);
@@ -32,7 +33,7 @@ export default function SideNav() {
         <LinkComp isSideNavOpen={isSideNavOpen} sideNavOpen={sideNavOpen} />
         <Account isSideNavOpen={isSideNavOpen} />
         <Image
-          src="/Icons/Drawer.svg"
+          src={drawer_img.src}
           alt="openclose"
           width={24}
           height={24}
