@@ -7,7 +7,7 @@ export default function Layout({ children }) {
     <Stack flexDirection="row" bgcolor="var(--sec-color-acc-2)">
       <SideNav />
       <Stack width="100%" >
-        <Header />
+        {/* <Header /> */}
         {children}
       </Stack>
     </Stack>

@@ -1,8 +1,12 @@
+"use client";
 import { Button, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import gate_cse from "@/public/Icons/gate_cse.svg";
+import { ArrowBackIosNew } from "@mui/icons-material";
+import { useRouter } from "next/navigation";
 
 export default function GoalHead() {
+  const router = useRouter();
   return (
     <Stack
       sx={{
@@ -19,6 +23,12 @@ export default function GoalHead() {
       }}
     >
       <Stack flexDirection="row" alignItems="center" gap="15px">
+        <ArrowBackIosNew
+          onClick={() => {
+            router.back();
+          }}
+          sx={{ color: "var(--sec-color)",fontSize:"16px" }}
+        />
         <Stack
           sx={{
             width: "40px",

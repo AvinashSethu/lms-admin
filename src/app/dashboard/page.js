@@ -9,6 +9,7 @@ import { Button, DialogContent, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { useRouter } from "next/navigation";
+import Header from "@/src/components/Header/Header";
 
 // const metadata = {
 //   title: "Home",
@@ -24,7 +25,10 @@ export default function Home() {
   };
 
   return (
+    <>
+    <Header />
     <Stack padding="30px 30px 0px 30px">
+      
       <Stack flexDirection="row" justifyContent="space-between">
         <Typography
           sx={{
@@ -219,5 +223,6 @@ export default function Home() {
         />
       </Stack>
     </Stack>
+    </>
   );
 }
