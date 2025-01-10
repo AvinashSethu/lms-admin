@@ -2,7 +2,7 @@ import { TrendingFlat } from "@mui/icons-material";
 import { Button, Card, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 
-export default function PrimaryCard({ icon, title, actionButton, subtitle }) {
+export default function PrimaryCard({ icon, title, actionButton, subtitle, onClick }) {
   return (
     <Card
       sx={{
@@ -38,7 +38,7 @@ export default function PrimaryCard({ icon, title, actionButton, subtitle }) {
           >
             {title}
           </Typography>
-          {/* {subtitle && (
+          {subtitle && (
           <Typography
             sx={{
               fontFamily: "Lato",
@@ -47,14 +47,15 @@ export default function PrimaryCard({ icon, title, actionButton, subtitle }) {
               color: "var(--text4)",
             }}
           >
-            {duration}
+            {subtitle}
           </Typography>
-        )} */}
+        )}
         </Stack>
 
         <Button
           variant="text"
           endIcon={<TrendingFlat />}
+          onClick={onClick}
           sx={{
             width: "87px",
             fontFamily: "Lato",

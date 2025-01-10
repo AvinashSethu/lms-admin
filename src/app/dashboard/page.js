@@ -5,23 +5,17 @@ import { Add } from "@mui/icons-material";
 import gatecse_img from "@/public/Icons/gate_cse.svg";
 import placements_img from "@/public/Icons/placements.svg";
 import banking_img from "@/public/Icons/banking.svg";
-
-import {
-  Button,
-  DialogContent,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import Image from "next/image";
+import { Button, DialogContent, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
+import { useRouter } from "next/navigation";
 
 // const metadata = {
 //   title: "Home",
 // };
 export default function Home() {
   const [isDialogOpen, setIsDialogOPen] = useState(false);
+  const router = useRouter();
   const dialogOpen = () => {
     setIsDialogOPen(true);
   };
@@ -92,7 +86,7 @@ export default function Home() {
                   "&:hover": {
                     backgroundColor: "var(--sec-color-acc-1)",
                     "& > div": {
-                      opacity: 1, 
+                      opacity: 1,
                     },
                   },
                   "&:focus": {
@@ -129,7 +123,7 @@ export default function Home() {
                   "&:hover": {
                     backgroundColor: "var(--sec-color-acc-1)",
                     "& > div": {
-                      opacity: 1, 
+                      opacity: 1,
                     },
                   },
                   "&:focus": {
@@ -166,7 +160,7 @@ export default function Home() {
                   "&:hover": {
                     backgroundColor: "var(--sec-color-acc-1)",
                     "& > div": {
-                      opacity: 1, 
+                      opacity: 1,
                     },
                   },
                   "&:focus": {
@@ -201,17 +195,27 @@ export default function Home() {
           icon="/Icons/gate_cse.svg"
           title="GATE CSE"
           actionButton="View"
+          onClick={() => {
+            router.push("dashboard/goals/1");
+          }}
         />
         <PrimaryCard
           icon="/Icons/placements.svg"
           title="Placements"
           actionButton="View"
+          onClick={() => {
+            router.push("dashboard/goals/2");
+          }
+          }
         />
         <PrimaryCard
           icon="/Icons/banking.svg"
           title="Banking"
           actionButton="View"
-          subtitle
+          subtitle="2 months"
+          onClick={() => {
+            router.push("dashboard/goals/3");
+          }}
         />
       </Stack>
     </Stack>
