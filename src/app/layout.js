@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono, Lato } from "next/font/google";
 import "./globals.css";
+import { Snackbar } from "@mui/material";
+import { SnackbarProvider } from "./context/SnackbarContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +34,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${lato.variable}`}
       >
-        
+        <SnackbarProvider>
         {children}
+        </SnackbarProvider>
       </body>
     </html>
   );
