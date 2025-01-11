@@ -20,6 +20,7 @@ export default function GoalHead() {
         backgroundColor: "var(--white)",
         padding: "20px",
         borderRadius: "10px",
+        height:"60px"
       }}
     >
       <Stack flexDirection="row" alignItems="center" gap="15px">
@@ -57,6 +58,7 @@ export default function GoalHead() {
           fontFamily: "Lato",
           fontSize: "14px",
           fontWeight: "700",
+          borderRadius:"5px"
         }}
         disableElevation
       >

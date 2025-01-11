@@ -1,15 +1,17 @@
 "use client";
 import { useState } from "react";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 export default function Form() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading,setIsLoading] = useState(false);
   const router = useRouter();
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     await fetch(`/api/login`, {
       method: "POST",
       headers: {
@@ -19,11 +21,13 @@ export default function Form() {
     }).then((res) => {
       if (res.ok) {
         router.push("/dashboard");
+        setIsLoading(false);
       } else {
         alert("Invalid email or password");
       }
     });
   };
+
 
   return (
     <>
@@ -117,7 +121,8 @@ export default function Form() {
             disableElevation
             onClick={onSubmit}
           >
-            Sign In
+            {isLoading ? (<CircularProgress size={24} sx={{color:"var(--sec-color)"}}/>) : "Sign In"}
+            
           </Button>
           <Typography
             sx={{

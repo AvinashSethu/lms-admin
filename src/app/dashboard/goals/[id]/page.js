@@ -11,7 +11,7 @@ export default async function Goals({ params }) {
     { label: "Settings" },
   ];
   return (
-    <Stack sx={{ padding: "30px", gap: "15px" }}>
+    <Stack sx={{ padding: "20px", gap: "15px" }}>
       <GoalHead id={id} />
       <GoalTabs tabs={tabs} />
     </Stack>
