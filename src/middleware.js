@@ -9,6 +9,7 @@ const publicRoutes = [
   "/mobile-not-supported",
   "/_next",
   "/api/login",
+  //"/api/event-update",
 ];
 
 export async function middleware(request) {
@@ -17,11 +18,11 @@ export async function middleware(request) {
   const cookieStore = await cookies();
 
   // Check if the device is a mobile
-  if (device.type === "mobile") {
-    // Redirect to the custom mobile-not-supported page
-    const mobileRedirectUrl = new URL("/mobile-not-supported", request.url);
-    return NextResponse.redirect(mobileRedirectUrl);
-  }
+  // if (device.type === "mobile") {
+  //   // Redirect to the custom mobile-not-supported page
+  //   const mobileRedirectUrl = new URL("/mobile-not-supported", request.url);
+  //   return NextResponse.redirect(mobileRedirectUrl);
+  // }
 
   try {
     const session = cookieStore.get("session")?.value;

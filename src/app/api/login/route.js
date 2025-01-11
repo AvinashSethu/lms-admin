@@ -10,7 +10,7 @@ export async function POST(request) {
     FilterExpression: "email = :email",
     ExpressionAttributeValues: { ":email": email },
   };
-  
+
   try {
     const user = await dynamoDB.scan(params).promise();
     if (user.Items.length == 0) {
