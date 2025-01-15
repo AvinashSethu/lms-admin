@@ -1,64 +1,87 @@
 "use client";
-import { Alert, Snackbar, Slide, Stack } from "@mui/material";
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useState, useContext, useCallback } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import { Alert } from "@mui/material";
 
 const SnackbarContext = createContext();
-function SlideTransition(props) {
-  return <Slide {...props} direction="down" />;
-}
+
+export const useSnackbar = () => useContext(SnackbarContext);
+
 export const SnackbarProvider = ({ children }) => {
   const [snackbar, setSnackbar] = useState({
-    isOpen: false,
+    open: false,
     message: "",
-    severity: "success",
   });
-  const openSnackbar = (message, severity, closeIcon = {}) => {
-    setSnackbar({
-      isOpen: true,
-      message,
-      severity,
-      actionButton: closeIcon.actionButton || null,
-    });
-  };
-  const closeSnackbar = () => {
-    setSnackbar({
-      isOpen: false,
-      message: "",
-      severity: "success",
-    });
+
+  const showSnackbar = useCallback(
+    (message, severity, icon = {}, autoHideDuration) => {
+      setSnackbar({
+        open: true,
+        message,
+        severity,
+        icon,
+        autoHideDuration: icon ? null : autoHideDuration,
+      });
+    },
+    []
+  );
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbar(!snackbar);
   };
 
   return (
-    <SnackbarContext.Provider value={{ openSnackbar, closeSnackbar }}>
+    <SnackbarContext.Provider value={{ showSnackbar }}>
       {children}
       <Snackbar
-        open={snackbar.isOpen}
-        // autoHideDuration={3000}
-        
+        open={snackbar.open}
+        autoHideDuration={snackbar.autoHideDuration}
+        onClose={handleClose}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        TransitionComponent={SlideTransition}
+        elevation={0}
         sx={{
-          "& .MuiSnackbarContent-root": {
-            marginTop: "20px",
+          "& .MuiPaper-root": {
+            padding: "8px",
+            alignItems:"center",
           },
         }}
       >
         <Alert
           severity={snackbar.severity}
+          action={
+            snackbar.icon ? (
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                onClick={handleClose}
+                sx={{"&.MuiIconButton-root":{
+                  fontSize:"16px",
+                  padding:"4px",
+                  color:"var(text3)"
+                }}}
+              >
+                {snackbar.icon === "close" ? (
+                  <CloseIcon fontSize="small" />
+                ) : (
+                  snackbar.icon
+                )}
+              </IconButton>
+            ) : null
+          }
           sx={{
-            width: "100%",
-            "& .MuiAlert-message": {
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            },
+            "& .MuiAlert-action": {
+              padding:"0px"
+            }
           }}
         >
           {snackbar.message}
-          {snackbar.actionButton && <Stack > {snackbar.actionButton}</Stack>}
         </Alert>
       </Snackbar>
     </SnackbarContext.Provider>
   );
 };
-export const useSnackbar = () => useContext(SnackbarContext);

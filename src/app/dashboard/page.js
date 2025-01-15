@@ -5,7 +5,7 @@ import { Add } from "@mui/icons-material";
 import gatecse_img from "@/public/Icons/gate_cse.svg";
 import placements_img from "@/public/Icons/placements.svg";
 import banking_img from "@/public/Icons/banking.svg";
-import { Button, DialogContent, Stack, Typography } from "@mui/material";
+import { DialogContent, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { useRouter } from "next/navigation";
@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <>
       <Stack padding="30px 30px 0px 30px" gap="15px">
-        <Header title="Goals" button="Goal" icon={<Add />} />
+        <Header title="Goals" button="Goal" icon={<Add />} onClick={dialogOpen} />
 
         <Stack flexDirection="row" justifyContent="space-between">
           <DialogBox

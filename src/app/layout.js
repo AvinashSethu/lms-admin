@@ -1,6 +1,5 @@
 import { Geist, Geist_Mono, Lato } from "next/font/google";
 import "./globals.css";
-import { Snackbar } from "@mui/material";
 import { SnackbarProvider } from "./context/SnackbarContext";
 
 const geistSans = Geist({
@@ -24,7 +23,7 @@ const name = process.env.NEXT_PUBLIC_COMPANY_NAME;
 export const metadata = {
   title: {
     default: name,
-    template: "%s |" + name
+    template: "%s |" + name,
   },
 };
 
@@ -34,9 +33,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${lato.variable}`}
       >
-        <SnackbarProvider>
-        {children}
-        </SnackbarProvider>
+        <SnackbarProvider>{children}</SnackbarProvider>
       </body>
     </html>
   );

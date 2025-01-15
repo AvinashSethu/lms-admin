@@ -3,22 +3,20 @@ import { useState } from "react";
 import {
   Button,
   CircularProgress,
-  IconButton,
-  Snackbar,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "../../context/SnackbarContext";
-import { Close } from "@mui/icons-material";
+
 
 export default function Form() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { openSnackbar } = useSnackbar();
+  const { showSnackbar } = useSnackbar();
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -31,13 +29,7 @@ export default function Form() {
       body: JSON.stringify({ email, password }),
     }).then((res) => {
       if (res.ok) {
-        openSnackbar("Welcome", "success", {
-          actionButton: (
-          <IconButton sx={{padding: "0px"}}>
-              <Close />
-            </IconButton>
-          ),
-        });
+        showSnackbar("Welcome","success","","3000");
         router.push("/dashboard");
         setIsLoading(false);
       } else {
@@ -137,6 +129,7 @@ export default function Form() {
             }}
             disableElevation
             onClick={onSubmit}
+            disabled={isLoading}
           >
             {isLoading ? (
               <CircularProgress size={24} sx={{ color: "var(--sec-color)" }} />
@@ -144,7 +137,6 @@ export default function Form() {
               "Sign In"
             )}
           </Button>
-          <Snackbar></Snackbar>
           <Typography
             sx={{
               fontFamily: "Lato",

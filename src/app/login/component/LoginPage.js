@@ -1,6 +1,7 @@
 import { Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import Form from "./Form";
+import { SnackbarProvider } from "../../context/SnackbarContext";
 
 export default function LoginPage() {
   return (
