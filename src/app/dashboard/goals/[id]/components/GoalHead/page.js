@@ -28,7 +28,7 @@ export default function GoalHead() {
           onClick={() => {
             router.back();
           }}
-          sx={{ color: "var(--sec-color)",fontSize:"16px" }}
+          sx={{ color: "var(--sec-color)",fontSize:"16px",cursor:"pointer" }}
         />
         <Stack
           sx={{

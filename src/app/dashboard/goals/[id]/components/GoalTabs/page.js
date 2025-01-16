@@ -22,7 +22,7 @@ const StyledTab = styled(Tab)({
   width: "100px",
   transition: "all 0.4s ease",
   minHeight: "32px",
-  padding:"0px",
+  padding: "0px",
   "&.Mui-selected": {
     color: "var(--sec-color)",
     backgroundColor: "var(--sec-color-acc-1)",
