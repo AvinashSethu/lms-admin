@@ -14,20 +14,20 @@ export async function POST(request) {
   try {
     const user = await dynamoDB.scan(params).promise();
     if (user.Items.length == 0) {
-      return Response.error({
+      return Response.json({
         status: 401,
         success: false,
-        body: "Unauthorized",
+        message: "Email or password incorrect",
       });
     }
     const { id, password: hash } = user.Items[0];
     const isPasswordCorrect = await comparePassword(password, hash);
 
     if (!isPasswordCorrect) {
-      return Response.error({
+      return Response.json({
         status: 401,
         success: false,
-        body: "Unauthorized",
+        message: "Email or password incorrect",
       });
     }
     await createSession({
@@ -37,15 +37,15 @@ export async function POST(request) {
     return Response.json({
       success: true,
       status: 200,
-      message: "Login successful",
+      message: "Welcome",
     });
   } catch (error) {
     console.log(error);
-    return Response.error({
+    return Response.json({
       status: 500,
       success: false,
-      body: "Internal Server Error",
-      message: error.message,
+      body: error.message,
+      message: "Internal Server Error",
     });
   }
 }

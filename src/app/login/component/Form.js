@@ -10,7 +10,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "../../context/SnackbarContext";
 
-
 export default function Form() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,15 +26,18 @@ export default function Form() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
-    }).then((res) => {
-      if (res.ok) {
-        showSnackbar("Welcome","success","","3000");
-        router.push("/dashboard");
-        setIsLoading(false);
-      } else {
-        alert("Invalid email or password");
-      }
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          showSnackbar(data.message, "success", "", "3000");
+          router.push("/dashboard");
+          setIsLoading(false);
+        } else {
+          showSnackbar(data.message, "error", "", "3000");
+          setIsLoading(false);
+        }
+      });
   };
 
   return (
