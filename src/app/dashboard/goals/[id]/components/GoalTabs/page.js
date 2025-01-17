@@ -1,7 +1,12 @@
 "use client";
-import { Stack, styled, Tab, Tabs } from "@mui/material";
+import { Box, Stack, styled, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
-import StudentsTab from "../StudentsTab";
+import PropTypes from 'prop-types';
+import Syllabus from "../Syllabus";
+import Exam from "../Exam";
+import Info from "../Info";
+import Settings from "../Settings";
+
 
 const StyledTabs = styled(Tabs)({
   backgroundColor: "var(--white)",
@@ -29,6 +34,28 @@ const StyledTab = styled(Tab)({
   },
 });
 
+function CustomTabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box>{children}</Box>}
+    </div>
+  );
+}
+
+CustomTabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
 export default function GoalTabs({ tabs = [] }) {
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -41,7 +68,10 @@ export default function GoalTabs({ tabs = [] }) {
           <StyledTab key={index} label={tab.label} />
         ))}
       </StyledTabs>
-      <StudentsTab />
+      <CustomTabPanel value={value} index={0}><Syllabus /></CustomTabPanel>
+      <CustomTabPanel value={value} index={1}><Exam /> </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}><Info /></CustomTabPanel>
+      <CustomTabPanel value={value} index={3}><Settings /></CustomTabPanel>
     </Stack>
   );
 }

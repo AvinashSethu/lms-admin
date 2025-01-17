@@ -17,27 +17,36 @@ export default function SideNav() {
   };
 
   return (
-    <Stack bgcolor="var(--white)">
-      <Stack position="fixed"
+    <Stack
+      bgcolor="var(--white)"
+      sx={{ borderRight: "1px solid var(--border-color)" }}
+    >
+      <Stack
         sx={{
-          padding: "40px 10px 40px 30px",
-          gap: "50px",
           width: isSideNavOpen ? "100px" : "300px",
           height: "100vh",
-          borderRight: "1px solid var(--border-color)",
           transition: "width .5s ease",
           position: "relative",
         }}
       >
-        <MasterLogo isSideNavOpen={isSideNavOpen} />
-        <LinkComp isSideNavOpen={isSideNavOpen} sideNavOpen={sideNavOpen} />
-        <Account isSideNavOpen={isSideNavOpen} />
+        <Stack
+          position="fixed"
+          gap="50px"
+          height="100vh"
+          padding="40px 10px 40px 30px"
+          sx={{ "& > :last-child": { marginTop: "auto" }}}
+        >
+          <MasterLogo isSideNavOpen={isSideNavOpen} />
+          <LinkComp isSideNavOpen={isSideNavOpen} sideNavOpen={sideNavOpen} />
+          <Account isSideNavOpen={isSideNavOpen} />
+        </Stack>
         <Image
           src={drawer_img.src}
           alt="openclose"
           width={24}
           height={24}
           onClick={drawer}
+          position="fixed"
           style={{
             position: "absolute",
             top: "70px",
