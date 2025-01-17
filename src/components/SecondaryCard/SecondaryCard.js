@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-export default function SecondaryCard({ icon, title, options }) {
+export default function SecondaryCard({ icon, title, options, subTitle,cardWidth }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuOpen = (event) => {
     setIsMenuOpen(event.currentTarget);
@@ -21,7 +21,7 @@ export default function SecondaryCard({ icon, title, options }) {
   return (
     <Card
       sx={{
-        width: "300px",
+        width: cardWidth,
         height: "80px",
         border: "1px solid",
         borderColor: "var(--border-color)",
@@ -30,31 +30,47 @@ export default function SecondaryCard({ icon, title, options }) {
       }}
       elevation={0}
     >
-      <Stack flexDirection="row" alignItems="center" gap="15px">
-        <Stack
-          sx={{
-            width: "62px",
-            height: "60px",
-            backgroundColor: "var(--sec-color-acc-2)",
-            borderRadius: "10px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {icon}
+      <Stack flexDirection="row">
+        <Stack flexDirection="row" alignItems="center" gap="15px">
+          <Stack
+            sx={{
+              minWidth: "62px",
+              height: "60px",
+              backgroundColor: "var(--sec-color-acc-1)",
+              borderRadius: "10px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {icon}
+          </Stack>
+          <Stack>
+          <Typography
+            sx={{
+              color: "var(text4)",
+              fontFamily: "Lato",
+              fontSize: "14px",
+              fontWeight: "700",
+            }}
+          >
+            {title}
+          </Typography>
+          <Typography
+            sx={{
+              color: "var(text4)",
+              fontFamily: "Lato",
+              fontSize: "12px",
+              fontWeight:'700'
+            }}
+          >
+            {subTitle}
+          </Typography>
+          </Stack>
         </Stack>
-        <Typography
-          sx={{
-            color: "var(text4)",
-            fontFamily: "Lato",
-            fontSize: "14px",
-            fontWeight: "700",
-          }}
-        >
-          {title}
-        </Typography>
-        <IconButton sx={{ marginLeft: "auto" }} onClick={menuOpen}>
+        <IconButton sx={{ marginLeft: "auto" ,"&.MuiIconButton-root":{
+            padding: "0px"
+          }}} onClick={menuOpen} disableRipple>
           <MoreVert />
         </IconButton>
         <Menu
@@ -65,18 +81,23 @@ export default function SecondaryCard({ icon, title, options }) {
             paper: {
               style: {
                 width: "90px",
-                border:"1px solid",
-                borderColor:"var(--border-color)"
+                border: "1px solid",
+                borderColor: "var(--border-color)",
               },
             },
           }}
           elevation={0}
         >
-          {options.map((option,index) => (
+          {options.map((option, index) => (
             <MenuItem
               key={index}
               onClick={menuClose}
-              sx={{  height: "30px", color:"var(text4)",fontSize:"14px",fontFamily:"Lato",}}
+              sx={{
+                height: "30px",
+                color: "var(text4)",
+                fontSize: "14px",
+                fontFamily: "Lato",
+              }}
             >
               {option}
             </MenuItem>

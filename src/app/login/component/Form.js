@@ -10,7 +10,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "../../context/SnackbarContext";
 
-
 export default function Form() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

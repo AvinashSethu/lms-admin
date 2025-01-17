@@ -26,8 +26,13 @@ export default function Home() {
 
   return (
     <>
-      <Stack padding="30px 30px 0px 30px" gap="15px">
-        <Header title="Goals" button="Goal" icon={<Add />} onClick={dialogOpen} />
+      <Stack padding="20px" gap="15px">
+        <Header
+          title="Goals"
+          button="Goal"
+          icon={<Add />}
+          onClick={dialogOpen}
+        />
 
         <Stack flexDirection="row" justifyContent="space-between">
           <DialogBox
