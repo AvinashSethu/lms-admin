@@ -93,21 +93,26 @@ export default function Settings() {
       >
         <DialogContent>
           <Stack gap="20px">
-            {/* <FormControl
+            <FormControl
               sx={{
                 width: "100%",
                 "&:hover": {
                   borderColor: "var(--primary-color)",
                 },
+                '& .MuiInputLabel-root': {
+          color: 'blue', // Label color
+        },
+                '& .Mui-focused .MuiInputLabel-root': {
+          color: 'orange', // Label color when focused
+        },
               }}
               size="small"
-            > */}
-            {/* <InputLabel>Select type</InputLabel> */}
+            >
+            <InputLabel >Select type</InputLabel>
             <Select
-              label="Select type"
-              disableElevation
+            label="Select type"
+              size="small"
               sx={{
-                
                 "&:hover .MuiOutlinedInput-notchedOutline": {
                   borderColor: "var(--sec-color)",
                 },
@@ -120,11 +125,19 @@ export default function Settings() {
               <MenuItem value="">two</MenuItem>
               <MenuItem value="">three</MenuItem>
             </Select>
-            {/* </FormControl> */}
+            </FormControl>
             <Stack flexDirection="row" justifyContent="space-between">
               <FormControl sx={{ width: "50%" }} size="small">
                 <InputLabel>No of type</InputLabel>
-                <Select label="Select type" disableElevation>
+                <Select label="No of type" sx={{
+                
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--sec-color)",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--sec-color)",
+                },
+              }}>
                   <MenuItem value="">one</MenuItem>
                   <MenuItem value="">two</MenuItem>
                   <MenuItem value="">three</MenuItem>

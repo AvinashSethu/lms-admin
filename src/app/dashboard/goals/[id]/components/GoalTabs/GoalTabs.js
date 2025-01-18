@@ -6,8 +6,7 @@ import Syllabus from "../Syllabus";
 import Exam from "../Exam";
 import Info from "../Info";
 import Settings from "../Settings";
-
-
+ 
 const StyledTabs = styled(Tabs)({
   backgroundColor: "var(--white)",
   borderRadius: "10px",

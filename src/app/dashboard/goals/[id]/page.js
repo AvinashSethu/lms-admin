@@ -1,6 +1,6 @@
 import { Stack } from "@mui/system";
-import GoalHead from "./components/GoalHead/page";
-import GoalTabs from "./components/GoalTabs/page";
+import GoalHead from "./components/GoalHead/GoalHead";
+import GoalTabs from "./components/GoalTabs/GoalTabs";
 
 export default async function Goals({ params }) {
   const id = (await params).id;
