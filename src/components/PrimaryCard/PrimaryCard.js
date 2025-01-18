@@ -51,7 +51,6 @@ export default function PrimaryCard({ icon, title, actionButton, subtitle, onCli
           </Typography>
         )}
         </Stack>
-
         <Button
           variant="text"
           endIcon={<TrendingFlat />}

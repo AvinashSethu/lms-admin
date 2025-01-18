@@ -1,6 +1,14 @@
-import { Button, Stack, Typography } from "@mui/material";
+import {  Button, Stack, Typography } from "@mui/material";
+import SearchBox from "../SearchBox/SearchBox";
 
-export default function Header({ title, button, icon, onClick}) {
+export default function Header({
+  title,
+  button,
+  icon,
+  onClick,
+  instituteButton,
+  search
+}) {
   return (
     <Stack
       sx={{
@@ -24,23 +32,39 @@ export default function Header({ title, button, icon, onClick}) {
           {title}
         </Typography>
       </Stack>
-      <Button
-        variant="contained"
-        onClick={onClick}
-        sx={{
-          textTransform: "none",
-          width: "120px",
-          backgroundColor: "var(--sec-color)",
-          fontFamily: "Lato",
-          fontSize: "14px",
-          fontWeight: "700",
-          borderRadius: "5px",
-        }}
-        startIcon={icon ? icon : null}
-        disableElevation
-      >
-        {button}
-      </Button>
+      <Stack flexDirection="row" gap="15px" alignItems="center">
+        {search && <SearchBox />}
+        {instituteButton && (
+          <Button
+            variant="contained"
+            sx={{
+              textTransform: "none",
+              backgroundColor: "var(--primary-color)",
+              height:"35px"
+            }}
+            disableElevation
+          >
+            {instituteButton}
+          </Button>
+        )}
+        <Button
+          variant="contained"
+          onClick={onClick}
+          sx={{
+            textTransform: "none",
+            width: "120px",
+            backgroundColor: "var(--primary-color)",
+            fontFamily: "Lato",
+            fontSize: "14px",
+            fontWeight: "700",
+            borderRadius: "5px",
+          }}
+          startIcon={icon ? icon : null}
+          disableElevation
+        >
+          {button}
+        </Button>
+      </Stack>
     </Stack>
   );
 }
