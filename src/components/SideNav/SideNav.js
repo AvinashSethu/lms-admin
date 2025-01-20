@@ -9,17 +9,18 @@ import drawer_img from "@/public/Icons/Drawer.svg";
 
 export default function SideNav() {
   const [isSideNavOpen, setIsSideNavOpen] = useState(true);
+
   const drawer = () => {
     setIsSideNavOpen((prev) => !prev);
-  };
-  const sideNavOpen = () => {
-    setIsSideNavOpen(false);
   };
 
   return (
     <Stack
       bgcolor="var(--white)"
-      sx={{ borderRight: "1px solid var(--border-color)" }}
+      sx={{
+        borderRight: "1px solid var(--border-color)",
+        position: "relative",
+      }}
     >
       <Stack
         sx={{
@@ -30,33 +31,33 @@ export default function SideNav() {
         }}
       >
         <Stack
-          position="fixed"
+          position="fixed" 
           gap="50px"
           height="100vh"
           padding="40px 10px 40px 30px"
-          sx={{ "& > :last-child": { marginTop: "auto" }}}
+          sx={{ "& > :last-child": { marginTop: "auto" } }}
         >
           <MasterLogo isSideNavOpen={isSideNavOpen} />
-          <LinkComp isSideNavOpen={isSideNavOpen} sideNavOpen={sideNavOpen} />
+          <LinkComp isSideNavOpen={isSideNavOpen} />
           <Account isSideNavOpen={isSideNavOpen} />
         </Stack>
-        <Image
-          src={drawer_img.src}
-          alt="openclose"
-          width={24}
-          height={24}
-          onClick={drawer}
-          position="fixed"
-          style={{
-            position: "absolute",
-            top: "70px",
-            right: "-12px",
-            cursor: "pointer",
-            transform: isSideNavOpen ? "rotate(180deg)" : "rotate(0deg)",
-            transition: "all .4s ease",
-          }}
-        />
       </Stack>
+
+      <Image
+        src={drawer_img.src}
+        alt="openclose"
+        width={24}
+        height={24}
+        onClick={drawer}
+        style={{
+          position: "fixed", 
+          top: "70px",
+          left: isSideNavOpen ? "90px" : "290px", 
+          cursor: "pointer",
+          transform: isSideNavOpen ? "rotate(180deg)" : "rotate(0deg)",
+          transition: "all .4s ease",
+        }}
+      />
     </Stack>
   );
 }
