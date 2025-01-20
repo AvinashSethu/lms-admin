@@ -14,6 +14,7 @@ import Header from "@/src/components/Header/Header";
 // const metadata = {
 //   title: "Home",
 // };
+
 export default function Home() {
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const router = useRouter();

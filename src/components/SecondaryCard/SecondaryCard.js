@@ -1,14 +1,13 @@
 "use client";
-import { MoreVert,East } from "@mui/icons-material";
+import { MoreVert, East } from "@mui/icons-material";
 import {
+  Button,
   Card,
   IconButton,
   Menu,
   MenuItem,
   Stack,
-  Switch,
   Typography,
-  Button
 } from "@mui/material";
 import { useState } from "react";
 
@@ -19,6 +18,9 @@ export default function SecondaryCard({
   subTitle,
   cardWidth,
   onClick,
+  button,
+  Switch,
+  live,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuOpen = (event) => {
@@ -55,90 +57,84 @@ export default function SecondaryCard({
           >
             {icon}
           </Stack>
-          <Stack>
+          <Stack gap="8px">
             <Typography
               sx={{
                 color: "var(text4)",
                 fontFamily: "Lato",
-                fontSize: "14px",
+                fontSize: "16px",
                 fontWeight: "700",
-                maxWidth: "160px",
               }}
             >
-              {title}
+              {title.value}
             </Typography>
             <Typography
               sx={{
                 color: "var(text4)",
                 fontFamily: "Lato",
                 fontSize: "12px",
-                fontWeight: "700",
               }}
             >
               {subTitle}
             </Typography>
           </Stack>
         </Stack>
-        <Stack marginLeft="auto" alignItems="center" flexDirection="row">
-          <Typography>Live</Typography>
-          <Switch
-            color="warning"
-            sx={{
-              "& .MuiSwitch-thumb": {
-                backgroundColor: "var(--sec-color-acc-1)",
-              },
-              "& .MuiSwitch-track": {
-                backgroundColor: "var(--sec-color-acc-1)",
-              },
-              "& .Mui-checked + .MuiSwitch-track": {
-                backgroundColor: "var(--sec-color)",
-              },
-            }}
-          />
-        <Button variant="contained" endIcon="<East />" sx={{backgroundColor:"var(--sec-color)"}} disableElevation></Button>
+        <Stack
+          marginLeft="auto"
+          alignItems="center"
+          flexDirection="row"
+          gap="10px"
+        >
+          {live}
+          {Switch}
+          {button}
+          {options && (
+            <>
+              <IconButton
+                sx={{
+                  marginLeft: "auto",
+                  "&.MuiIconButton-root": {
+                    padding: "0px",
+                  },
+                }}
+                onClick={menuOpen}
+                disableRipple
+              >
+                <MoreVert sx={{ color: "var(--text3)" }} />
+              </IconButton>
+
+              <Menu
+                anchorEl={isMenuOpen}
+                open={Boolean(isMenuOpen)}
+                onClose={menuClose}
+                disableScrollLock={true}
+                slotProps={{
+                  paper: {
+                    style: {
+                      border: "1px solid",
+                      borderColor: "var(--border-color)",
+                    },
+                  },
+                }}
+                elevation={0}
+              >
+                {options.map((option, index) => (
+                  <MenuItem
+                    key={index}
+                    onClick={menuClose}
+                    sx={{
+                      color: "var(text4)",
+                      fontSize: "14px",
+                      fontFamily: "Lato",
+                    }}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </>
+          )}
         </Stack>
-        <IconButton
-          sx={{
-            marginLeft: "auto",
-            "&.MuiIconButton-root": {
-              padding: "0px",
-            },
-          }}
-          onClick={menuOpen}
-          disableRipple
-        >
-          <MoreVert sx={{ color: "var(--text3)" }} />
-        </IconButton>
-        <Menu
-          anchorEl={isMenuOpen}
-          open={Boolean(isMenuOpen)}
-          onClose={menuClose}
-          slotProps={{
-            paper: {
-              style: {
-                width: "90px",
-                border: "1px solid",
-                borderColor: "var(--border-color)",
-              },
-            },
-          }}
-          elevation={0}
-        >
-          {options.map((option, index) => (
-            <MenuItem
-              key={index}
-              onClick={menuClose}
-              sx={{
-                height: "30px",
-                color: "var(text4)",
-                fontSize: "14px",
-                fontFamily: "Lato",
-              }}
-            >
-              {option}
-            </MenuItem>
-          ))}
-        </Menu>
       </Stack>
     </Card>
   );

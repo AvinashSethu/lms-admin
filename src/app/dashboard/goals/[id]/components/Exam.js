@@ -25,13 +25,16 @@ export default function Exam() {
           title="Exam Groups"
           actionButton="View" 
           onClick={() => {
-            router.push("/dashboard/exam/1");
+            router.push("/dashboard/goals/1/examgroups");
           }}
         />
         <PrimaryCard
           icon={series.src}
           title="TMA Test series"
           actionButton="View"
+          onClick={() => {
+            router.push("/dashboard/goals/1/testseries");
+          }}
         />
       </Stack>
     </Stack>

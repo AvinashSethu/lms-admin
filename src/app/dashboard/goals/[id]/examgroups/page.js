@@ -1,10 +1,13 @@
-import { Button, Stack, Typography } from "@mui/material";
-import GoalHead from "../../goals/[id]/components/GoalHead/GoalHead";
-import { Add, CalendarMonth, InsertDriveFile, PushPin, Weekend } from "@mui/icons-material";
+"use client";
+import { Button, Stack, Switch, Typography } from "@mui/material";
+import { Add, CalendarMonth, East } from "@mui/icons-material";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
+import GoalHead from "../components/GoalHead/GoalHead";
+import { useRouter } from "next/navigation";
 
-export default function exam() {
-    const menuOptions = ["subject1", "subject2"];
+export default function Examgroups() {
+  const router = useRouter();
+  const menuOptions = ["subject1", "subject2"];
   return (
     <Stack padding="20px" gap="15px">
       <GoalHead />
@@ -28,7 +31,7 @@ export default function exam() {
               color: "var(--text3)",
             }}
           >
-            Subject
+            Exam Groups
           </Typography>
           <Button
             variant="contained"
@@ -39,7 +42,7 @@ export default function exam() {
             }}
             disableElevation
           >
-            Subject
+            create
           </Button>
         </Stack>
         <Stack
@@ -50,16 +53,50 @@ export default function exam() {
         >
           <SecondaryCard
             icon={<CalendarMonth sx={{ color: "var(--sec-color)" }} />}
-            title="Weekly Test"
+            title={{ value: "Weekly Test" }}
             options={menuOptions}
             cardWidth="100%"
             subTitle="05/01/25 to 06/02/25"
+            button={
+              <Button
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  backgroundColor: "var(--sec-color)",
+                  fontFamily: "Lato",
+                  fontSize: "12px",
+                }}
+                endIcon={<East />}
+                onClick={() => {
+                  router.push("/dashboard/goals/1/examgroups/1")
+              }}
+                disableElevation
+              >
+                View
+              </Button>
+            }
+            
           />
           <SecondaryCard
             icon={<CalendarMonth sx={{ color: "var(--sec-color)" }} />}
-            title="Monthly Test"
-            options={menuOptions}
+            title={{ value: "Monthly Test" }}
+            button={
+              <Button
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  backgroundColor: "var(--sec-color)",
+                  fontFamily: "Lato",
+                  fontSize: "12px",
+                }}
+                endIcon={<East />}
+                disableElevation
+              >
+                View
+              </Button>
+            }
             cardWidth="100%"
+            options={menuOptions}
             subTitle="05/01/25 to 06/02/25"
           />
         </Stack>

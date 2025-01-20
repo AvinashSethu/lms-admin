@@ -13,6 +13,7 @@ const StyledTabs = styled(Tabs)({
   width: "408px",
   padding: "4px",
   minHeight: "40px",
+  boxShadow:"inset .5px .5px 6px var(--border-color)",
   "& .MuiTabs-indicator": {
     display: "none",
   },

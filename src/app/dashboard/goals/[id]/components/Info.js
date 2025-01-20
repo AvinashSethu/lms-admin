@@ -46,7 +46,7 @@ export default function Info() {
               sx={{ color: "var(--sec-color)", transform: "rotate(45deg)" }}
             />
           }
-          title="Overview"
+          title={{value:"Overview"}}
           options={menuOptions}
           cardWidth="350px"
         />
@@ -56,7 +56,7 @@ export default function Info() {
               sx={{ color: "var(--sec-color)", transform: "rotate(45deg)" }}
             />
           }
-          title="Important Dates"
+          title={{value:"Important Dates"}}
           options={menuOptions}
           cardWidth="350px"
         />
@@ -66,7 +66,7 @@ export default function Info() {
               sx={{ color: "var(--sec-color)", transform: "rotate(45deg)" }}
             />
           }
-          title="Application Process"
+          title={{value:"Application Process"}}
           options={menuOptions}
           cardWidth="350px"
         />
@@ -76,7 +76,7 @@ export default function Info() {
               sx={{ color: "var(--sec-color)", transform: "rotate(45deg)" }}
             />
           }
-          title="Syllabus"
+          title={{value:"Syllabus"}}
           options={menuOptions}
           cardWidth="350px"
         />
@@ -86,7 +86,7 @@ export default function Info() {
               sx={{ color: "var(--sec-color)", transform: "rotate(45deg)" }}
             />
           }
-          title="Cutoffs"
+          title={{value:"Cutoffs"}}
           options={menuOptions}
           cardWidth="350px"
         />

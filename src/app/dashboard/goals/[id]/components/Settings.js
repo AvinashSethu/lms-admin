@@ -15,7 +15,7 @@ import {
 import { useState } from "react";
 
 export default function Settings() {
-  const menuOptions = ["subject1", "subject2"];
+  const menuOptions = ["Remove"];
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const dialogOpen = () => {
     setIsDialogOPen(true);
@@ -67,7 +67,7 @@ export default function Settings() {
               sx={{ color: "var(--sec-color)", fontSize: "30px" }}
             />
           }
-          title="Monthly Subscription (1 month)"
+          title={{ value: "Monthly Subscription (1 month)" }}
           options={menuOptions}
           cardWidth="500px"
           subTitle="₹299"
@@ -78,9 +78,15 @@ export default function Settings() {
               sx={{ color: "var(--sec-color)", fontSize: "30px" }}
             />
           }
-          title="Yearly Subscription"
+          title={{ value: "Yearly Subscription" }}
           options={menuOptions}
-          subTitle="₹799"
+          subTitle={
+            <Stack flexDirection="row" gap="20px">
+              <Typography fontSize="12px">₹700</Typography>
+              <Typography fontSize="12px">₹700</Typography>
+              <Typography fontSize="12px">₹700</Typography>
+            </Stack>
+          }
           cardWidth="500px"
         />
       </Stack>
@@ -95,7 +101,6 @@ export default function Settings() {
             <FormControl
               sx={{
                 width: "100%",
-                
               }}
               size="small"
             >
@@ -110,7 +115,6 @@ export default function Settings() {
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                     borderColor: "var(--sec-color)",
                   },
-          
                 }}
               >
                 <MenuItem value="">one</MenuItem>

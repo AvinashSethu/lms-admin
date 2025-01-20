@@ -2,7 +2,7 @@
 import { Button, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import gate_cse from "@/public/Icons/gate_cse.svg";
-import { ArrowBackIosNew } from "@mui/icons-material";
+import { ArrowBackIosRounded } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
 export default function GoalHead() {
@@ -24,11 +24,11 @@ export default function GoalHead() {
       }}
     >
       <Stack flexDirection="row" alignItems="center" gap="15px">
-        <ArrowBackIosNew
+        <ArrowBackIosRounded
           onClick={() => {
             router.back();
           }}
-          sx={{ color: "var(--sec-color)",fontSize:"16px",cursor:"pointer" }}
+          sx={{ color: "var(--sec-color)",fontSize:"18px",cursor:"pointer",fontWeight:"700" }}
         />
         <Stack
           sx={{
