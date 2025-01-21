@@ -94,25 +94,25 @@ export default function Syllabus() {
       <Stack flexWrap="wrap" flexDirection="row" rowGap="20px" columnGap="50px">
         <SecondaryCard
           icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title={{ value: "Numerical Ability" }}
+          title="Numerical Ability"
           options={menuOptions}
           cardWidth="350px"
         />
         <SecondaryCard
           icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title={{ value: "Simplifications & simple equations" }}
+          title= "Simplifications & simple equations"
           options={menuOptions}
           cardWidth="350px"
         />
         <SecondaryCard
           icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title={{ value: "Blood Relations and Coding & Decoding" }}
+          title="Blood Relations and Coding & Decoding"
           options={menuOptions}
           cardWidth="350px"
         />
         <SecondaryCard
           icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title={{ value: "Logical reasoning" }}
+          title= "Logical reasoning"
           options={menuOptions}
           cardWidth="350px"
         />

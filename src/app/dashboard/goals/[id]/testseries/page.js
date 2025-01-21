@@ -55,7 +55,7 @@ export default function Testseries() {
         >
           <SecondaryCard
             icon={<CalendarMonth sx={{ color: "var(--sec-color)" }} />}
-            title={{ value: "Mock Test 1" }}
+            title= "Mock Test 1"
             options={menuOptions}
             cardWidth="100%"
             button={
@@ -87,7 +87,7 @@ export default function Testseries() {
           />
           <SecondaryCard
             icon={<CalendarMonth sx={{ color: "var(--sec-color)" }} />}
-            title={{ value: "Mock Test 2" }}
+            title="Mock Test 2"
             options={menuOptions}
             cardWidth="100%"
             button={

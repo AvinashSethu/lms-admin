@@ -52,7 +52,7 @@ export default function SideNav() {
         style={{
           position: "fixed", 
           top: "70px",
-          left: isSideNavOpen ? "90px" : "290px", 
+          left: isSideNavOpen ? "89px" : "289px", 
           cursor: "pointer",
           transform: isSideNavOpen ? "rotate(180deg)" : "rotate(0deg)",
           transition: "all .4s ease",

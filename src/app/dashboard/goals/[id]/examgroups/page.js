@@ -53,7 +53,7 @@ export default function Examgroups() {
         >
           <SecondaryCard
             icon={<CalendarMonth sx={{ color: "var(--sec-color)" }} />}
-            title={{ value: "Weekly Test" }}
+            title= "Weekly Test"
             options={menuOptions}
             cardWidth="100%"
             subTitle="05/01/25 to 06/02/25"
@@ -79,7 +79,7 @@ export default function Examgroups() {
           />
           <SecondaryCard
             icon={<CalendarMonth sx={{ color: "var(--sec-color)" }} />}
-            title={{ value: "Monthly Test" }}
+            title="Monthly Test"
             button={
               <Button
                 variant="contained"

@@ -17,6 +17,7 @@ export default function DialogBox({
   return (
     <Dialog
       open={isOpen}
+      disableScrollLock={true}
       sx={{
         "& .MuiDialog-paper": {
           width: "600px",

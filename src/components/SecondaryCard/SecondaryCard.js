@@ -66,7 +66,7 @@ export default function SecondaryCard({
                 fontWeight: "700",
               }}
             >
-              {title.value}
+              {title}
             </Typography>
             <Typography
               sx={{

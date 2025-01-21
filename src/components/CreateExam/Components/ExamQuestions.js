@@ -1,7 +1,12 @@
+import SectionCard from "@/src/components/CreateExam/Components/SectionCard";
 import { Add } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
+import question from "@/public/Icons/question.svg";
+import Image from "next/image";
+import QuestionCard from "./QuestionCard";
 
-export default function Questions() {
+export default function ExamQuestions() {
+  const menuOptions = ["Remove"];
   return (
     <Stack marginTop="20px" gap="15px">
       <Stack flexDirection="row" gap="15px">
@@ -47,7 +52,20 @@ export default function Questions() {
           </Typography>
         </Stack>
       </Stack>
-      
+      <SectionCard
+        icon={<Image src={question.src} alt="icon" width={24} height={24} />}
+        section="Section 1"
+        selected="2"
+        button="Questions"
+        options={menuOptions}
+      />
+      <SectionCard
+        icon={<Image src={question.src} alt="icon" width={24} height={24} />}
+        section="Section 2"
+        selected="2"
+        button="Questions"
+        options={menuOptions}
+      />
     </Stack>
   );
 }

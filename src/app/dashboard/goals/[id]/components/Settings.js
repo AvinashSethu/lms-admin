@@ -67,7 +67,7 @@ export default function Settings() {
               sx={{ color: "var(--sec-color)", fontSize: "30px" }}
             />
           }
-          title={{ value: "Monthly Subscription (1 month)" }}
+          title= "Monthly Subscription (1 month)" 
           options={menuOptions}
           cardWidth="500px"
           subTitle="₹299"
@@ -78,7 +78,7 @@ export default function Settings() {
               sx={{ color: "var(--sec-color)", fontSize: "30px" }}
             />
           }
-          title={{ value: "Yearly Subscription" }}
+          title="Yearly Subscription"
           options={menuOptions}
           subTitle={
             <Stack flexDirection="row" gap="20px">
