@@ -6,7 +6,7 @@ export default function SearchBox() {
       <TextField
       
         sx={{
-          width: "260px",
+          width:"100%",
           "& .MuiOutlinedInput-root": {
             height: "35px",
             borderRadius: "5px",

@@ -17,7 +17,6 @@ export default function Institute() {
         title="Institute"
         button="Institute"
         icon={<Add />}
-        instituteButton="Scheduled test"
         search="Search"
       />
       <Stack flexWrap="wrap" flexDirection="row" rowGap="10px" columnGap="40px">
@@ -26,9 +25,6 @@ export default function Institute() {
           icon={<AccountBalance sx={{ color: "var(--sec-color)" }} />}
           options={menuItem}
           cardWidth="300px"
-          onClick={() => {
-            router.push("/institute/1")
-          }}
         />
         <SecondaryCard
           title="KPRIET"

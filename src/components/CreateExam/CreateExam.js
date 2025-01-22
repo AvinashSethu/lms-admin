@@ -1,6 +1,6 @@
 "use client";
 import { ArrowBackIosRounded } from "@mui/icons-material";
-import { Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import CustomTabs from "../CustomTabs/CustomTabs";
 import ExamInfoCard from "./Components/ExamInfoCard";
 import calendar from "@/public/Icons/weekCalendar.svg";
@@ -9,13 +9,12 @@ import ExamQuestions from "./Components/ExamQuestions";
 import ExamSettings from "./Components/ExamSettings";
 import ExamStudents from "./Components/ExamStudents";
 
-export default function CreateExam({ title,examInfoTitle }) {
-  // console.log(examInfoTitle)
+export default function CreateExam({ title, examInfoTitle }) {
   const tabs = [
     { label: "Questions", content: <ExamQuestions /> },
     { label: "Settings", content: <ExamSettings /> },
     { label: "Students", content: <ExamStudents /> },
-  ];  
+  ];
   const router = useRouter();
   return (
     <Stack
@@ -55,6 +54,7 @@ export default function CreateExam({ title,examInfoTitle }) {
         duration="120 Minutes"
       />
       <CustomTabs tabs={tabs} />
+      
     </Stack>
   );
 }

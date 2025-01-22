@@ -77,7 +77,7 @@ export default function SectionCard({
             >
               {icon}
             </Stack>
-            <StyledTextField  placeholder="Enter Section"/>
+            <StyledTextField placeholder="Enter Section" />
           </Stack>
           <Stack gap="15px" flexDirection="row" alignItems="center">
             <Stack
@@ -161,23 +161,33 @@ export default function SectionCard({
       </AccordionSummary>
       <AccordionDetails>
         <Stack flexDirection="row" alignItems="center" gap="10px">
-        <Checkbox sx={{
-            color: "var(--primary-color)",
-            "&.Mui-checked": {
+          <Checkbox
+            sx={{
               color: "var(--primary-color)",
-            },
-          }} />
+              "&.Mui-checked": {
+                color: "var(--primary-color)",
+              },
+            }}
+          />
           <Typography>Select all</Typography>
-          </Stack>
+        </Stack>
         <Stack gap="15px">
-        <QuestionCard
-          questionNumber="Q1"
-          questionType="MCQ"
-          Subject="Numerical ability"
-          question="What is the difference in the place value of 5 in the numeral 754853?"
-          preview="Preview"
-        />
-        <QuestionCard />
+          <QuestionCard
+            questionNumber="Q1"
+            questionType="MCQ"
+            Subject="Numerical ability"
+            question="What is the difference in the place value of 5 in the numeral 754853?"
+            preview="Preview"
+            check
+          />
+          <QuestionCard
+            questionNumber="Q2"
+            questionType="Fill up"
+            Subject="Numerical ability"
+            question="What is the difference in the place value of 5 in the numeral 754853?"
+            preview="Preview"
+            check
+          />
         </Stack>
       </AccordionDetails>
     </Accordion>

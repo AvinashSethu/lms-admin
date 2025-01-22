@@ -6,7 +6,6 @@ export default function Header({
   button,
   icon,
   onClick,
-  instituteButton,
   search
 }) {
   return (
@@ -34,19 +33,6 @@ export default function Header({
       </Stack>
       <Stack flexDirection="row" gap="15px" alignItems="center">
         {search && <SearchBox />}
-        {instituteButton && (
-          <Button
-            variant="contained"
-            sx={{
-              textTransform: "none",
-              backgroundColor: "var(--primary-color)",
-              height:"35px"
-            }}
-            disableElevation
-          >
-            {instituteButton}
-          </Button>
-        )}
         <Button
           variant="contained"
           onClick={onClick}

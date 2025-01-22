@@ -1,5 +1,5 @@
 "use client";
-import { ExpandMore } from "@mui/icons-material";
+import { CurrencyRupee, ExpandMore } from "@mui/icons-material";
 import { Stack, Tooltip, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -27,9 +27,9 @@ export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
         title="Library"
         href="#"
         list={[
-          { title: "Course Bank", href: "/library/courseBank" },
-          { title: "All Questions", href: "/library/allQuestions" },
-          { title: "All Subjects", href: "/library/allSubjects" },
+          { title: "Course Bank", href: "/dashboard/library/coursebank" },
+          { title: "All Questions", href: "/dashboard/library/allQuestions" },
+          { title: "All Subjects", href: "/dashboard/library/allSubjects" },
         ]}
         isSideNavOpen={isSideNavOpen}
         sideNavOpen={sideNavOpen}
@@ -47,9 +47,9 @@ export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
         isSideNavOpen={isSideNavOpen}
       />
       <NavComp
-        icon="/Icons/Settings.svg"
-        title="Settings"
-        href="/dashboard/settings"
+        icon="/Icons/rupee.svg"
+        title="Transactions"
+        href="/dashboard/transactions"
         isSideNavOpen={isSideNavOpen}
       />
     </Stack>
@@ -120,7 +120,6 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
                   sx={{
                     color: "var(--primary-color)",
                     marginLeft: "auto",
-                    transition: "all .3s ease",
                     transform: isNavOpen ? "rotate(180deg)" : "rotate(0deg)",
                   }}
                 />
@@ -147,6 +146,10 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
                         fontWeight: "700",
                         color: "var(--text4)",
                         whiteSpace: "nowrap",
+                        borderRadius: "20px",
+                        "&:hover": {
+                          backgroundColor: "var(--library-expand)",
+                        },
                       }}
                     >
                       {item.title}

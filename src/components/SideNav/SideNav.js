@@ -29,19 +29,22 @@ export default function SideNav() {
         sx={{
           width: isSideNavOpen ? "100px" : "300px",
           height: "100vh",
-          transition: "width .5s ease",
+          transition: "width .4s ease",
           position: "relative",
         }}
       >
         <Stack
-          position="fixed" 
+          position="fixed"
           gap="50px"
           height="100vh"
           padding="40px 10px 40px 30px"
-          sx={{ "& > :last-child": { marginTop: "auto" } }}
+          transition="2s"
+          sx={{
+            "& > :last-child": { marginTop: "auto" },
+          }}
         >
           <MasterLogo isSideNavOpen={isSideNavOpen} />
-          <LinkComp isSideNavOpen={isSideNavOpen} sideNavOpen={sideNavOpen}  />
+          <LinkComp isSideNavOpen={isSideNavOpen} sideNavOpen={sideNavOpen} />
           <Account isSideNavOpen={isSideNavOpen} />
         </Stack>
       </Stack>
@@ -53,9 +56,9 @@ export default function SideNav() {
         height={24}
         onClick={drawer}
         style={{
-          position: "fixed", 
+          position: "fixed",
           top: "70px",
-          left: isSideNavOpen ? "89px" : "289px", 
+          left: isSideNavOpen ? "89px" : "289px",
           cursor: "pointer",
           transform: isSideNavOpen ? "rotate(180deg)" : "rotate(0deg)",
           transition: "all .4s ease",

@@ -14,6 +14,7 @@ import calendar from "@/public/Icons/weekCalendar.svg";
 import { useRouter } from "next/navigation";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import { useState } from "react";
+import StatusCard from "@/src/components/CreateExam/Components/StatusCard";
 
 export default function Groupid() {
   const [isDialogOpen, setIsDialogOPen] = useState(false);
@@ -80,61 +81,9 @@ export default function Groupid() {
           title="Settings"
           actionText="Create"
         ></DialogBox>
-        <Stack flexDirection="row" gap="30px">
-          <Card
-            sx={{
-              width: "180px",
-              padding: "20px 16px",
-              border: "1px solid",
-              borderColor: "var(--border-color)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "15px",
-              borderRadius: "12px",
-            }}
-            elevation={0}
-          >
-            <Stack flexDirection="row" gap="10px" alignItems="center">
-              <Typography sx={{ fontFamily: "Lato", fontSize: "14px" }}>
-                Mcoins rewarded
-              </Typography>
-              <Tooltip title="info" placement="right">
-                <Info sx={{ color: "var(--sec-color)" }} />
-              </Tooltip>
-            </Stack>
-            <Typography
-              sx={{ fontFamily: "Lato", fontSize: "28px", fontWeight: "700" }}
-            >
-              2500
-            </Typography>
-          </Card>
-          <Card
-            sx={{
-              width: "180px",
-              padding: "20px 16px",
-              border: "1px solid",
-              borderColor: "var(--border-color)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "15px",
-              borderRadius: "12px",
-            }}
-            elevation={0}
-          >
-            <Stack flexDirection="row" gap="10px" alignItems="center">
-              <Typography sx={{ fontFamily: "Lato", fontSize: "14px" }}>
-                No of attempts
-              </Typography>
-              <Tooltip title="info"  placement="right">
-                <Info sx={{ color: "var(--sec-color)" }} />
-              </Tooltip>
-            </Stack>
-            <Typography
-              sx={{ fontFamily: "Lato", fontSize: "28px", fontWeight: "700" }}
-            >
-              250
-            </Typography>
-          </Card>
+        <Stack flexDirection="row" gap="30px" > 
+        <StatusCard info title="Mcoins rewarded" count="2500" />
+        <StatusCard info title="No of attempts" count="250" />
         </Stack>
         <Stack
           flexDirection="row"

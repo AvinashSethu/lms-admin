@@ -7,6 +7,7 @@ export default function QuestionCard({
   Subject,
   question,
   preview,
+  check
 }) {
   return (
     <Stack sx={{ width: "100%" }}>
@@ -14,15 +15,16 @@ export default function QuestionCard({
         flexDirection="row"
         alignItems="center"
         sx={{
-          padding: "10px",
+          padding: "15px",
           border: "1px solid var(--border-color)",
           borderRadius: "10px",
           height: "100px",
           width: "100%",
           gap: "15px",
+          backgroundColor:"var(--white)"
         }}
       >
-        <Checkbox
+        {check && <Checkbox
           sx={{
             color: "var(--sec-color)",
             "&.Mui-checked": {
@@ -32,7 +34,7 @@ export default function QuestionCard({
               padding: "0px",
             },
           }}
-        />
+        />}
         <Stack width="100%" gap="8px">
           <Stack flexDirection="row" justifyContent="space-between">
             <Stack flexDirection="row" alignItems="center" gap="10px">
