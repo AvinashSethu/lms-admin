@@ -9,12 +9,13 @@ import ExamQuestions from "./Components/ExamQuestions";
 import ExamSettings from "./Components/ExamSettings";
 import ExamStudents from "./Components/ExamStudents";
 
-export default function CreateExam({ title }) {
+export default function CreateExam({ title,examInfoTitle }) {
+  // console.log(examInfoTitle)
   const tabs = [
     { label: "Questions", content: <ExamQuestions /> },
     { label: "Settings", content: <ExamSettings /> },
     { label: "Students", content: <ExamStudents /> },
-  ];
+  ];  
   const router = useRouter();
   return (
     <Stack
@@ -47,7 +48,7 @@ export default function CreateExam({ title }) {
         </Typography>
       </Stack>
       <ExamInfoCard
-        title="Wednesday"
+        examInfoTitle={examInfoTitle}
         icon={calendar.src}
         date="2024-08-05 08:00:00 -- 2024-08-10 20:00:00"
         questions="120 Questions"

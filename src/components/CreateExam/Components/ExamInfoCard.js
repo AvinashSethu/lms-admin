@@ -4,15 +4,17 @@ import { CalendarToday } from "@mui/icons-material";
 import { Stack, Typography } from "@mui/material";
 
 export default function ExamInfoCard({
-  title,
+  examInfoTitle,
   icon,
   date,
   questions,
   duration,
-}) {
+})
+{
+  console.log(examInfoTitle)
   return (
     <SecondaryCard
-      title={title}
+      title={examInfoTitle}
       icon={<Image src={icon} alt="icon" width={24} height={24} />}
       subTitle={
         <Stack flexDirection="row" gap="15px" alignItems="center">

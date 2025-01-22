@@ -1,11 +1,21 @@
 "use client";
-import { Button, Stack, Switch, Typography } from "@mui/material";
+import { Button, DialogContent, Stack, Typography } from "@mui/material";
 import { Add, CalendarMonth, East } from "@mui/icons-material";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import GoalHead from "../components/GoalHead/GoalHead";
 import { useRouter } from "next/navigation";
+import DialogBox from "@/src/components/DialogBox/DialogBox";
+import { useState } from "react";
+import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 
 export default function Examgroups() {
+  const [isDialogOpen, setIsDialogOPen] = useState(false);
+      const dialogOpen = () => {
+        setIsDialogOPen(true);
+      };
+      const dialogClose = () => {
+        setIsDialogOPen(false);
+      };
   const router = useRouter();
   const menuOptions = ["subject1", "subject2"];
   return (
@@ -36,6 +46,7 @@ export default function Examgroups() {
           <Button
             variant="contained"
             startIcon={<Add />}
+            onClick={dialogOpen}
             sx={{
               backgroundColor: "var(--primary-color)",
               textTransform: "none",
@@ -45,6 +56,14 @@ export default function Examgroups() {
             create
           </Button>
         </Stack>
+        <DialogBox isOpen={isDialogOpen}
+          onClose={dialogClose}
+          title="Exam Group"
+          actionText="Create">
+          <DialogContent>
+            <StyledTextField placeholder="Enter Group Name" />
+          </DialogContent>
+        </DialogBox>
         <Stack
           flexWrap="wrap"
           flexDirection="row"

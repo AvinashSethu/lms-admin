@@ -17,13 +17,13 @@ import { useState } from "react";
 
 export default function Groupid() {
   const [isDialogOpen, setIsDialogOPen] = useState(false);
-    const dialogOpen = () => {
-      setIsDialogOPen(true);
-    };
-    const dialogClose = () => {
-      setIsDialogOPen(false);
-    };
-  
+  const dialogOpen = () => {
+    setIsDialogOPen(true);
+  };
+  const dialogClose = () => {
+    setIsDialogOPen(false);
+  };
+
   const router = useRouter();
   return (
     <Stack padding="20px" gap="15px">
@@ -55,10 +55,14 @@ export default function Groupid() {
               Live
             </Typography>
             <Switch />
-            <Settings sx={{ color: "var(--primary-color)",cursor:"pointer" }} onClick={dialogOpen} />
+            <Settings
+              sx={{ color: "var(--primary-color)", cursor: "pointer" }}
+              onClick={dialogOpen}
+            />
             <Button
               variant="contained"
               startIcon={<Add />}
+              onClick={dialogOpen}
               sx={{
                 backgroundColor: "var(--primary-color)",
                 textTransform: "none",
@@ -70,10 +74,12 @@ export default function Groupid() {
             </Button>
           </Stack>
         </Stack>
-        <DialogBox  isOpen={isDialogOpen}
-        onClose={dialogClose}
-        title="Settings"
-        actionText="Create"></DialogBox>
+        <DialogBox
+          isOpen={isDialogOpen}
+          onClose={dialogClose}
+          title="Settings"
+          actionText="Create"
+        ></DialogBox>
         <Stack flexDirection="row" gap="30px">
           <Card
             sx={{
@@ -92,7 +98,7 @@ export default function Groupid() {
               <Typography sx={{ fontFamily: "Lato", fontSize: "14px" }}>
                 Mcoins rewarded
               </Typography>
-              <Tooltip title="info">
+              <Tooltip title="info" placement="right">
                 <Info sx={{ color: "var(--sec-color)" }} />
               </Tooltip>
             </Stack>
@@ -119,7 +125,7 @@ export default function Groupid() {
               <Typography sx={{ fontFamily: "Lato", fontSize: "14px" }}>
                 No of attempts
               </Typography>
-              <Tooltip title="info">
+              <Tooltip title="info"  placement="right">
                 <Info sx={{ color: "var(--sec-color)" }} />
               </Tooltip>
             </Stack>
@@ -151,30 +157,45 @@ export default function Groupid() {
             title="Tuesday"
             subtitle="05/01/25 to 06/02/25"
             actionButton="View"
+            onClick={() => {
+              router.push("/dashboard/goals/1/examgroups/1/1");
+            }}
           />
           <PrimaryCard
             icon={calendar}
             title="Wednesday"
             subtitle="05/01/25 to 06/02/25"
             actionButton="View"
+            onClick={() => {
+              router.push("/dashboard/goals/1/examgroups/1/1");
+            }}
           />
           <PrimaryCard
             icon={calendar}
             title="Thursday"
             subtitle="05/01/25 to 06/02/25"
             actionButton="View"
+            onClick={() => {
+              router.push("/dashboard/goals/1/examgroups/1/1");
+            }}
           />
           <PrimaryCard
             icon={calendar}
             title="Friday"
             subtitle="05/01/25 to 06/02/25"
             actionButton="View"
+            onClick={() => {
+              router.push("/dashboard/goals/1/examgroups/1/1");
+            }}
           />
           <PrimaryCard
             icon={calendar}
             title="Saturday"
             subtitle="05/01/25 to 06/02/25"
             actionButton="View"
+            onClick={() => {
+              router.push("/dashboard/goals/1/examgroups/1/1");
+            }}
           />
         </Stack>
       </Stack>
