@@ -13,6 +13,9 @@ export default function SideNav() {
   const drawer = () => {
     setIsSideNavOpen((prev) => !prev);
   };
+  const sideNavOpen = () => {
+    setIsSideNavOpen(false);
+  };
 
   return (
     <Stack
@@ -38,7 +41,7 @@ export default function SideNav() {
           sx={{ "& > :last-child": { marginTop: "auto" } }}
         >
           <MasterLogo isSideNavOpen={isSideNavOpen} />
-          <LinkComp isSideNavOpen={isSideNavOpen} />
+          <LinkComp isSideNavOpen={isSideNavOpen} sideNavOpen={sideNavOpen}  />
           <Account isSideNavOpen={isSideNavOpen} />
         </Stack>
       </Stack>
