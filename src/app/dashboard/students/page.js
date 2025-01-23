@@ -3,9 +3,10 @@ import FilterSideNav from "@/src/components/FilterSideNav/FilterSideNav";
 import Header from "@/src/components/Header/Header";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
-import { Add, ArrowBack, ArrowBackIos, FilterAlt } from "@mui/icons-material";
+import { Add, ArrowBackIos, FilterAlt } from "@mui/icons-material";
 import { Button, Pagination, Stack, Typography } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 // export const metadata = {
@@ -26,9 +27,17 @@ export default function Students() {
     }
     setIsOpen(open);
   };
+  const router = useRouter();
   return (
     <Stack padding="20px" gap="20px">
-      <Header title="Students" button="Student" icon={<Add />} />
+      <Header
+        title="Students"
+        button="Student"
+        icon={<Add />}
+        onClick={() => {
+          router.push("/dashboard/students/1");
+        }}
+      />
       <Stack
         sx={{
           backgroundColor: "var(--white)",
@@ -90,18 +99,26 @@ export default function Students() {
                 >
                   Abishek A
                 </Typography>
-                <Typography sx={{
+                <Typography
+                  sx={{
                     fontFamily: "Lato",
                     fontSize: "14px",
                     fontWeight: "700",
                     color: "var(--text1)",
-                  }}>21ec001@psr.edu.in</Typography>
-                <Typography sx={{
+                  }}
+                >
+                  21ec001@psr.edu.in
+                </Typography>
+                <Typography
+                  sx={{
                     fontFamily: "Lato",
                     fontSize: "14px",
                     fontWeight: "700",
                     color: "var(--text1)",
-                  }}>GATE CSE</Typography>
+                  }}
+                >
+                  GATE CSE
+                </Typography>
               </Stack>
             }
             options={menuOptions}
@@ -127,18 +144,26 @@ export default function Students() {
                 >
                   Abishek A
                 </Typography>
-                <Typography sx={{
+                <Typography
+                  sx={{
                     fontFamily: "Lato",
                     fontSize: "14px",
                     fontWeight: "700",
                     color: "var(--text1)",
-                  }}>21ec001@psr.edu.in</Typography>
-                <Typography sx={{
+                  }}
+                >
+                  21ec001@psr.edu.in
+                </Typography>
+                <Typography
+                  sx={{
                     fontFamily: "Lato",
                     fontSize: "14px",
                     fontWeight: "700",
                     color: "var(--text1)",
-                  }}>GATE CSE</Typography>
+                  }}
+                >
+                  GATE CSE
+                </Typography>
               </Stack>
             }
             options={menuOptions}
@@ -164,40 +189,48 @@ export default function Students() {
                 >
                   Abishek A
                 </Typography>
-                <Typography sx={{
+                <Typography
+                  sx={{
                     fontFamily: "Lato",
                     fontSize: "14px",
                     fontWeight: "700",
                     color: "var(--text1)",
-                  }}>21ec001@psr.edu.in</Typography>
-                <Typography sx={{
+                  }}
+                >
+                  21ec001@psr.edu.in
+                </Typography>
+                <Typography
+                  sx={{
                     fontFamily: "Lato",
                     fontSize: "14px",
                     fontWeight: "700",
                     color: "var(--text1)",
-                  }}>GATE CSE</Typography>
+                  }}
+                >
+                  GATE CSE
+                </Typography>
               </Stack>
             }
             options={menuOptions}
           />
         </Stack>
         <Stack
-                flexDirection="row"
-                justifyContent="center"
-                alignItems="center"
-                gap="10px"
-                sx={{
-                  width: "100%",
-                  marginTop: "auto",
-                }}
-              >
-                <Typography
-                  sx={{ fontFamily: "Lato", fontSize: "13px", fontWeight: "400" }}
-                >
-                  Total 85 items
-                </Typography>
-                <Pagination count={9} shape="rounded" variant="outlined" />
-              </Stack>
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="center"
+          gap="10px"
+          sx={{
+            width: "100%",
+            marginTop: "auto",
+          }}
+        >
+          <Typography
+            sx={{ fontFamily: "Lato", fontSize: "13px", fontWeight: "400" }}
+          >
+            Total 85 items
+          </Typography>
+          <Pagination count={9} shape="rounded" variant="outlined" />
+        </Stack>
       </Stack>
     </Stack>
   );

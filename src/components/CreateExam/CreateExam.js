@@ -1,6 +1,6 @@
 "use client";
 import { ArrowBackIosRounded } from "@mui/icons-material";
-import { Button, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import CustomTabs from "../CustomTabs/CustomTabs";
 import ExamInfoCard from "./Components/ExamInfoCard";
 import calendar from "@/public/Icons/weekCalendar.svg";
@@ -53,7 +53,7 @@ export default function CreateExam({ title, examInfoTitle }) {
         questions="120 Questions"
         duration="120 Minutes"
       />
-      <CustomTabs tabs={tabs} />
+      <CustomTabs tabs={tabs} width="308px" />
       
     </Stack>
   );

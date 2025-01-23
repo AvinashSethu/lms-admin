@@ -1,9 +1,8 @@
 "use client";
 import CustomTabs from "@/src/components/CustomTabs/CustomTabs";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
-import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
-import { AccountBalance, ArrowBackIos } from "@mui/icons-material";
-import { Button, Stack, Typography } from "@mui/material";
+import { ArrowBackIos } from "@mui/icons-material";
+import { Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Approved from "./Approved";
 import Request from "./Request";
@@ -11,9 +10,9 @@ import Request from "./Request";
 export default function Batchid() {
   const router = useRouter();
   const tabs = [
-      { label: "Questions", content: <Approved /> },
-      { label: "Settings", content: <Request /> },
-    ];
+    { label: "Approved", content: <Approved /> },
+    { label: "Request", content: <Request /> },
+  ];
   return (
     <Stack padding="20px" gap="20px">
       <Stack
@@ -49,7 +48,7 @@ export default function Batchid() {
             <SearchBox />
           </Stack>
         </Stack>
-        <CustomTabs tabs={tabs} />
+        <CustomTabs tabs={tabs} width="208px" />
       </Stack>
     </Stack>
   );

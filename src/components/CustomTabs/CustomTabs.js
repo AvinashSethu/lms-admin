@@ -3,10 +3,10 @@ import { Box, styled, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-const StyledTabs = styled(Tabs)(({ customStyles }) => ({
+const StyledTabs = styled(Tabs)(({ customStyles,width }) => ({
   backgroundColor: "var(--white)",
   borderRadius: "10px",
-  width:"308px",
+  width:width,
   padding: "4px",
   minHeight: "40px",
   boxShadow: "inset .5px .5px 6px var(--border-color)",
@@ -71,6 +71,7 @@ export default function CustomTabs({ tabs, customStyles,width }) {
       >
         {tabs.map((tab, index) => (
           <StyledTab
+          // value={value}
             key={index}
             label={tab.label}
             customStyles={customStyles}

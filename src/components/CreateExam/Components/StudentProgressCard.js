@@ -14,7 +14,6 @@ export default function StudentProgressCard({
   status,
   percent,
 }) {
-  
   const progressButton = {
     "In Progress": "var(--sec-color-acc-2)",
     Completed: "var(--primary-color-acc-2)",
@@ -149,16 +148,16 @@ export default function StudentProgressCard({
           }}
           elevation={0}
         >
-            <MenuItem
-              onClick={menuClose}
-              sx={{
-                color: "var(text4)",
-                fontSize: "14px",
-                fontFamily: "Lato",
-              }}
-            >
-              Remove
-            </MenuItem>
+          <MenuItem
+            onClick={menuClose}
+            sx={{
+              color: "var(text4)",
+              fontSize: "14px",
+              fontFamily: "Lato",
+            }}
+          >
+            Remove
+          </MenuItem>
         </Menu>
       </Stack>
     </Stack>
