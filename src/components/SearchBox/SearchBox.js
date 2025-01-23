@@ -8,11 +8,12 @@ export default function SearchBox() {
         sx={{
           width:"100%",
           "& .MuiOutlinedInput-root": {
-            height: "35px",
+            height: "40px",
             borderRadius: "5px",
             fontFamily: "Lato",
             fontWeight: "400",
             fontSize: "16px",
+            backgroundColor:"var(--white)",
             "&.Mui-focused fieldset": {
               borderColor: "var(--sec-color)",
               borderWidth: "1px",

@@ -21,7 +21,9 @@ export default function Institute() {
       />
       <Stack flexWrap="wrap" flexDirection="row" rowGap="10px" columnGap="40px">
         <SecondaryCard
-          title="P.S.R Engineering College"
+        title={<span style={{cursor:"pointer"}} onClick={() => {
+          router.push("/dashboard/institute/1")
+        }}>P.S.R Engineering College</span>}
           icon={<AccountBalance sx={{ color: "var(--sec-color)" }} />}
           options={menuItem}
           cardWidth="300px"

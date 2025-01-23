@@ -16,8 +16,8 @@ import Header from "@/src/components/Header/Header";
 // };
 
 export default function Home() {
-  const [isDialogOpen, setIsDialogOPen] = useState(false);
   const router = useRouter();
+  const [isDialogOpen, setIsDialogOPen] = useState(false);
   const dialogOpen = () => {
     setIsDialogOPen(true);
   };

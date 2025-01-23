@@ -3,15 +3,14 @@ import { Box, styled, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-// Styled Tabs and Tab
 const StyledTabs = styled(Tabs)(({ customStyles }) => ({
   backgroundColor: "var(--white)",
   borderRadius: "10px",
-  width: "308px",
+  width:"308px",
   padding: "4px",
   minHeight: "40px",
   boxShadow: "inset .5px .5px 6px var(--border-color)",
-  ...customStyles?.tabs, // Allow external styles to override
+  ...customStyles?.tabs,
   "& .MuiTabs-indicator": {
     display: "none",
   },
@@ -30,10 +29,9 @@ const StyledTab = styled(Tab)(({ customStyles }) => ({
     color: "var(--sec-color)",
     backgroundColor: "var(--sec-color-acc-1)",
   },
-  ...customStyles?.tab, // Allow external styles to override
+  ...customStyles?.tab, 
 }));
 
-// Tab Panel Component
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -56,8 +54,7 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-// Main Tabs Component
-export default function CustomTabs({ tabs, customStyles }) {
+export default function CustomTabs({ tabs, customStyles,width }) {
   const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
@@ -70,6 +67,7 @@ export default function CustomTabs({ tabs, customStyles }) {
         value={value}
         onChange={handleChange}
         customStyles={customStyles}
+        width={width}
       >
         {tabs.map((tab, index) => (
           <StyledTab

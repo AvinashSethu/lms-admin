@@ -30,6 +30,7 @@ export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
           { title: "Course Bank", href: "/dashboard/library/coursebank" },
           { title: "All Questions", href: "/dashboard/library/allQuestions" },
           { title: "All Subjects", href: "/dashboard/library/allSubjects" },
+          { title: "All Exams", href: "/dashboard/library/allExams" },
         ]}
         isSideNavOpen={isSideNavOpen}
         sideNavOpen={sideNavOpen}
