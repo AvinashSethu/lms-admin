@@ -1,11 +1,10 @@
 "use client";
 import QuestionCard from "@/src/components/CreateExam/Components/QuestionCard";
-import DialogBox from "@/src/components/DialogBox/DialogBox";
 import FilterSideNav from "@/src/components/FilterSideNav/FilterSideNav";
 import Header from "@/src/components/Header/Header";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
-import { Add, Close, FilterAlt } from "@mui/icons-material";
-import { Button, DialogContent, Drawer, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Typography } from "@mui/material";
+import { Add, FilterAlt } from "@mui/icons-material";
+import { Button, Pagination, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 
 export default function AllQuestions() {
@@ -22,47 +21,11 @@ export default function AllQuestions() {
     }
     setIsOpen(open);
   };
-  const [isDialogOpen, setIsDialogOPen] = useState(false);
-    const dialogOpen = () => {
-      setIsDialogOPen(true);
-    };
-    const dialogClose = () => {
-      setIsDialogOPen(false);
-    };
+
   return (
     <Stack padding="20px" gap="20px" minHeight="100vh">
-      <Header title="Questions" button="Question" icon={<Add />} onClick={dialogOpen} />
-      <DialogBox
-          isOpen={isDialogOpen}
-          onClose={dialogClose}
-          title="Add Question"
-          actionText="Add Question"
-        >
-          <DialogContent>
-            <FormControl
-              sx={{
-                width: "100%",
-              }}
-              size="small"
-            >
-              <InputLabel>Select Questions</InputLabel>
-              <Select
-                label="Select Questions"
-                size="small"
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                }}
-              >
-                <MenuItem>Question 1</MenuItem>
-              </Select>
-            </FormControl>
-          </DialogContent>
-        </DialogBox>
+      <Header title="Questions" button="Question" icon={<Add />} />
+
       <Stack flexDirection="row" justifyContent="space-between" gap="20px">
         <SearchBox />
         <Button

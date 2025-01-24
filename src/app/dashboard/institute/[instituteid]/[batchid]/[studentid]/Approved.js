@@ -9,16 +9,19 @@ export default function Approved() {
           name="Abishek A"
           email="21ec001@psr.edu.in"
           college="P.S.R Engineering College"
+          options
         />
         <StudentProgressCard
           name="Abishek A"
           email="21ec001@psr.edu.in"
           college="P.S.R Engineering College"
+          options
         />
         <StudentProgressCard
           name="Abishek A"
           email="21ec001@psr.edu.in"
           college="P.S.R Engineering College"
+          options
         />
       </Stack>
       <Stack

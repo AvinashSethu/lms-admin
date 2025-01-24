@@ -2,7 +2,7 @@
 import { Button, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import studentcard from "@/public/Icons/studentcard.svg";
-import { MoreVert } from "@mui/icons-material";
+import { Close, Done, MoreVert, RampRight } from "@mui/icons-material";
 import { useState } from "react";
 
 export default function StudentProgressCard({
@@ -13,6 +13,8 @@ export default function StudentProgressCard({
   time,
   status,
   percent,
+  options,
+  Request,
 }) {
   const progressButton = {
     "In Progress": "var(--sec-color-acc-2)",
@@ -40,7 +42,7 @@ export default function StudentProgressCard({
       flexDirection="row"
       padding="10px"
       alignItems="center"
-      justifyContent="space-between"
+      gap="20px"
       sx={{
         border: "1px solid var(--border-color)",
         borderRadius: "10px",
@@ -70,7 +72,6 @@ export default function StudentProgressCard({
         flexDirection="row"
         gap={10}
         alignItems="center"
-        justifyContent="space-between"
       >
         <Stack gap="5px">
           <Typography
@@ -132,34 +133,61 @@ export default function StudentProgressCard({
           {status}
         </Button>
         <Typography sx={{ width: "60px" }}>{percent}</Typography>
-        <MoreVert sx={{ cursor: "pointer" }} onClick={menuOpen} />
-        <Menu
-          anchorEl={isMenuOpen}
-          open={Boolean(isMenuOpen)}
-          onClose={menuClose}
-          disableScrollLock={true}
-          slotProps={{
-            paper: {
-              style: {
-                border: "1px solid",
-                borderColor: "var(--border-color)",
-              },
-            },
-          }}
-          elevation={0}
-        >
-          <MenuItem
-            onClick={menuClose}
-            sx={{
-              color: "var(text4)",
-              fontSize: "14px",
-              fontFamily: "Lato",
-            }}
-          >
-            Remove
-          </MenuItem>
-        </Menu>
       </Stack>
+      {options && (
+        <MoreVert
+          sx={{ cursor: "pointer", marginLeft: "auto" }}
+          onClick={menuOpen}
+        />
+      )}
+      {Request && (
+        <Stack flexDirection="row" gap="10px" marginLeft="auto">
+          <Done
+          fontSize="medium"
+            sx={{
+              color: "var(--primary-color)",
+              cursor: "pointer",
+              backgroundColor: "var(--primary-color-acc-2)",
+              padding:"3px",
+              borderRadius:"5px",
+            }}
+          />
+          <Close fontSize="medium"
+            sx={{
+              color: "var(--sec-color)",
+              cursor: "pointer",
+              backgroundColor: "var(--sec-color-acc-1)",
+              padding:"3px",
+              borderRadius:"5px"
+            }} />
+        </Stack>
+      )}
+      <Menu
+        anchorEl={isMenuOpen}
+        open={Boolean(isMenuOpen)}
+        onClose={menuClose}
+        disableScrollLock={true}
+        slotProps={{
+          paper: {
+            style: {
+              border: "1px solid",
+              borderColor: "var(--border-color)",
+            },
+          },
+        }}
+        elevation={0}
+      >
+        <MenuItem
+          onClick={menuClose}
+          sx={{
+            color: "var(text4)",
+            fontSize: "14px",
+            fontFamily: "Lato",
+          }}
+        >
+          Remove
+        </MenuItem>
+      </Menu>
     </Stack>
   );
 }

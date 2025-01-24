@@ -9,16 +9,13 @@ export default function Request() {
           name="Abishek A"
           email="21ec001@psr.edu.in"
           college="P.S.R Engineering College"
+          Request
         />
         <StudentProgressCard
           name="Abishek A"
           email="21ec001@psr.edu.in"
           college="P.S.R Engineering College"
-        />
-        <StudentProgressCard
-          name="Abishek A"
-          email="21ec001@psr.edu.in"
-          college="P.S.R Engineering College"
+          Request
         />
       </Stack>
       <Stack

@@ -61,7 +61,7 @@ export default function FilterSideNav({ isOpen, toggleDrawer,select_1 ,select_2,
             <MenuItem value="">Completed</MenuItem>
           </Select>
         </FormControl>
-        <FormControl size="small">
+        {select_3 && <FormControl size="small">
           <InputLabel>{select_3}</InputLabel>
           <Select
             label={select_3}
@@ -77,7 +77,7 @@ export default function FilterSideNav({ isOpen, toggleDrawer,select_1 ,select_2,
             <MenuItem value="">Ascending</MenuItem>
             <MenuItem value="">descending</MenuItem>
           </Select>
-        </FormControl>
+        </FormControl>}
         <Button
           variant="contained"
           onClick={toggleDrawer(false)}

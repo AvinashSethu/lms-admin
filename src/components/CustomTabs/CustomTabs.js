@@ -1,5 +1,7 @@
 "use client";
-import { Box, styled, Tab, Tabs } from "@mui/material";
+import { ArrowBackIos } from "@mui/icons-material";
+import { Box, Stack, styled, Tab, Tabs } from "@mui/material";
+import { useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
@@ -54,15 +56,18 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function CustomTabs({ tabs, customStyles,width }) {
+export default function CustomTabs({ tabs, customStyles,width ,back}) {
   const [value, setValue] = useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+const router = useRouter();
 
   return (
-    <Box>
+    <Stack>
+      <Stack flexDirection="row" alignItems="center">
+      {back && <ArrowBackIos sx={{cursor:"pointer"}} onClick={() => {router.back();}} />}
+      
       <StyledTabs
         value={value}
         onChange={handleChange}
@@ -78,24 +83,25 @@ export default function CustomTabs({ tabs, customStyles,width }) {
           />
         ))}
       </StyledTabs>
+      </Stack>
       {tabs.map((tab, index) => (
         <CustomTabPanel key={index} value={value} index={index}>
           {tab.content}
         </CustomTabPanel>
       ))}
-    </Box>
+    </Stack>
   );
 }
 
 CustomTabs.propTypes = {
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string.isRequired, // Tab label
-      content: PropTypes.node.isRequired, // Tab content
+      label: PropTypes.string.isRequired, 
+      content: PropTypes.node.isRequired,
     })
   ).isRequired,
   customStyles: PropTypes.shape({
-    tabs: PropTypes.object, // Optional custom styles for Tabs
-    tab: PropTypes.object,  // Optional custom styles for individual Tab
+    tabs: PropTypes.object, 
+    tab: PropTypes.object,  
   }),
 };

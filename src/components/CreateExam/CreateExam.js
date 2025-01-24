@@ -54,7 +54,6 @@ export default function CreateExam({ title, examInfoTitle }) {
         duration="120 Minutes"
       />
       <CustomTabs tabs={tabs} width="308px" />
-      
     </Stack>
   );
 }

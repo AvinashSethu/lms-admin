@@ -49,9 +49,9 @@ export default function Students() {
           minHeight: "100vh",
         }}
       >
-        <Stack flexDirection="row" justifyContent="space-between">
-          <ArrowBackIos />
-          <Stack flexDirection="row" gap="10px">
+        <Stack  >
+          {/* <ArrowBackIos /> */}
+          <Stack flexDirection="row" gap="10px" alignItems="flex-end">
             <SearchBox />
             <Button
               variant="contained"

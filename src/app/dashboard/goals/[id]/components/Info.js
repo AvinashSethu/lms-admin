@@ -1,9 +1,20 @@
+"use client";
+import DialogBox from "@/src/components/DialogBox/DialogBox";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
+import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { Add, PushPin } from "@mui/icons-material";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, DialogContent, Stack, Typography } from "@mui/material";
+import { useState } from "react";
 
 export default function Info() {
-  const menuOptions = ["subject1", "subject2"];
+  const menuOptions = ["Remove"];
+  const [isDialogOpen, setIsDialogOPen] = useState(false);
+  const dialogOpen = () => {
+    setIsDialogOPen(true);
+  };
+  const dialogClose = () => {
+    setIsDialogOPen(false);
+  };
   return (
     <Stack
       sx={{
@@ -30,6 +41,7 @@ export default function Info() {
         <Button
           variant="contained"
           startIcon={<Add />}
+          onClick={dialogOpen}
           sx={{
             backgroundColor: "var(--primary-color)",
             textTransform: "none",
@@ -39,6 +51,23 @@ export default function Info() {
           Create
         </Button>
       </Stack>
+      <DialogBox
+        isOpen={isDialogOpen}
+        onClose={dialogClose}
+        title="Info editor"
+        actionText="Save"
+      >
+        <DialogContent>
+          <Stack gap="15px">
+            <Typography>Title</Typography>
+            <Stack flexDirection="row" justifyContent="space-between">
+              <StyledTextField placeholder="Enter title" />
+              
+            </Stack>
+            
+          </Stack>
+        </DialogContent>
+      </DialogBox>
       <Stack flexWrap="wrap" flexDirection="row" rowGap="20px" columnGap="50px">
         <SecondaryCard
           icon={
@@ -91,7 +120,6 @@ export default function Info() {
           cardWidth="350px"
         />
       </Stack>
-      
     </Stack>
   );
 }

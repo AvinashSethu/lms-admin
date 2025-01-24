@@ -17,11 +17,20 @@ export default function Studentprofileid() {
     { label: "Courses",content:<StudentCourse /> },
   ];
   return (
-    <Stack padding="20px">
-      <Stack flexDirection="row" alignItems="center">
-        <ArrowBackIos onClick={() => {router.back();}} sx={{cursor:"pointer"}} />
-        <CustomTabs tabs={tabs} width="408px" />
-      </Stack>
+    <Stack padding="20px" flexDirection="row" >
+      <Stack
+        sx={{
+          border: "1px solid var(--border-color)",
+          borderRadius: "10px",
+          padding: "20px",
+          backgroundColor: "var(--white)",
+          minHeight: "100vh",
+          gap: "20px",
+          width:"100%",
+        }}
+      >
+        <CustomTabs tabs={tabs} width="408px" back />
+    </Stack>
     </Stack>
   );
 }
