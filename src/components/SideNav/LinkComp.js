@@ -131,10 +131,9 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
             {isNavOpen && list && (
               <Stack
                 sx={{
-                  pl: "14px",
+                  pl: "15px",
                   mt: "10px",
                   justifyContent: "center",
-                  gap: "10px",
                 }}
               >
                 {list.map((item, index) => (
@@ -143,11 +142,12 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
                       sx={{
                         fontFamily: "Lato",
                         fontSize: "14px",
-                        pl: "14px",
                         fontWeight: "700",
                         color: "var(--text4)",
                         whiteSpace: "nowrap",
                         borderRadius: "20px",
+                        height:"28px",
+                        padding:"4px",                        
                         "&:hover": {
                           backgroundColor: "var(--library-expand)",
                         },

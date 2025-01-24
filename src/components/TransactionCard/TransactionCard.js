@@ -142,13 +142,16 @@ export default function TransactionCard({
             {price}
           </Typography>
           <Chip
-            label="success"
+            label={status}
             size="small"
             sx={{
               fontFamily: "Lato",
               fontSize: "14px",
-              fontWeight: "400",
+              fontWeight: "700",
               color: "var(--text1)",
+              backgroundColor:"var(--primary-color-acc-2)",
+              color:"var(--primary-color)",
+              textTransform:"none"
             }}
           >
             {status}
