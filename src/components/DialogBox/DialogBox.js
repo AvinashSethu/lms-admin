@@ -13,6 +13,7 @@ export default function DialogBox({
   onClose,
   title,
   actionText,
+  onClick
 }) {
   return (
     <Dialog
@@ -45,6 +46,7 @@ export default function DialogBox({
       <DialogActions sx={{ justifyContent: "center" }}>
         <Button
           variant="text"
+          onClick={onClick}
           sx={{
             textTransform: "none",
             color: "var(--primary-color)",

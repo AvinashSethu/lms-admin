@@ -1,10 +1,10 @@
 import { TextField } from "@mui/material";
-import { styled } from "@mui/system";
+import { height, maxHeight, minHeight, styled } from "@mui/system";
 
-const StyledTextField = styled(TextField)({
+const StyledTextField = styled(TextField)(({description}) => ({
   width: "100%",
   "& .MuiOutlinedInput-root": {
-    height: "40px",
+    height: description ?  "80px" : "40px",
     borderRadius: "5px",
     fontFamily: "Lato",
     fontWeight: "400",
@@ -17,6 +17,10 @@ const StyledTextField = styled(TextField)({
       borderColor: "var(--sec-color)",
     },
   },
-});
+  "& .MuiInputBase-input::placeholder": {
+    color: "var(--text3)", 
+    opacity: 1, 
+  },
+}));
 
 export default StyledTextField;

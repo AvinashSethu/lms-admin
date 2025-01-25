@@ -14,8 +14,10 @@ import {
 import videoThumbnail from "@/public/Images/videoThumbnail.svg";
 import { useState } from "react";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
+import { useRouter } from "next/navigation";
 
 export default function Syllabus() {
+  const router = useRouter();
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const dialogOpen = () => {
     setIsDialogOPen(true);
@@ -23,6 +25,13 @@ export default function Syllabus() {
   const dialogClose = () => {
     setIsDialogOPen(false);
   };
+  const [videoDialog, setVideoDialog] = useState(false);
+  const videoDialogOpen = () => {
+    setVideoDialog(true);
+  }
+  const videoDialogClose = () => {
+    setVideoDialog(false);
+  }
   const menuOptions = ["Remove"];
   return (
     <Stack
@@ -131,6 +140,7 @@ export default function Syllabus() {
         <Button
           variant="contained"
           startIcon={<Add />}
+          onClick={videoDialogOpen}
           sx={{
             backgroundColor: "var(--primary-color)",
             textTransform: "none",
@@ -140,6 +150,40 @@ export default function Syllabus() {
           Video courses
         </Button>
       </Stack>
+      <DialogBox
+          isOpen={videoDialog}
+          onClose={videoDialogClose}
+          title="Add Course"
+          actionText="Create"
+          onClick={() => {
+            videoDialogClose();
+            router.push("/dashboard/goals/1/courses/1");}}
+        >
+          <DialogContent>
+            <FormControl
+              sx={{
+                width: "100%",
+              }}
+              size="small"
+            >
+              <InputLabel>Select Subject</InputLabel>
+              <Select
+                label="Select subject"
+                size="small"
+                sx={{
+                  "&:hover .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "var(--sec-color)",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "var(--sec-color)",
+                  },
+                }}
+              >
+                <MenuItem>one</MenuItem>
+              </Select>
+            </FormControl>
+          </DialogContent>
+        </DialogBox>
       <VideoCard
         title="Linear Algebra"
         thumbnail={videoThumbnail.src}

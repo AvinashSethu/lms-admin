@@ -68,6 +68,7 @@ export default function Account({ isSideNavOpen }) {
         open={open}
         onClose={handleClose}
         autoFocus={false}
+        disableScrollLock={true}
         sx={{
           "& .MuiPaper-root": {
             width: "240px",
