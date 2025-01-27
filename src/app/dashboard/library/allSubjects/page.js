@@ -15,6 +15,10 @@ export default function AllSubjects() {
       const dialogClose = () => {
         setIsDialogOPen(false);
       };
+      const [allSubject, setAllSubject] = useState();
+      const hanglechange = (event) => {
+        setAllSubject(event.target.value);
+      }
   return (
     <Stack padding="20px" gap="20px">
       <Header title="All Subjects" search button="Subject" icon={<Add />} onClick={dialogOpen} />
@@ -33,6 +37,8 @@ export default function AllSubjects() {
             >
               <InputLabel>Select Subject</InputLabel>
               <Select
+              value={allSubject}
+              onChange={hanglechange}
                 label="Select Subject"
                 size="small"
                 sx={{
@@ -44,7 +50,7 @@ export default function AllSubjects() {
                   },
                 }}
               >
-                <MenuItem>Numerical Ability</MenuItem>
+                <MenuItem value="one">Numerical Ability</MenuItem>
               </Select>
             </FormControl>
           </DialogContent>

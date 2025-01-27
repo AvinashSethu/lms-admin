@@ -23,7 +23,14 @@ export default function Settings() {
   const dialogClose = () => {
     setIsDialogOPen(false);
   };
-
+  const [selectType, setSelectType] = useState('');
+  const [noOfType, setNoOfType] = useState('');
+  const handleChangeSelect = (event) => {
+    setSelectType(event.target.value);
+  };
+  const handleChangeNum = (event) => {
+    setNoOfType(event.target.value)
+  }
   return (
     <Stack
       sx={{
@@ -107,7 +114,9 @@ export default function Settings() {
               <InputLabel>Select type</InputLabel>
               <Select
                 label="Select type"
+                value={selectType}
                 size="small"
+                onChange={handleChangeSelect}
                 sx={{
                   "&:hover .MuiOutlinedInput-notchedOutline": {
                     borderColor: "var(--sec-color)",
@@ -117,9 +126,9 @@ export default function Settings() {
                   },
                 }}
               >
-                <MenuItem value="">one</MenuItem>
-                <MenuItem value="">two</MenuItem>
-                <MenuItem value="">three</MenuItem>
+                <MenuItem value="10">one</MenuItem>
+                <MenuItem value="20">two</MenuItem>
+                <MenuItem value="30">three</MenuItem>
               </Select>
             </FormControl>
             <Stack flexDirection="row" justifyContent="space-between">
@@ -127,6 +136,8 @@ export default function Settings() {
                 <InputLabel>No of type</InputLabel>
                 <Select
                   label="No of type"
+                  value={noOfType}
+                  onChange={handleChangeNum}
                   sx={{
                     "&:hover .MuiOutlinedInput-notchedOutline": {
                       borderColor: "var(--sec-color)",
@@ -136,9 +147,9 @@ export default function Settings() {
                     },
                   }}
                 >
-                  <MenuItem value="">one</MenuItem>
-                  <MenuItem value="">two</MenuItem>
-                  <MenuItem value="">three</MenuItem>
+                  <MenuItem value="10">one</MenuItem>
+                  <MenuItem value="20">two</MenuItem>
+                  <MenuItem value="30">three</MenuItem>
                 </Select>
               </FormControl>
               <StyledTextField

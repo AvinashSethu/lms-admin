@@ -1,14 +1,16 @@
 "use client";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
+import CourseCard from "@/src/components/CourseCard/CourseCard";
 import {
   AccountBalance,
+  Add,
   ArrowBackIos,
-  CopyAll,
   FileCopy,
 } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
+import videoThumbnail from "@/public/Images/videoThumbnail.svg";
 
 export default function Batchid() {
   const router = useRouter();
@@ -52,8 +54,8 @@ export default function Batchid() {
                 color: "var(--text3)",
                 fontFamily: "Lato",
                 fontSize: "16px",
-                width:"160px",
-                borderColor:"var(--border-color)"
+                width: "160px",
+                borderColor: "var(--border-color)",
               }}
             >
               CYMKAB
@@ -74,7 +76,73 @@ export default function Batchid() {
             </Button>
           </Stack>
         </Stack>
-
+        <Stack flexDirection="row" justifyContent="space-between">
+          <Typography
+            sx={{ fontFamily: "Lato", fontSize: "20px", fontWeight: "700" }}
+          >
+            Courses
+          </Typography>
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
+            disableElevation
+          >
+            Courses
+          </Button>
+        </Stack>
+        <Stack
+          flexDirection="row"
+          flexWrap="wrap"
+          rowGap="15px"
+          columnGap="30px"
+        >
+          <CourseCard
+            title="Linear Algebra"
+            thumbnail={videoThumbnail.src}
+            Language="English"
+            lesson="16 Lessons"
+            hours="48 Hours"
+            actionButton="Remove"
+          />
+          <CourseCard
+            title="Linear Algebra"
+            thumbnail={videoThumbnail.src}
+            Language="English"
+            lesson="16 Lessons"
+            hours="48 Hours"
+            actionButton="Remove"
+          />
+          <CourseCard
+            title="Linear Algebra"
+            thumbnail={videoThumbnail.src}
+            Language="English"
+            lesson="16 Lessons"
+            hours="48 Hours"
+            actionButton="Remove"
+          />
+        </Stack>
+        <Stack flexDirection="row" justifyContent="space-between">
+          <Typography
+            sx={{ fontFamily: "Lato", fontSize: "20px", fontWeight: "700" }}
+          >
+            Exams
+          </Typography>
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
+            disableElevation
+          >
+            Exams
+          </Button>
+        </Stack>
         <Stack
           columnGap="35px"
           rowGap="15px"

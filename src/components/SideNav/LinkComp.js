@@ -49,8 +49,8 @@ export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
       />
       <NavComp
         icon="/Icons/rupee.svg"
-        title="Transactions"
-        href="/dashboard/transactions"
+        title="Payments & Coupons"
+        href="/dashboard/payments"
         isSideNavOpen={isSideNavOpen}
       />
     </Stack>

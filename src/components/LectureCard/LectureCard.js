@@ -100,7 +100,7 @@ export default function LectureCard({
               <SaveAlt sx={{ color: "var(--sec-color)" }} />
             </IconButton>
           )}
-          <IconButton disableRipple>
+          <IconButton  disableRipple >
             {link ? (
               <Link sx={{ color: "var(--sec-color)" }} />
             ) : (
@@ -115,4 +115,3 @@ export default function LectureCard({
     </Stack>
   );
 }
-

@@ -22,6 +22,16 @@ export default function CoursebankId() {
   const dialogClose = () => {
     setIsDialogOPen(false);
   };
+  const [selectValues, setSelectValues] = useState({
+    videoTitle:"",
+  });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setSelectValues((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   return (
     <Stack padding="20px" gap="20px">
       <Header
@@ -48,6 +58,9 @@ export default function CoursebankId() {
             >
               <InputLabel>Enter video title</InputLabel>
               <Select
+              name="videoTitle"
+              value={selectValues.videoTitle}
+              onChange={handleChange}
                 label="Enter video title"
                 size="small"
                 sx={{
@@ -59,7 +72,7 @@ export default function CoursebankId() {
                   },
                 }}
               >
-                <MenuItem>Numerical Ability</MenuItem>
+                <MenuItem value="one">Numerical Ability</MenuItem>
               </Select>
             </FormControl>
             <FormControl

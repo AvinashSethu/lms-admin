@@ -1,4 +1,4 @@
-import VideoCard from "@/src/components/VideoCard/VideoCard";
+import CourseCard from "@/src/components/CourseCard/CourseCard";
 import { Add } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 import videoThumbnail from "@/public/Images/videoThumbnail.svg";
@@ -37,53 +37,59 @@ export default function StudentCourse() {
         </Stack>
       </Stack>
       <Stack flexDirection="row" flexWrap="wrap" rowGap="15px" columnGap="25px" >
-        <VideoCard
+        <CourseCard
           title="General Aptitude"
           thumbnail={videoThumbnail.src}
           Language="English"
           lesson="16 Lessons"
           hours="48 Hours"
           actionButton="View"
+          progress
         />
-        <VideoCard
+        <CourseCard
           title="General Aptitude"
           thumbnail={videoThumbnail.src}
           Language="English"
           lesson="16 Lessons"
           hours="48 Hours"
           actionButton="View"
+          progress
         />
-        <VideoCard
+        <CourseCard
           title="General Aptitude"
           thumbnail={videoThumbnail.src}
           Language="English"
           lesson="16 Lessons"
           hours="48 Hours"
           actionButton="View"
+          progress
         />
-        <VideoCard
+        <CourseCard
           title="General Aptitude"
           thumbnail={videoThumbnail.src}
           Language="English"
           lesson="16 Lessons"
           hours="48 Hours"
           actionButton="View"
+          progress
         />
-        <VideoCard
+        <CourseCard
           title="General Aptitude"
           thumbnail={videoThumbnail.src}
           Language="English"
           lesson="16 Lessons"
           hours="48 Hours"
           actionButton="View"
+          progress
         />
-        <VideoCard
+        <CourseCard
           title="General Aptitude"
           thumbnail={videoThumbnail.src}
           Language="English"
           lesson="16 Lessons"
           hours="48 Hours"
           actionButton="View"
+          progress
         />
       </Stack>
     </Stack>

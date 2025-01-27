@@ -24,6 +24,10 @@ export default function Coursebank() {
   const dialogClose = () => {
     setIsDialogOPen(false);
   };
+  const [courseBankSelect, setCourseBankSelect] = useState();
+  const handleChange = (event) => {
+    setCourseBankSelect(event.target.value);
+  }
   return (
     <Stack padding="20px" gap="20px">
       <Header
@@ -48,6 +52,8 @@ export default function Coursebank() {
           >
             <InputLabel>Select Course bank</InputLabel>
             <Select
+            value={courseBankSelect}
+            onChange={handleChange}
               label="Select Course bank"
               size="small"
               sx={{
@@ -59,7 +65,7 @@ export default function Coursebank() {
                 },
               }}
             >
-              <MenuItem>Numerical Ability</MenuItem>
+              <MenuItem value="one">Numerical Ability</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>

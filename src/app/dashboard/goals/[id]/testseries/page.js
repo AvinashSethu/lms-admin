@@ -4,6 +4,7 @@ import { Add, CalendarMonth, East } from "@mui/icons-material";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import GoalHead from "../components/GoalHead/GoalHead";
 import { useRouter } from "next/navigation";
+import StyledSwitchButton from "@/src/components/StyledSwitch/StyledSwitch";
 
 export default function Testseries() {
     
@@ -76,7 +77,7 @@ export default function Testseries() {
                 View
               </Button>
             }
-            Switch={<Switch color="warning" />}
+            Switch={<StyledSwitchButton  />}
             live={
               <Typography
                 sx={{ fontFamily: "Lato", fontSize: "14px", fontWeight: "700" }}
@@ -109,7 +110,7 @@ export default function Testseries() {
                 View
               </Button>
             }
-            Switch={<Switch color="warning" />}
+            Switch={<StyledSwitchButton />}
             live={
               <Typography
                 sx={{ fontFamily: "Lato", fontSize: "14px", fontWeight: "700" }}

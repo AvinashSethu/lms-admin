@@ -1,10 +1,7 @@
 "use client";
 import {
   Button,
-  Card,
   Stack,
-  Switch,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import GoalHead from "../../components/GoalHead/GoalHead";
@@ -15,6 +12,7 @@ import { useRouter } from "next/navigation";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import { useState } from "react";
 import StatusCard from "@/src/components/CreateExam/Components/StatusCard";
+import StyledSwitchButton from "@/src/components/StyledSwitch/StyledSwitch";
 
 export default function Groupid() {
   const [isDialogOpen, setIsDialogOPen] = useState(false);
@@ -55,7 +53,7 @@ export default function Groupid() {
             <Typography sx={{ fontFamily: "Lato", fontSize: "14px" }}>
               Live
             </Typography>
-            <Switch />
+           <StyledSwitchButton />
             <Settings
               sx={{ color: "var(--primary-color)", cursor: "pointer" }}
               onClick={dialogOpen}
@@ -81,9 +79,9 @@ export default function Groupid() {
           title="Settings"
           actionText="Create"
         ></DialogBox>
-        <Stack flexDirection="row" gap="30px" > 
-        <StatusCard info title="Mcoins rewarded" count="2500" />
-        <StatusCard info title="No of attempts" count="250" />
+        <Stack flexDirection="row" gap="30px">
+          <StatusCard info title="Mcoins rewarded" count="2500" />
+          <StatusCard info title="No of attempts" count="250" />
         </Stack>
         <Stack
           flexDirection="row"

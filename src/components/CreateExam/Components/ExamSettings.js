@@ -1,5 +1,6 @@
 import { Stack, Switch, Typography } from "@mui/material";
 import StyledTextField from "../../StyledTextField/StyledTextField";
+import StyledSwitchButton from "../../StyledSwitch/StyledSwitch";
 
 export default function ExamSettings() {
   return (
@@ -62,7 +63,7 @@ export default function ExamSettings() {
           >
             Show results to canditate
           </Typography>
-          <Switch />
+          <StyledSwitchButton />
         </Stack>
       </Stack>
       <Stack flexDirection="row" gap={10}>

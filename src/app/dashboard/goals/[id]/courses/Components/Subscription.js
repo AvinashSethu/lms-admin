@@ -31,6 +31,20 @@ export default function Subscription() {
   const discountClose = () => {
     setIsDiscountOpen(false);
   };
+  const [selectValues, setSelectValues] = useState({
+    subscriptionType: "",
+    subscriptionDuration: "",
+    subscriptionCount: "",
+    discountMode: "",
+    discountValidity: "",
+  });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setSelectValues((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
   return (
     <Stack marginTop="20px" gap="20px">
       <Stack flexDirection="row" justifyContent="space-between">
@@ -73,8 +87,11 @@ export default function Subscription() {
             >
               <InputLabel>Select type</InputLabel>
               <Select
+              name="subscriptionType"
                 label="Select type"
                 size="small"
+                value={selectValues.subscriptionType}
+                onChange={handleChange}
                 sx={{
                   "&:hover .MuiOutlinedInput-notchedOutline": {
                     borderColor: "var(--sec-color)",
@@ -84,9 +101,9 @@ export default function Subscription() {
                   },
                 }}
               >
-                <MenuItem value="">Free-all</MenuItem>
-                <MenuItem value="">free-pro</MenuItem>
-                <MenuItem value="">paid</MenuItem>
+                <MenuItem value="all">Free-all</MenuItem>
+                <MenuItem value="pro">free-pro</MenuItem>
+                <MenuItem value="paid">paid</MenuItem>
               </Select>
             </FormControl>
             <FormControl
@@ -97,8 +114,11 @@ export default function Subscription() {
             >
               <InputLabel>Select Duration</InputLabel>
               <Select
+              name="subscriptionDuration"
                 label="Select type"
                 size="small"
+                value={selectValues.subscriptionDuration}
+                onChange={handleChange}
                 sx={{
                   "&:hover .MuiOutlinedInput-notchedOutline": {
                     borderColor: "var(--sec-color)",
@@ -108,16 +128,19 @@ export default function Subscription() {
                   },
                 }}
               >
-                <MenuItem value="">Free-all</MenuItem>
-                <MenuItem value="">free-pro</MenuItem>
-                <MenuItem value="">paid</MenuItem>
+                <MenuItem value="all">Free-all</MenuItem>
+                <MenuItem value="pro">free-pro</MenuItem>
+                <MenuItem value="paid">paid</MenuItem>
               </Select>
             </FormControl>
             <Stack flexDirection="row" justifyContent="space-between">
               <FormControl sx={{ width: "50%" }} size="small">
                 <InputLabel>No of type</InputLabel>
                 <Select
+                name="subscriptionCount"
                   label="No of type"
+                  value={selectValues.subscriptionCount}
+                  onChange={handleChange}
                   sx={{
                     "&:hover .MuiOutlinedInput-notchedOutline": {
                       borderColor: "var(--sec-color)",
@@ -127,9 +150,9 @@ export default function Subscription() {
                     },
                   }}
                 >
-                  <MenuItem value="">one</MenuItem>
-                  <MenuItem value="">two</MenuItem>
-                  <MenuItem value="">three</MenuItem>
+                  <MenuItem value="one">one</MenuItem>
+                  <MenuItem value="two">two</MenuItem>
+                  <MenuItem value="three">three</MenuItem>
                 </Select>
               </FormControl>
               <StyledTextField
@@ -208,8 +231,11 @@ export default function Subscription() {
             >
               <InputLabel>Select mode</InputLabel>
               <Select
+              name="discountMode"
                 label="Select mode"
                 size="small"
+                value={selectValues.discountMode}
+                onChange={handleChange}
                 sx={{
                   "&:hover .MuiOutlinedInput-notchedOutline": {
                     borderColor: "var(--sec-color)",
@@ -219,15 +245,18 @@ export default function Subscription() {
                   },
                 }}
               >
-                <MenuItem value="">Percentage</MenuItem>
-                <MenuItem value="">price</MenuItem>
+                <MenuItem value="percentage">Percentage</MenuItem>
+                <MenuItem value="price">price</MenuItem>
               </Select>
             </FormControl>
             <StyledTextField placeholder="Enter Percentage/price" />
             <FormControl size="small">
               <InputLabel>valid from & thru</InputLabel>
               <Select
+              name="discountValidity"
                 label="valid from & thru"
+                value={selectValues.discountValidity}
+                onChange={handleChange}
                 sx={{
                   "&:hover .MuiOutlinedInput-notchedOutline": {
                     borderColor: "var(--sec-color)",
@@ -237,9 +266,9 @@ export default function Subscription() {
                   },
                 }}
               >
-                <MenuItem value="">one</MenuItem>
-                <MenuItem value="">two</MenuItem>
-                <MenuItem value="">three</MenuItem>
+                <MenuItem value="one">one</MenuItem>
+                <MenuItem value="two">two</MenuItem>
+                <MenuItem value="three">three</MenuItem>
               </Select>
             </FormControl>
           </Stack>

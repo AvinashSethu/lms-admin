@@ -1,14 +1,12 @@
 "use client";
 import FilterSideNav from "@/src/components/FilterSideNav/FilterSideNav";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
-import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import { FilterAlt } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import studentcard from "@/public/Icons/studentcard.svg";
 import Image from "next/image";
 import TransactionCard from "@/src/components/TransactionCard/TransactionCard";
-import StudentProgressCard from "@/src/components/CreateExam/Components/StudentProgressCard";
 
 // export const metadata = {
 //   title: "Transaction",
@@ -29,7 +27,7 @@ export default function Transactions() {
   };
   const menuOptions = ["Remove"];
   return (
-    <Stack padding="20px">
+    <Stack marginTop="20px" >
       <Stack
         padding="20px"
         sx={{

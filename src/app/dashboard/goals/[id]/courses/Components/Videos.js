@@ -27,7 +27,7 @@ export default function Videos() {
     {
       id: 2,
       title: "What is numerals",
-      link: false,
+      link: true,
       play: false,
       download: true,
       toggle: true,
@@ -36,7 +36,7 @@ export default function Videos() {
     {
       id: 3,
       title: "Numerical methods problems",
-      link: false,
+      link: true,
       play: false,
       download: true,
       toggle: true,

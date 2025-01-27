@@ -1,8 +1,10 @@
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
-import VideoCard from "@/src/components/VideoCard/VideoCard";
+import CourseCard from "@/src/components/CourseCard/CourseCard";
 import { Add, InsertDriveFile } from "@mui/icons-material";
 import {
+  Box,
   Button,
+  CircularProgress,
   DialogContent,
   FormControl,
   InputLabel,
@@ -28,10 +30,18 @@ export default function Syllabus() {
   const [videoDialog, setVideoDialog] = useState(false);
   const videoDialogOpen = () => {
     setVideoDialog(true);
-  }
+  };
   const videoDialogClose = () => {
     setVideoDialog(false);
-  }
+  };
+  const [subjectType, setSubjectType] = useState("");
+  const handleChangeSubject = (event) => {
+    setSubjectType(event.target.value);
+  };
+  const [videoSelect, setVideoSelect] = useState("");
+  const handleChangeVideo = (event) => {
+    setVideoSelect(event.target.value);
+  };
   const menuOptions = ["Remove"];
   return (
     <Stack
@@ -85,6 +95,8 @@ export default function Syllabus() {
               <Select
                 label="Select subject"
                 size="small"
+                value={subjectType}
+                onChange={handleChangeSubject}
                 sx={{
                   "&:hover .MuiOutlinedInput-notchedOutline": {
                     borderColor: "var(--sec-color)",
@@ -94,7 +106,7 @@ export default function Syllabus() {
                   },
                 }}
               >
-                <MenuItem>one</MenuItem>
+                <MenuItem value="1">one</MenuItem>
               </Select>
             </FormControl>
           </DialogContent>
@@ -109,7 +121,7 @@ export default function Syllabus() {
         />
         <SecondaryCard
           icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title= "Simplifications & simple equations"
+          title="Simplifications & simple equations"
           options={menuOptions}
           cardWidth="350px"
         />
@@ -121,7 +133,7 @@ export default function Syllabus() {
         />
         <SecondaryCard
           icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title= "Logical reasoning"
+          title="Logical reasoning"
           options={menuOptions}
           cardWidth="350px"
         />
@@ -151,40 +163,43 @@ export default function Syllabus() {
         </Button>
       </Stack>
       <DialogBox
-          isOpen={videoDialog}
-          onClose={videoDialogClose}
-          title="Add Course"
-          actionText="Create"
-          onClick={() => {
-            videoDialogClose();
-            router.push("/dashboard/goals/1/courses/1");}}
-        >
-          <DialogContent>
-            <FormControl
-              sx={{
-                width: "100%",
-              }}
+        isOpen={videoDialog}
+        onClose={videoDialogClose}
+        title="Add Course"
+        actionText="Create"
+        onClick={() => {
+          videoDialogClose();
+          router.push("/dashboard/goals/1/courses/1");
+        }}
+      >
+        <DialogContent>
+          <FormControl
+            sx={{
+              width: "100%",
+            }}
+            size="small"
+          >
+            <InputLabel>Select Subject</InputLabel>
+            <Select
+              label="Select subject"
               size="small"
+              value={videoSelect}
+              onChange={handleChangeVideo}
+              sx={{
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--sec-color)",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "var(--sec-color)",
+                },
+              }}
             >
-              <InputLabel>Select Subject</InputLabel>
-              <Select
-                label="Select subject"
-                size="small"
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                }}
-              >
-                <MenuItem>one</MenuItem>
-              </Select>
-            </FormControl>
-          </DialogContent>
-        </DialogBox>
-      <VideoCard
+              <MenuItem value="1">one</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+      </DialogBox>
+      <CourseCard
         title="Linear Algebra"
         thumbnail={videoThumbnail.src}
         Language="English"

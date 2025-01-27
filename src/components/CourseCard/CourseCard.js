@@ -1,8 +1,26 @@
+"use client";
 import { Circle, TrendingFlat } from "@mui/icons-material";
-import { Button, Card, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
-export default function VideoCard({ title, thumbnail, Language,lesson,hours,actionButton }) {
+export default function CourseCard({
+  title,
+  thumbnail,
+  Language,
+  lesson,
+  hours,
+  actionButton,
+  progress
+}) {
+  const router = useRouter();
   return (
     <Card
       sx={{
@@ -16,7 +34,25 @@ export default function VideoCard({ title, thumbnail, Language,lesson,hours,acti
       elevation={0}
     >
       <Stack gap="8px">
-        <Image src={thumbnail} alt="videoThumbnail" width={180} height={102} />
+        <Box position="relative">
+          <Image
+            src={thumbnail}
+            alt="videoThumbnail"
+            width={180}
+            height={102}
+          />
+          {progress && <CircularProgress
+            variant="determinate"
+            value={75}
+            size={20}
+            sx={{
+              color: "var(--sec-color)",
+              position: "absolute",
+              top: "8px",
+              left: "150px",
+            }}
+          />}
+        </Box>
         <Typography
           sx={{ fontFamily: "Lato", fontSize: "14px", fontWeight: "700" }}
         >
@@ -38,13 +74,20 @@ export default function VideoCard({ title, thumbnail, Language,lesson,hours,acti
           {Language}
         </Button>
         <Stack flexDirection="row" alignItems="center" gap="10px">
-          <Typography sx={{ fontFamily: "Lato", fontSize: "12px",  }}>{lesson}</Typography>
+          <Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
+            {lesson}
+          </Typography>
           <Circle sx={{ fontSize: "10px", color: "var(--border-color)" }} />
-          <Typography sx={{ fontFamily: "Lato", fontSize: "12px",  }}>{hours}</Typography>
+          <Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
+            {hours}
+          </Typography>
         </Stack>
         <Button
           variant="text"
           endIcon={<TrendingFlat />}
+          onClick={() => {
+            router.push("/dashboard/goals/1/courses/1");
+          }}
           sx={{
             fontFamily: "Lato",
             fontSize: "12px",
@@ -54,7 +97,7 @@ export default function VideoCard({ title, thumbnail, Language,lesson,hours,acti
             "&:hover": {
               backgroundColor: "transparent",
             },
-            padding:"0px"
+            padding: "0px",
           }}
           disableRipple
         >
