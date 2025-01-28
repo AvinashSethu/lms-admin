@@ -1,10 +1,10 @@
 "use client";
-import { CurrencyRupee, ExpandMore } from "@mui/icons-material";
+import { ExpandMore } from "@mui/icons-material";
 import { Stack, Tooltip, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
   return (
@@ -19,8 +19,9 @@ export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
       <NavComp
         icon="/Icons/Goals.svg"
         title="Goals"
-        href="/dashboard"
+        href="/"
         isSideNavOpen={isSideNavOpen}
+        isRoot={true}
       />
       <NavComp
         icon="/Icons/Library.svg"
@@ -57,8 +58,24 @@ export default function LinkComp({ isSideNavOpen, sideNavOpen }) {
   );
 }
 
-const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
+const NavComp = ({
+  icon,
+  title,
+  list,
+  href,
+  isSideNavOpen,
+  sideNavOpen,
+  isRoot,
+}) => {
+  const router = useRouter();
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const pathname = usePathname();
+  const isParentActive = isRoot
+    ? pathname === "/dashboard" || pathname.startsWith("/dashboard/goals")
+    : pathname === href || pathname.startsWith(href + "/");
+  // const isChildActive = list?.some((item) => pathname === item.href);
+  const isChildActive = list?.some((item) => pathname.startsWith(item.href));
+
 
   const toggleLibrary = () => {
     setIsNavOpen((prev) => {
@@ -66,12 +83,12 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
       return !prev;
     });
   };
+  
+
   useEffect(() => {
     isSideNavOpen && setIsNavOpen(false);
     !isSideNavOpen && setIsNavOpen(true);
   }, [isSideNavOpen]);
-
-  const pathname = usePathname();
 
   return (
     <Stack>
@@ -83,7 +100,9 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
             cursor: "pointer",
             alignItems: !isSideNavOpen ? "" : "center",
             backgroundColor:
-              pathname === href ? "var(--primary-color-acc-2)" : "transparent",
+              isParentActive 
+                ? "var(--primary-color-acc-2)"
+                : "transparent",
             borderRadius: "20px",
             "&:hover": {
               backgroundColor: "var(--primary-color-acc-2)",
@@ -134,6 +153,7 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
                   pl: "15px",
                   mt: "10px",
                   justifyContent: "center",
+                  gap: "2px",
                 }}
               >
                 {list.map((item, index) => (
@@ -146,8 +166,13 @@ const NavComp = ({ icon, title, list, href, isSideNavOpen, sideNavOpen }) => {
                         color: "var(--text4)",
                         whiteSpace: "nowrap",
                         borderRadius: "20px",
-                        height:"28px",
-                        padding:"4px",                        
+                        height: "28px",
+                        paddingTop:"4px",
+                        paddingLeft: "15px",
+                        backgroundColor:
+                          pathname.startsWith( item.href)
+                            ? "var(--primary-color-acc-2)"
+                            : "transparent",
                         "&:hover": {
                           backgroundColor: "var(--library-expand)",
                         },

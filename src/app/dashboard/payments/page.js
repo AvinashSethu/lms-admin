@@ -31,7 +31,7 @@ export default function Payments() {
   const menuOptions = ["Remove"];
   const tabs = [
     { label: "Transactions", content: <Transactions /> },
-        { label: "Request", content: <Coupons /> },
+        { label: "Coupons", content: <Coupons /> },
   ]
   return (
     <Stack padding="20px">

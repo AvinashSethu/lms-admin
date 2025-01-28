@@ -10,11 +10,11 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
       backgroundColor: "transparent",
     },
     "&.Mui-checked + .MuiSwitch-track": {
-      backgroundColor: "var(--sec-color-acc-1)",
+      backgroundColor: "var(--sec-color)",
     },
   },
   "& .MuiSwitch-track": {
-    backgroundColor: "var(--sec-color-acc-1)",
+    backgroundColor: "var(--sec-color)",
   },
 }));
 

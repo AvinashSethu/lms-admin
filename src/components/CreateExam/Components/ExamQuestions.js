@@ -3,7 +3,6 @@ import { Add } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 import question from "@/public/Icons/question.svg";
 import Image from "next/image";
-import QuestionCard from "./QuestionCard";
 
 export default function ExamQuestions() {
   const menuOptions = ["Remove"];

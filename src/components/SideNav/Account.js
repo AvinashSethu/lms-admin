@@ -29,7 +29,7 @@ export default function Account({ isSideNavOpen }) {
           marginTop: "auto",
           borderRadius: "23px",
           cursor: "pointer",
-          padding: isSideNavOpen ? "9px": "3px 14px 3px 5px",
+          padding: isSideNavOpen ? "9px": "4px 12px 4px 4px",
           backgroundColor: open ? "var(--primary-color-acc-2)" : "transparent",
           "&:hover": { backgroundColor: "var(--primary-color-acc-2)" },
         }}

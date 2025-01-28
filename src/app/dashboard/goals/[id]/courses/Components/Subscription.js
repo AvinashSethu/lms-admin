@@ -15,22 +15,44 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
+// Reusable SelectField Component
+const SelectField = ({ label, name, value, onChange, options }) => {
+  return (
+    <FormControl sx={{ width: "100%" }} size="small">
+      <InputLabel>{label}</InputLabel>
+      <Select
+        name={name}
+        label={label}
+        size="small"
+        value={value}
+        onChange={onChange}
+        sx={{
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: "var(--sec-color)",
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: "var(--sec-color)",
+          },
+        }}
+      >
+        {options.map((option, index) => (
+          <MenuItem key={index} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+};
+
 export default function Subscription() {
   const menuOptions = ["Remove"];
   const [isDialogOpen, setIsDialogOPen] = useState(false);
-  const dialogOpen = () => {
-    setIsDialogOPen(true);
-  };
-  const dialogClose = () => {
-    setIsDialogOPen(false);
-  };
-  const [isdiscountOpen, setIsDiscountOpen] = useState(false);
-  const discountOpen = () => {
-    setIsDiscountOpen(true);
-  };
-  const discountClose = () => {
-    setIsDiscountOpen(false);
-  };
+  const dialogOpen = () => setIsDialogOPen(true);
+  const dialogClose = () => setIsDialogOPen(false);
+  const [isDiscountOpen, setIsDiscountOpen] = useState(false);
+  const discountOpen = () => setIsDiscountOpen(true);
+  const discountClose = () => setIsDiscountOpen(false);
   const [selectValues, setSelectValues] = useState({
     subscriptionType: "",
     subscriptionDuration: "",
@@ -38,6 +60,7 @@ export default function Subscription() {
     discountMode: "",
     discountValidity: "",
   });
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setSelectValues((prevState) => ({
@@ -45,6 +68,37 @@ export default function Subscription() {
       [name]: value,
     }));
   };
+
+  // Options for Select fields
+  const subscriptionTypeOptions = [
+    { value: "all", label: "Free-all" },
+    { value: "pro", label: "free-pro" },
+    { value: "paid", label: "paid" },
+  ];
+
+  const subscriptionDurationOptions = [
+    { value: "all", label: "Free-all" },
+    { value: "pro", label: "free-pro" },
+    { value: "paid", label: "paid" },
+  ];
+
+  const subscriptionCountOptions = [
+    { value: "one", label: "one" },
+    { value: "two", label: "two" },
+    { value: "three", label: "three" },
+  ];
+
+  const discountModeOptions = [
+    { value: "percentage", label: "Percentage" },
+    { value: "price", label: "Price" },
+  ];
+
+  const discountValidityOptions = [
+    { value: "one", label: "one" },
+    { value: "two", label: "two" },
+    { value: "three", label: "three" },
+  ];
+
   return (
     <Stack marginTop="20px" gap="20px">
       <Stack flexDirection="row" justifyContent="space-between">
@@ -71,6 +125,7 @@ export default function Subscription() {
           Create
         </Button>
       </Stack>
+
       <DialogBox
         isOpen={isDialogOpen}
         onClose={dialogClose}
@@ -79,119 +134,52 @@ export default function Subscription() {
       >
         <DialogContent>
           <Stack gap="20px">
-            <FormControl
-              sx={{
-                width: "100%",
-              }}
-              size="small"
-            >
-              <InputLabel>Select type</InputLabel>
-              <Select
+            <SelectField
+              label="Select type"
               name="subscriptionType"
-                label="Select type"
-                size="small"
-                value={selectValues.subscriptionType}
-                onChange={handleChange}
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                }}
-              >
-                <MenuItem value="all">Free-all</MenuItem>
-                <MenuItem value="pro">free-pro</MenuItem>
-                <MenuItem value="paid">paid</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl
-              sx={{
-                width: "100%",
-              }}
-              size="small"
-            >
-              <InputLabel>Select Duration</InputLabel>
-              <Select
+              value={selectValues.subscriptionType}
+              onChange={handleChange}
+              options={subscriptionTypeOptions}
+            />
+            <SelectField
+              label="Select Duration"
               name="subscriptionDuration"
-                label="Select type"
-                size="small"
-                value={selectValues.subscriptionDuration}
-                onChange={handleChange}
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                }}
-              >
-                <MenuItem value="all">Free-all</MenuItem>
-                <MenuItem value="pro">free-pro</MenuItem>
-                <MenuItem value="paid">paid</MenuItem>
-              </Select>
-            </FormControl>
-            <Stack flexDirection="row" justifyContent="space-between">
-              <FormControl sx={{ width: "50%" }} size="small">
-                <InputLabel>No of type</InputLabel>
-                <Select
+              value={selectValues.subscriptionDuration}
+              onChange={handleChange}
+              options={subscriptionDurationOptions}
+            />
+            <Stack flexDirection="row" justifyContent="space-between" gap="10px">
+              <SelectField
+                label="No of type"
                 name="subscriptionCount"
-                  label="No of type"
-                  value={selectValues.subscriptionCount}
-                  onChange={handleChange}
-                  sx={{
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "var(--sec-color)",
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "var(--sec-color)",
-                    },
-                  }}
-                >
-                  <MenuItem value="one">one</MenuItem>
-                  <MenuItem value="two">two</MenuItem>
-                  <MenuItem value="three">three</MenuItem>
-                </Select>
-              </FormControl>
-              <StyledTextField
-                placeholder="Enter Price"
-                sx={{ width: "260px" }}
+                value={selectValues.subscriptionCount}
+                onChange={handleChange}
+                options={subscriptionCountOptions}
               />
+              <StyledTextField placeholder="Enter Price" sx={{ width: "260px" }} />
             </Stack>
           </Stack>
         </DialogContent>
       </DialogBox>
+
       <Stack flexDirection="row" flexWrap="wrap" rowGap="10px" columnGap="40px">
         <SecondaryCard
-          icon={
-            <PlaylistAddCheck
-              sx={{ color: "var(--sec-color)", fontSize: "30px" }}
-            />
-          }
+          icon={<PlaylistAddCheck sx={{ color: "var(--sec-color)", fontSize: "30px" }} />}
           title="Monthly Subscription (1 month)"
           options={menuOptions}
           cardWidth="500px"
           subTitle="₹299"
         />
         <SecondaryCard
-          icon={
-            <PlaylistAddCheck
-              sx={{ color: "var(--sec-color)", fontSize: "30px" }}
-            />
-          }
+          icon={<PlaylistAddCheck sx={{ color: "var(--sec-color)", fontSize: "30px" }} />}
           title="Free"
           options={menuOptions}
           cardWidth="500px"
           subTitle="Pro users"
         />
       </Stack>
-      <Stack
-        flexDirection="row"
-        justifyContent="space-between"
-        marginBottom="15px"
-      >
+
+      <Stack flexDirection="row" justifyContent="space-between" marginBottom="15px">
         <Typography
           sx={{
             fontFamily: "Lato",
@@ -215,94 +203,41 @@ export default function Subscription() {
           Create
         </Button>
       </Stack>
+
       <DialogBox
-        isOpen={isdiscountOpen}
+        isOpen={isDiscountOpen}
         onClose={discountClose}
         title="Add discount"
         actionText="Create"
       >
         <DialogContent>
           <Stack gap="20px">
-            <FormControl
-              sx={{
-                width: "100%",
-              }}
-              size="small"
-            >
-              <InputLabel>Select mode</InputLabel>
-              <Select
+            <SelectField
+              label="Select mode"
               name="discountMode"
-                label="Select mode"
-                size="small"
-                value={selectValues.discountMode}
-                onChange={handleChange}
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                }}
-              >
-                <MenuItem value="percentage">Percentage</MenuItem>
-                <MenuItem value="price">price</MenuItem>
-              </Select>
-            </FormControl>
+              value={selectValues.discountMode}
+              onChange={handleChange}
+              options={discountModeOptions}
+            />
             <StyledTextField placeholder="Enter Percentage/price" />
-            <FormControl size="small">
-              <InputLabel>valid from & thru</InputLabel>
-              <Select
+            <SelectField
+              label="valid from & thru"
               name="discountValidity"
-                label="valid from & thru"
-                value={selectValues.discountValidity}
-                onChange={handleChange}
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                }}
-              >
-                <MenuItem value="one">one</MenuItem>
-                <MenuItem value="two">two</MenuItem>
-                <MenuItem value="three">three</MenuItem>
-              </Select>
-            </FormControl>
+              value={selectValues.discountValidity}
+              onChange={handleChange}
+              options={discountValidityOptions}
+            />
           </Stack>
         </DialogContent>
       </DialogBox>
-      <Stack
-        flexDirection="row"
-        flexWrap="wrap"
-        rowGap="10px"
-        columnGap="40px"
-        alignItems="center"
-      >
+
+      <Stack flexDirection="row" flexWrap="wrap" rowGap="10px" columnGap="40px" alignItems="center">
         <SecondaryCard
-          icon={
-            <PlaylistAddCheck
-              sx={{ color: "var(--sec-color)", fontSize: "30px" }}
-            />
-          }
+          icon={<PlaylistAddCheck sx={{ color: "var(--sec-color)", fontSize: "30px" }} />}
           title="Monthly Subscription (1 month)"
           options={menuOptions}
           cardWidth="500px"
           subTitle="₹299"
-        />
-        <Typography>or</Typography>
-        <SecondaryCard
-          icon={
-            <PlaylistAddCheck
-              sx={{ color: "var(--sec-color)", fontSize: "30px" }}
-            />
-          }
-          title="Free"
-          options={menuOptions}
-          cardWidth="500px"
-          subTitle="Pro users"
         />
       </Stack>
     </Stack>
