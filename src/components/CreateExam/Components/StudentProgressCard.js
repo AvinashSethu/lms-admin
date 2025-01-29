@@ -42,15 +42,16 @@ export default function StudentProgressCard({
       flexDirection="row"
       padding="10px"
       alignItems="center"
-      gap="20px"
+      justifyContent="space-between"
+      gap="10px"
       sx={{
         border: "1px solid var(--border-color)",
         borderRadius: "10px",
         minHeight: "80px",
       }}
     >
-      <Stack flexDirection="row" alignItems="center" gap="20px">
-        <Stack
+      <Stack flexDirection="row" alignItems="center" gap="20px" >
+        <Stack  
           sx={{
             width: "60px",
             height: "60px",
@@ -71,9 +72,9 @@ export default function StudentProgressCard({
       <Stack
         flexDirection="row"
         gap={10}
-        alignItems="center"
+        alignItems="center"        
       >
-        <Stack gap="5px">
+        <Stack gap="5px" >
           <Typography
             sx={{
               fontFamily: "Lato",
@@ -134,6 +135,7 @@ export default function StudentProgressCard({
         </Button>
         <Typography sx={{ width: "60px" }}>{percent}</Typography>
       </Stack>
+      <Stack>
       {options && (
         <MoreVert
           sx={{ cursor: "pointer", marginLeft: "auto" }}
@@ -188,6 +190,7 @@ export default function StudentProgressCard({
           Remove
         </MenuItem>
       </Menu>
+      </Stack>
     </Stack>
   );
 }

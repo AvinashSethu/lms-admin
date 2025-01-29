@@ -1,19 +1,25 @@
 "use client";
+import CustomPagination from "@/src/components/CustomPagination/CustomPagination";
 import FilterSideNav from "@/src/components/FilterSideNav/FilterSideNav";
 import Header from "@/src/components/Header/Header";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
-import { Add, ArrowBackIos, FilterAlt } from "@mui/icons-material";
+import { Add, FilterAlt } from "@mui/icons-material";
 import { Button, Pagination, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // export const metadata = {
 //   title:"Students",
 // };
+
 export default function Students() {
+  const router = useRouter();
   const menuOptions = ["Remove"];
+  const page = router.query;
+  const [currentPage, setCurrentPage] = useState(Number(page) || 1);
+  const totalPages = 10;
   const [isOpen, setIsOpen] = useState(false);
   const filterOpen = () => {
     setIsOpen(!isOpen);
@@ -27,17 +33,18 @@ export default function Students() {
     }
     setIsOpen(open);
   };
-  const router = useRouter();
+
+  useEffect(() => {
+    setCurrentPage(Number(page) || 1);
+  }, [page]);
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
   return (
     <Stack padding="20px" gap="20px">
-      <Header
-        title="Students"
-        button="Student"
-        icon={<Add />}
-        onClick={() => {
-          router.push("/dashboard/students/1");
-        }}
-      />
+      <Header title="Students" button="Student" icon={<Add />} />
       <Stack
         sx={{
           backgroundColor: "var(--white)",
@@ -49,8 +56,7 @@ export default function Students() {
           minHeight: "100vh",
         }}
       >
-        <Stack  >
-          {/* <ArrowBackIos /> */}
+        <Stack>
           <Stack flexDirection="row" gap="10px" alignItems="flex-end">
             <SearchBox />
             <Button
@@ -90,101 +96,15 @@ export default function Students() {
             title={
               <Stack flexDirection="row" alignItems="center" gap={15}>
                 <Typography
-                  sx={{
-                    fontFamily: "Lato",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    color: "var(--text1)",
+                  onClick={() => {
+                    router.push("/dashboard/students/1");
                   }}
-                >
-                  Abishek A
-                </Typography>
-                <Typography
                   sx={{
                     fontFamily: "Lato",
                     fontSize: "14px",
                     fontWeight: "700",
                     color: "var(--text1)",
-                  }}
-                >
-                  21ec001@psr.edu.in
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: "Lato",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    color: "var(--text1)",
-                  }}
-                >
-                  GATE CSE
-                </Typography>
-              </Stack>
-            }
-            options={menuOptions}
-          />
-          <SecondaryCard
-            icon={
-              <Image
-                src="/Icons/studentCard.svg"
-                alt="icon"
-                width={24}
-                height={24}
-              />
-            }
-            title={
-              <Stack flexDirection="row" alignItems="center" gap={15}>
-                <Typography
-                  sx={{
-                    fontFamily: "Lato",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    color: "var(--text1)",
-                  }}
-                >
-                  Abishek A
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: "Lato",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    color: "var(--text1)",
-                  }}
-                >
-                  21ec001@psr.edu.in
-                </Typography>
-                <Typography
-                  sx={{
-                    fontFamily: "Lato",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    color: "var(--text1)",
-                  }}
-                >
-                  GATE CSE
-                </Typography>
-              </Stack>
-            }
-            options={menuOptions}
-          />
-          <SecondaryCard
-            icon={
-              <Image
-                src="/Icons/studentCard.svg"
-                alt="icon"
-                width={24}
-                height={24}
-              />
-            }
-            title={
-              <Stack flexDirection="row" alignItems="center" gap={15}>
-                <Typography
-                  sx={{
-                    fontFamily: "Lato",
-                    fontSize: "14px",
-                    fontWeight: "700",
-                    color: "var(--text1)",
+                    cursor: "pointer",
                   }}
                 >
                   Abishek A
@@ -229,7 +149,11 @@ export default function Students() {
           >
             Total 85 items
           </Typography>
-          <Pagination count={9} shape="rounded" variant="outlined" />
+          <CustomPagination
+            count={totalPages}
+            page={currentPage}
+            onPageChange={handlePageChange}
+          />
         </Stack>
       </Stack>
     </Stack>

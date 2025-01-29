@@ -1,7 +1,23 @@
+"use client";
 import StudentProgressCard from "@/src/components/CreateExam/Components/StudentProgressCard";
+import CustomPagination from "@/src/components/CustomPagination/CustomPagination";
 import { Pagination, Stack, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Approved() {
+  const router = useRouter();
+  const page = router.query;
+  const [currentPage, setCurrentPage] = useState(Number(page) || "");
+  const totalPages = 10;
+
+  // useEffect(() => {
+  //   setCurrentPage(Number(page) || 1);
+  // })
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  }
+
   return (
     <Stack sx={{ minHeight: "100vh" }}>
       <Stack marginTop="20px" gap="15px">
@@ -40,6 +56,7 @@ export default function Approved() {
           Total 85 items
         </Typography>
         <Pagination count={9} shape="rounded" variant="outlined" />
+        {/* <CustomPagination count={totalPages} page={currentPage} onPageChange={handlePageChange} /> */}
       </Stack>
     </Stack>
   );

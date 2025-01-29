@@ -1,0 +1,59 @@
+"use client";
+import { ArrowBackIosRounded } from "@mui/icons-material";
+import { Stack, Typography } from "@mui/material";
+import CustomTabs from "../CustomTabs/CustomTabs";
+import ExamInfoCard from "./Components/ExamInfoCard";
+import calendar from "@/public/Icons/weekCalendar.svg";
+import { useRouter } from "next/navigation";
+import TestSeriesQuestions from "./Components/TestSeriesQuestions";
+import TestSeriesSettings from "./Components/TestSeriesSettings";
+import TestSeriesStudents from "./Components/TestSeriesStudents";
+
+export default function CreateTestSeries({ title, examInfoTitle }) {
+  const tabs = [
+    { label: "Questions", content: <TestSeriesQuestions /> },
+    { label: "Settings", content: <TestSeriesSettings /> },
+    { label: "Students", content: <TestSeriesStudents /> },
+  ];
+  const router = useRouter();
+  return (
+    <Stack
+      sx={{
+        backgroundColor: "var(--white)",
+        border: "1px solid",
+        borderColor: "var(--border-color)",
+        borderRadius: "10px",
+        padding: "20px",
+        gap: "25px",
+        minHeight: "100vh",
+      }}
+    >
+      <Stack flexDirection="row" gap="10px" alignItems="center">
+        <ArrowBackIosRounded
+          sx={{ fontSize: "18px", cursor: "pointer" }}
+          onClick={() => {
+            router.back();
+          }}
+        />
+        <Typography
+          sx={{
+            fontFamily: "Lato",
+            fontSize: "18px",
+            fontWeight: "700",
+            color: "var(--text2)",
+          }}
+        >
+          {title}
+        </Typography>
+      </Stack>
+      <ExamInfoCard
+        examInfoTitle={examInfoTitle}
+        icon={calendar.src}
+        date="2024-08-05 08:00:00 -- 2024-08-10 20:00:00"
+        questions="120 Questions"
+        duration="120 Minutes"
+      />
+      <CustomTabs tabs={tabs} width="308px" />
+    </Stack>
+  );
+}

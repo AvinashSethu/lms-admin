@@ -8,12 +8,30 @@ import {
   ArrowBackIos,
   FileCopy,
 } from "@mui/icons-material";
-import { Button, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  DialogContent,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import videoThumbnail from "@/public/Images/videoThumbnail.svg";
+import { useState } from "react";
+import LongDialogBox from "@/src/components/LongDialogBox/LongDialogBox";
 
 export default function Batchid() {
   const router = useRouter();
+  const [isCourseDialogOpen, setIsCourseDialogOpen] = useState(false);
+  const courseDialogOpen = () => {
+    setIsCourseDialogOpen(true);
+  };
+  const courseDialogClose = () => {
+    setIsCourseDialogOpen(false);
+  };
   return (
     <Stack padding="20px" gap="20px">
       <Stack
@@ -85,6 +103,7 @@ export default function Batchid() {
           <Button
             variant="contained"
             startIcon={<Add />}
+            onClick={courseDialogOpen}
             sx={{
               backgroundColor: "var(--primary-color)",
               textTransform: "none",
@@ -94,6 +113,90 @@ export default function Batchid() {
             Courses
           </Button>
         </Stack>
+        <LongDialogBox
+          isOpen={isCourseDialogOpen}
+          onClose={courseDialogClose}
+          title="Add courses"
+        >
+          <DialogContent>
+            <Stack gap="20px">
+              <Stack flexDirection="row" gap="10px">
+                <FormControl size="small" sx={{ width: "300px" }}>
+                  <InputLabel>Select label</InputLabel>
+                  <Select
+                    label="Select label"
+                    sx={{
+                      "&:hover .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "var(--sec-color)",
+                      },
+                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderColor: "var(--sec-color)",
+                      },
+                    }}
+                  >
+                    <MenuItem value="goal">Goal</MenuItem>
+                    <MenuItem value="all">All</MenuItem>
+                  </Select>
+                </FormControl>
+                <SearchBox />
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "var(--primary-color)",
+                    textTransform: "none",
+                  }}
+                  disableElevation
+                >
+                  Add
+                </Button>
+              </Stack>
+              <Typography
+                sx={{
+                  marginLeft: "auto",
+                  fontFamily: "Lato",
+                  fontSize: "12px",
+                  fontWeight: "700",
+                }}
+              >
+                (Selected 2)
+              </Typography>
+              <Stack
+                flexDirection="row"
+                flexWrap="wrap"
+                rowGap="15px"
+                columnGap="30px"
+              >
+                <CourseCard
+                  title="Linear Algebra"
+                  thumbnail={videoThumbnail.src}
+                  Language="English"
+                  lesson="16 Lessons"
+                  hours="48 Hours"
+                  actionButton="Select"
+                  selected
+                />
+                <CourseCard
+                  title="Linear Algebra"
+                  thumbnail={videoThumbnail.src}
+                  Language="English"
+                  lesson="16 Lessons"
+                  hours="48 Hours"
+                  actionButton="Select"
+                  selected
+                />
+                <CourseCard
+                  title="Linear Algebra"
+                  thumbnail={videoThumbnail.src}
+                  Language="English"
+                  lesson="16 Lessons"
+                  hours="48 Hours"
+                  actionButton="Select"
+                  selected
+                />
+              </Stack>
+            </Stack>
+          </DialogContent>
+        </LongDialogBox>
         <Stack
           flexDirection="row"
           flexWrap="wrap"
