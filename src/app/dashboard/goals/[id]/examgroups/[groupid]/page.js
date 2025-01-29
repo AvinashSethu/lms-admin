@@ -1,6 +1,12 @@
 "use client";
 import {
   Button,
+  DialogContent,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Slider,
   Stack,
   Typography,
 } from "@mui/material";
@@ -13,14 +19,22 @@ import DialogBox from "@/src/components/DialogBox/DialogBox";
 import { useState } from "react";
 import StatusCard from "@/src/components/CreateExam/Components/StatusCard";
 import StyledSwitchButton from "@/src/components/StyledSwitch/StyledSwitch";
+import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 
 export default function Groupid() {
   const [isDialogOpen, setIsDialogOPen] = useState(false);
+  const [isSettingDialog, setIsSettingDialog] = useState(false);
   const dialogOpen = () => {
     setIsDialogOPen(true);
   };
   const dialogClose = () => {
     setIsDialogOPen(false);
+  };
+  const settingDialogopen = () => {
+    setIsSettingDialog(true);
+  };
+  const settingDialogClose = () => {
+    setIsSettingDialog(false);
   };
 
   const router = useRouter();
@@ -53,10 +67,10 @@ export default function Groupid() {
             <Typography sx={{ fontFamily: "Lato", fontSize: "14px" }}>
               Live
             </Typography>
-           <StyledSwitchButton />
+            <StyledSwitchButton />
             <Settings
               sx={{ color: "var(--primary-color)", cursor: "pointer" }}
-              onClick={dialogOpen}
+              onClick={settingDialogopen}
             />
             <Button
               variant="contained"
@@ -74,11 +88,115 @@ export default function Groupid() {
           </Stack>
         </Stack>
         <DialogBox
+          isOpen={isSettingDialog}
+          onClose={settingDialogClose}
+          title="Group Settings"
+          actionText="Save"
+        >
+          <DialogContent>
+            <Stack gap="10px">
+              <Stack gap="5px">
+                <Typography
+                  sx={{
+                    fontFamily: "Lato",
+                    fontSize: "12px",
+                    fontWeight: "700",
+                    color: "var(--text3)",
+                  }}
+                >
+                  Name
+                </Typography>
+                <StyledTextField placeholder="Enter test name" />
+              </Stack>
+              <Stack gap="6px">
+                <Typography
+                  sx={{
+                    fontFamily: "Lato",
+                    fontSize: "12px",
+                    fontWeight: "700",
+                    color: "var(--text3)",
+                  }}
+                >
+                  Who can access this test
+                </Typography>
+                <FormControl size="small">
+                  <InputLabel>Select plan</InputLabel>
+                  <Select label="Select plan">
+                    <MenuItem value="Free">Free</MenuItem>
+                    <MenuItem value="pro">Pro</MenuItem>
+                  </Select>
+                </FormControl>
+              </Stack>
+              <Stack flexDirection="row" justifyContent="space-between">
+                <Stack>
+                  <Typography
+                    sx={{
+                      fontFamily: "Lato",
+                      fontSize: "12px",
+                      fontWeight: "700",
+                      color: "var(--text3)",
+                    }}
+                  >
+                    MCoin rewards
+                  </Typography>
+                  <Stack
+                    flexDirection="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <StyledSwitchButton />
+                    <Info
+                      fontSize="small"
+                      sx={{ color: "var(--primary-color)" }}
+                    />
+                  </Stack>
+                </Stack>
+                <Stack gap="10px">
+                  <Typography
+                    sx={{
+                      fontFamily: "Lato",
+                      fontSize: "12px",
+                      fontWeight: "700",
+                      color: "var(--text3)",
+                    }}
+                  >
+                    Select rewarding percentage
+                  </Typography>
+                  <Slider
+                    size="small"
+                    valueLabelDisplay="auto"
+                    sx={{ color: "var(--primary-color)" }}
+                  ></Slider>
+                </Stack>
+                <Stack gap="5px">
+                  <Typography
+                    sx={{
+                      fontFamily: "Lato",
+                      fontSize: "12px",
+                      fontWeight: "700",
+                      color: "var(--text3)",
+                    }}
+                  >
+                    Coins to be rewarded
+                  </Typography>
+                  <StyledTextField placeholder="Enter coins" />
+                </Stack>
+              </Stack>
+            </Stack>
+          </DialogContent>
+        </DialogBox>
+        <DialogBox
           isOpen={isDialogOpen}
           onClose={dialogClose}
-          title="Settings"
-          actionText="Create"
-        ></DialogBox>
+          title="Add Test"
+          actionText="Add"
+        >
+          <DialogContent>
+            <Stack>
+              <StyledTextField placeholder="Enter Test" />
+            </Stack>
+          </DialogContent>
+        </DialogBox>
         <Stack flexDirection="row" gap="30px">
           <StatusCard info title="Mcoins rewarded" count="2500" />
           <StatusCard info title="No of attempts" count="250" />

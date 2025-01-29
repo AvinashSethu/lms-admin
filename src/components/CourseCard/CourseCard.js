@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   CircularProgress,
   Stack,
   Typography,
@@ -18,14 +19,15 @@ export default function CourseCard({
   lesson,
   hours,
   actionButton,
-  progress
+  progress,
+  selected
 }) {
   const router = useRouter();
   return (
     <Card
       sx={{
         width: "200px",
-        height: "230px",
+        maxHeight: "250px",
         border: "1px solid",
         borderColor: "var(--border-color)",
         borderRadius: "10px",
@@ -84,10 +86,18 @@ export default function CourseCard({
         </Stack>
         <Button
           variant="text"
-          endIcon={<TrendingFlat />}
-          onClick={() => {
-            router.push("/dashboard/goals/1/courses/1");
-          }}
+          endIcon={selected ? <Checkbox sx={{
+            color: "var(--primary-color)",
+            "&.Mui-checked": {
+              color: "var(--primary-color)",
+            },
+            "&.MuiCheckbox-root": {
+              padding: "0px",
+            },
+          }} /> : <TrendingFlat />}
+          // onClick={() => {
+          //   router.push("/dashboard/goals/1/courses/1");
+          // }}
           sx={{
             fontFamily: "Lato",
             fontSize: "12px",
