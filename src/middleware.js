@@ -9,8 +9,13 @@ const publicRoutes = [
   "/mobile-not-supported",
   "/_next",
   "/api/login",
+  "/api/logout",
   //"/api/event-update",
 ];
+
+// export const config = {
+//   matcher: ["/api/*"],
+// };
 
 export async function middleware(request) {
   const pathname = request.nextUrl.pathname;
@@ -61,7 +66,7 @@ export async function middleware(request) {
 
 // Apply middleware to all routes
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: ["/((?!_next/static|_next/image|.*\\.png$).*)"],
 };
 
 const loginRedirect = async (request) => {
