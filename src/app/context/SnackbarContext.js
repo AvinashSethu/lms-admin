@@ -16,7 +16,8 @@ export const SnackbarProvider = ({ children }) => {
   });
 
   const showSnackbar = useCallback(
-    (message, severity, icon = {}, autoHideDuration) => {
+    (message, severity, icon ={} , autoHideDuration) => {
+
       setSnackbar({
         open: true,
         message,
@@ -24,6 +25,7 @@ export const SnackbarProvider = ({ children }) => {
         icon,
         autoHideDuration: icon ? null : autoHideDuration,
       });
+
     },
     []
   );
@@ -32,7 +34,10 @@ export const SnackbarProvider = ({ children }) => {
     if (reason === "clickaway") {
       return;
     }
-    setSnackbar(!snackbar);
+    setSnackbar({
+      open: false,
+      severity: snackbar.severity
+    });
   };
 
   return (
