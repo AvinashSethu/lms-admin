@@ -1,8 +1,8 @@
-import getAllGoals from "@/src/util/goals/getAllGoals";
+import getAllSubjects from "@/src/util/subjects/getAllSubjects";
 
-export async function GET(request) {
+export async function GET() {
   try {
-    const response = await getAllGoals();
+    const response = await getAllSubjects();
     return Response.json(response, { status: 200 });
   } catch (error) {
     console.log(error);

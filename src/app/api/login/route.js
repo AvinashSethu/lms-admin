@@ -41,11 +41,9 @@ export async function POST(request) {
     });
   } catch (error) {
     console.log(error);
-    return Response.json({
-      status: 500,
-      success: false,
-      body: error.message,
-      message: "Internal Server Error",
-    });
+    return Response.json(
+      { success: false, message: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

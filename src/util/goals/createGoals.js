@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import dynamoDB from "../dbConnect";
+import { red } from "@mui/material/colors";
 
 export default async function createGoals({ title, icon }) {
   const params = {
@@ -18,7 +19,13 @@ export default async function createGoals({ title, icon }) {
   };
   try {
     await dynamoDB.put(params).promise();
-    return { message: "Goal created successfully", goalPKey: params.Item.pKey };
+    return {
+      success: true,
+      message: "Goal created successfully",
+      data: {
+        goalID: params.Item.pKey.split("#")[1],
+      },
+    };
   } catch (err) {
     console.error("DynamoDB Error:", err);
     throw new Error("Internal server error");

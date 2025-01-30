@@ -1,18 +1,30 @@
 import dynamoDB from "../dbConnect";
 
 export default async function getAllGoals() {
-    const params = {
-        TableName: `${process.env.AWS_DB_NAME}master`,
-        FilterExpression: "sKey = :sKey",
-        ExpressionAttributeValues: {
-            ":sKey": "GOALS",
-        },
+  const params = {
+    TableName: `${process.env.AWS_DB_NAME}master`,
+    FilterExpression: "sKey = :sKey",
+    ExpressionAttributeValues: {
+      ":sKey": "GOALS",
+    },
+  };
+  try {
+    const response = await dynamoDB.scan(params).promise();
+    return {
+      success: true,
+      message: "All goals fetched successfully",
+      data: {
+        goals: [
+          response.Items.map((goal) => {
+            const { pKey, title, icon } = goal;
+            return { goalID: pKey.split("#")[1], title, icon };
+          }),
+        ],
+      },
     };
-    try {
-        const response = await dynamoDB.scan(params).promise(); // ✅ Use `scan()` instead of `query()`
-        return response.Items;
-    } catch (err) {
-        console.error("DynamoDB Error:", err);
-        throw new Error("Internal server error");
-    }
+    // return response.Items;
+  } catch (err) {
+    console.error("DynamoDB Error:", err);
+    throw new Error("Internal server error");
+  }
 }

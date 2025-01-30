@@ -40,6 +40,12 @@ export async function middleware(request) {
       if (pathname === "/login") {
         return NextResponse.next();
       }
+      if (pathname.startsWith("/api/")) {
+        return new Response(JSON.stringify({ message: "Unauthorized" }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        });
+      }
       return loginRedirect(request);
     }
 
@@ -60,6 +66,12 @@ export async function middleware(request) {
   } catch (error) {
     console.log(error);
     await cookieStore.delete("session");
+    if (pathname.startsWith("/api/")) {
+      return new Response(JSON.stringify({ message: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
     return loginRedirect(request);
   }
 }
