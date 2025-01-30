@@ -1,7 +1,7 @@
 "use client";
 import PrimaryCard from "@/src/components/PrimaryCard/PrimaryCard";
 import { Add } from "@mui/icons-material";
-import { Stack } from "@mui/material";
+import { Skeleton, Stack, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/src/components/Header/Header";
@@ -23,8 +23,12 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-        setGoalList(data);
-        console.log(data);
+        if (data.success) {
+          setGoalList(data.data.goals);
+          console.log(data.data.goals);
+        } else {
+          setGoalList([]);
+        }
       });
   }, []);
 
@@ -49,19 +53,42 @@ export default function Home() {
           <GoalDialogBox isOpen={isDialogOpen} onClose={dialogClose} />
         </Stack>
         <Stack flexDirection="row" gap="20px">
-          {goalList.map((item, index) => {
+          {/* {goalList.map((item, index) => {
             return (
               <PrimaryCard
                 key={index}
                 icon={"/Icons/gate_cse.svg"}
-                title={item.title}
+                title={item[0].title}
                 actionButton="View"
                 onClick={() => {
-                  router.push(`dashboard/goals/${item.pKey}`);
+                  router.push(`dashboard/goals/${item[0].goalID}`);
                 }}
               />
             );
-          })}
+          })} */}
+          {goalList.length > 0 ? (
+            goalList.map((item, index) => (
+              <PrimaryCard
+                key={index}
+                icon={`/Icons/gate_cse.svg`}
+                title={item.title}
+                actionButton="View"
+                onClick={() => {
+                  router.push(`dashboard/goals/${item.goalID}`);
+                }}
+              />
+            ))
+          ) : (
+            <Stack>
+              <Skeleton
+                variant="rectangular"
+                width={160}
+                height={210}
+                sx={{ borderRadius: "10px", padding: "20px 0px 20px 0px" }}
+              >
+              </Skeleton>
+            </Stack>
+          )}
         </Stack>
       </Stack>
     </>
