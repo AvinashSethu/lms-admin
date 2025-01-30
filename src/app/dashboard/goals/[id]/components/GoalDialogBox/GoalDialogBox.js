@@ -8,6 +8,7 @@ import banking_img from "@/public/Icons/banking.svg";
 import { useState } from "react";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import { useRouter } from "next/navigation";
+import { apiFetch } from "@/src/lib/apiFetch";
 
 export default function GoalDialogBox({ isOpen, onClose }) {
   const [title, setTitle] = useState("");
@@ -16,28 +17,32 @@ export default function GoalDialogBox({ isOpen, onClose }) {
   const onIconSelect = (value) => {
     setIcon(value);
   };
-  const {showSnackbar} = useSnackbar();
+  const { showSnackbar } = useSnackbar();
 
   function OnGoalCreate() {
     //API: /api/goals/goal-create
     if (!title || !icon) {
-      showSnackbar("Fill all data","error","", "3000",);
-      return
+      showSnackbar("Fill all data", "error", "", "3000");
+      return;
     }
-    
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/create-goal`, {
-      method: "POST",
-      body: JSON.stringify({
-        title,
-        icon,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        showSnackbar(data.message,"success","", "3000",);
+
+    apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/create-goal`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+          icon,
+        }),
+      },
+      showSnackbar
+    ).then((data) => {
+        if (data.success) {
+          showSnackbar(data.message, "success", "", "3000");
+        } else {
+          showSnackbar(data.message, "error", "", "3000");
+        }
         router.push(`dashboard/goals/${data.pKey}`);
-        console.log(data);
-        
       });
   }
 

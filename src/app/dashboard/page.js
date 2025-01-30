@@ -1,15 +1,12 @@
 "use client";
 import PrimaryCard from "@/src/components/PrimaryCard/PrimaryCard";
 import { Add } from "@mui/icons-material";
-import { Skeleton, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; 
 import Header from "@/src/components/Header/Header";
 import GoalDialogBox from "./goals/[id]/components/GoalDialogBox/GoalDialogBox";
-
-// const metadata = {
-//   title: "Home",
-// };
+import { apiFetch } from "@/src/lib/apiFetch";
 
 export default function Home() {
   const router = useRouter();
@@ -19,18 +16,20 @@ export default function Home() {
 
   useEffect(() => {
     setIsLoading(true);
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/get-all-goals`)
-      .then((res) => res.json())
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/get-all-goals`)
       .then((data) => {
         setIsLoading(false);
         if (data.success) {
           setGoalList(data.data.goals);
-          console.log(data.data.goals);
         } else {
           setGoalList([]);
         }
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.error(err);
       });
-  }, []);
+  }, []); 
 
   const dialogOpen = () => {
     setIsDialogOpen(true);
@@ -52,20 +51,7 @@ export default function Home() {
         <Stack flexDirection="row" justifyContent="space-between">
           <GoalDialogBox isOpen={isDialogOpen} onClose={dialogClose} />
         </Stack>
-        <Stack flexDirection="row" gap="20px">
-          {/* {goalList.map((item, index) => {
-            return (
-              <PrimaryCard
-                key={index}
-                icon={"/Icons/gate_cse.svg"}
-                title={item[0].title}
-                actionButton="View"
-                onClick={() => {
-                  router.push(`dashboard/goals/${item[0].goalID}`);
-                }}
-              />
-            );
-          })} */}
+        <Stack flexDirection="row" gap="20px" flexWrap="wrap">
           {goalList.length > 0 ? (
             goalList.map((item, index) => (
               <PrimaryCard
@@ -79,15 +65,7 @@ export default function Home() {
               />
             ))
           ) : (
-            <Stack>
-              <Skeleton
-                variant="rectangular"
-                width={160}
-                height={210}
-                sx={{ borderRadius: "10px", padding: "20px 0px 20px 0px" }}
-              >
-              </Skeleton>
-            </Stack>
+            <Typography>No Goal Created</Typography>
           )}
         </Stack>
       </Stack>
