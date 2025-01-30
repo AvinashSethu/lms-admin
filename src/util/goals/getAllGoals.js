@@ -14,12 +14,10 @@ export default async function getAllGoals() {
       success: true,
       message: "All goals fetched successfully",
       data: {
-        goals: [
-          response.Items.map((goal) => {
-            const { pKey, title, icon } = goal;
-            return { goalID: pKey.split("#")[1], title, icon };
-          }),
-        ],
+        goals: response.Items.map((goal) => {
+          const { pKey, title, icon } = goal;
+          return { goalID: pKey.split("#")[1], title, icon };
+        }),
       },
     };
     // return response.Items;

@@ -41,7 +41,7 @@ export async function middleware(request) {
         return NextResponse.next();
       }
       if (pathname.startsWith("/api/")) {
-        return new Response(JSON.stringify({ message: "Unauthorized" }), {
+        return new Response(JSON.stringify({ message: "Session expired", success: false }), {
           status: 401,
           headers: { "Content-Type": "application/json" },
         });
