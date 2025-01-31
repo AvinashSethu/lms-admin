@@ -1,3 +1,4 @@
+"use client";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import CourseCard from "@/src/components/CourseCard/CourseCard";
 import { Add, InsertDriveFile } from "@mui/icons-material";
@@ -16,44 +17,74 @@ export default function Syllabus() {
   const { showSnackbar } = useSnackbar();
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const [videoDialog, setVideoDialog] = useState(false);
+  const [allSubjects, setAllSubjects] = useState([]);
   const [subjectList, setSubjectList] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
 
-  const fetchSubject = () => {
-    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/add-subject`)
-      .then((data) => {
-        if (data.success) {
-          setSubjectList(data.data.subjects);
-        } else {
-          setSubjectList([]);
-        }
-      })
-      .catch(() => {
-        showSnackbar(data.message, "error", "", "3000");
-      });
-  };
-
-  useEffect(() => {
-    fetchSubject();
-  }, []);
-
-  function onSubjectAdd() {
-    if (!selectedSubject) {
-      showSnackbar("select a subject", "error", "", "3000");
-      return;
-    }
-
+  const fetchAllSubjects = () => {
     apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects/get-all-subjects`
     ).then((data) => {
       if (data.success) {
-        showSnackbar("Subject added to syllabus", "success");
-        fetchSubject();
-      } else {
-        showSnackbar("Failed to add subject", "error");
+        setAllSubjects(data.data.subjects);
       }
+      else{
+        setAllSubjects([]);
+      }
+    })
+    .catch(() => {
+      showSnackbar("Failed","error","","3000");
     });
+  };
+
+  const fetchSyllabusSubject = () => {
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/add-subjects`)
+    .then((data) => {
+      console.log(data);
+      
+      if(data.success) {
+        setSubjectList(data.data.subjects);
+      }
+      else {
+        setSubjectList([]);
+      }
+    })
   }
+
+  useEffect(() => {
+    fetchAllSubjects();
+    fetchSyllabusSubject();
+  }, []);
+
+  const onAddSubjectSyllabus = () => {
+    if(!selectedSubject) {
+      showSnackbar("Select subject","error","","3000");
+      return;
+    }
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/add-subject`,{
+      method: "POST",
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
+      body: JSON.stringify({title: selectedSubject}),
+    })
+    .then((data) => {
+      if(data.success){
+        showSnackbar("Subject Added","success","","3000");
+        // setSubjectList(data.data.subjects);
+        fetchSyllabusSubject();
+        // setIsDialogOPen(false);
+      }
+      else{
+        showSnackbar("Failed","error","","3000");
+      }
+    })
+    .catch(() => {
+      showSnackbar("Failed sub","error","","3000");
+    });
+    
+  }
+
 
   const dialogOpen = () => {
     setIsDialogOPen(true);
@@ -109,16 +140,16 @@ export default function Syllabus() {
           onClose={dialogClose}
           title="Add Subject"
           actionText="Add subject"
+          onClick={onAddSubjectSyllabus}
         >
           <DialogContent>
             <StyledSelect
               title="Select Subject"
               value={selectedSubject}
-              // onClick={}
               onChange={(e) => {
                 setSelectedSubject(e.target.value);
               }}
-              options={onSubjectAdd}
+              options={allSubjects}
             />
           </DialogContent>
         </DialogBox>

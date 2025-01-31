@@ -64,7 +64,7 @@ export default function Home() {
                 }}
               />
             ))
-          ) : [...Array(2)].map((item,index) => <PrimaryCardSkeleton key={index} />)
+          ) : [...Array(4)].map((_,index) => <PrimaryCardSkeleton key={index} />)
           }
         </Stack>
       </Stack>
