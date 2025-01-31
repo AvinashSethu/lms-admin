@@ -1,12 +1,13 @@
 "use client";
 import PrimaryCard from "@/src/components/PrimaryCard/PrimaryCard";
 import { Add } from "@mui/icons-material";
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; 
 import Header from "@/src/components/Header/Header";
 import GoalDialogBox from "./goals/[id]/components/GoalDialogBox/GoalDialogBox";
 import { apiFetch } from "@/src/lib/apiFetch";
+import PrimaryCardSkeleton from "@/src/components/PrimaryCardSkeleton/PrimaryCardSkeleton";
 
 export default function Home() {
   const router = useRouter();
@@ -40,7 +41,6 @@ export default function Home() {
   };
 
   return (
-    <>
       <Stack padding="20px" gap="15px">
         <Header
           title="Goals"
@@ -64,11 +64,9 @@ export default function Home() {
                 }}
               />
             ))
-          ) : (
-            <Typography>No Goal Created</Typography>
-          )}
+          ) : [...Array(2)].map((item,index) => <PrimaryCardSkeleton key={index} />)
+          }
         </Stack>
       </Stack>
-    </>
   );
 }

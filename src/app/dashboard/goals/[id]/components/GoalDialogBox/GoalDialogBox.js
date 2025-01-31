@@ -37,13 +37,13 @@ export default function GoalDialogBox({ isOpen, onClose }) {
       },
       showSnackbar
     ).then((data) => {
-        if (data.success) {
-          showSnackbar(data.message, "success", "", "3000");
-        } else {
-          showSnackbar(data.message, "error", "", "3000");
-        }
-        router.push(`dashboard/goals/${data.pKey}`);
-      });
+      if (data.success) {
+        showSnackbar(data.message, "success", "", "3000");
+      } else {
+        showSnackbar(data.message, "error", "", "3000");
+      }
+      router.push(`dashboard/goals/${data.pKey}`);
+    });
   }
 
   return (

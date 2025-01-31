@@ -13,7 +13,6 @@ export default function DialogBox({
   onClose,
   title,
   actionText,
-  actionArrow,
   onClick
 }) {
   return (

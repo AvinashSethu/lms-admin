@@ -1,48 +1,74 @@
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import CourseCard from "@/src/components/CourseCard/CourseCard";
 import { Add, InsertDriveFile } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  DialogContent,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, DialogContent, Stack, Typography } from "@mui/material";
 import videoThumbnail from "@/public/Images/videoThumbnail.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import { useRouter } from "next/navigation";
+import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
+import { apiFetch } from "@/src/lib/apiFetch";
+import { useSnackbar } from "@/src/app/context/SnackbarContext";
 
 export default function Syllabus() {
   const router = useRouter();
+  const menuOptions = ["Remove"];
+  const { showSnackbar } = useSnackbar();
   const [isDialogOpen, setIsDialogOPen] = useState(false);
+  const [videoDialog, setVideoDialog] = useState(false);
+  const [subjectList, setSubjectList] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
+
+  const fetchSubject = () => {
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/add-subject`)
+      .then((data) => {
+        if (data.success) {
+          setSubjectList(data.data.subjects);
+        } else {
+          setSubjectList([]);
+        }
+      })
+      .catch(() => {
+        showSnackbar(data.message, "error", "", "3000");
+      });
+  };
+
+  useEffect(() => {
+    fetchSubject();
+  }, []);
+
+  function onSubjectAdd() {
+    if (!selectedSubject) {
+      showSnackbar("select a subject", "error", "", "3000");
+      return;
+    }
+
+    apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects/get-all-subjects`
+    ).then((data) => {
+      if (data.success) {
+        showSnackbar("Subject added to syllabus", "success");
+        fetchSubject();
+      } else {
+        showSnackbar("Failed to add subject", "error");
+      }
+    });
+  }
+
   const dialogOpen = () => {
     setIsDialogOPen(true);
   };
   const dialogClose = () => {
     setIsDialogOPen(false);
   };
-  const [videoDialog, setVideoDialog] = useState(false);
+
   const videoDialogOpen = () => {
     setVideoDialog(true);
   };
   const videoDialogClose = () => {
     setVideoDialog(false);
   };
-  const [subjectType, setSubjectType] = useState("");
-  const handleChangeSubject = (event) => {
-    setSubjectType(event.target.value);
-  };
-  const [videoSelect, setVideoSelect] = useState("");
-  const handleChangeVideo = (event) => {
-    setVideoSelect(event.target.value);
-  };
-  const menuOptions = ["Remove"];
+
   return (
     <Stack
       sx={{
@@ -85,58 +111,32 @@ export default function Syllabus() {
           actionText="Add subject"
         >
           <DialogContent>
-            <FormControl
-              sx={{
-                width: "100%",
+            <StyledSelect
+              title="Select Subject"
+              value={selectedSubject}
+              // onClick={}
+              onChange={(e) => {
+                setSelectedSubject(e.target.value);
               }}
-              size="small"
-            >
-              <InputLabel>Select Subject</InputLabel>
-              <Select
-                label="Select subject"
-                size="small"
-                value={subjectType}
-                onChange={handleChangeSubject}
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                }}
-              >
-                <MenuItem value="1">one</MenuItem>
-              </Select>
-            </FormControl>
+              options={onSubjectAdd}
+            />
           </DialogContent>
         </DialogBox>
       </Stack>
       <Stack flexWrap="wrap" flexDirection="row" rowGap="20px" columnGap="50px">
-        <SecondaryCard
-          icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title="Numerical Ability"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title="Simplifications & simple equations"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-          title="Logical reasoning"
-          options={menuOptions}
-          cardWidth="350px"
-        />
+        {subjectList.length > 0 ? (
+          subjectList.map((item, index) => (
+            <SecondaryCard
+              icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
+              title={item.title}
+              options={menuOptions}
+              cardWidth="350px"
+              key={index}
+            />
+          ))
+        ) : (
+          <Typography sx={{ color: "var(--text4)" }}>Add subjects</Typography>
+        )}
       </Stack>
       <Stack flexDirection="row" justifyContent="space-between">
         <Typography
@@ -173,30 +173,7 @@ export default function Syllabus() {
         }}
       >
         <DialogContent>
-          <FormControl
-            sx={{
-              width: "100%",
-            }}
-            size="small"
-          >
-            <InputLabel>Select Subject</InputLabel>
-            <Select
-              label="Select subject"
-              size="small"
-              value={videoSelect}
-              onChange={handleChangeVideo}
-              sx={{
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "var(--sec-color)",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "var(--sec-color)",
-                },
-              }}
-            >
-              <MenuItem value="1">one</MenuItem>
-            </Select>
-          </FormControl>
+          <StyledSelect title="Select Video" value="course" />
         </DialogContent>
       </DialogBox>
       <CourseCard

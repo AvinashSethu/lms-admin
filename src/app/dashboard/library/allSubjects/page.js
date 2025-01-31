@@ -1,127 +1,106 @@
 "use client";
+import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import Header from "@/src/components/Header/Header";
+import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
-import { Add, Folder } from "@mui/icons-material";
-import { DialogContent, FormControl, InputLabel, MenuItem, Select, Stack } from "@mui/material";
-import { useState } from "react";
+import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
+import { apiFetch } from "@/src/lib/apiFetch";
+import { Add, InsertDriveFile } from "@mui/icons-material";
+import { DialogContent, Stack } from "@mui/material";
+import { useEffect, useState } from "react";
 
 export default function AllSubjects() {
   const menuOptions = ["Remove"];
+  const [title, setTitle] = useState("");
   const [isDialogOpen, setIsDialogOPen] = useState(false);
-      const dialogOpen = () => {
-        setIsDialogOPen(true);
-      };
-      const dialogClose = () => {
-        setIsDialogOPen(false);
-      };
-      const [allSubject, setAllSubject] = useState();
-      const hanglechange = (event) => {
-        setAllSubject(event.target.value);
+  const [subjectList, setSubjectList] = useState([]);
+  const { showSnackbar } = useSnackbar();
+
+  function OnSubjectCreate() {
+    if (!title) {
+      showSnackbar("Fill all data", "error", "", "3000");
+      return;
+    }
+
+    apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects/create-subject`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          title,
+        }),
       }
+    ).then((data) => {
+      if (data.success) {
+        showSnackbar(data.message, "success", "", "3000");
+        console.log(data.message);
+      } else {
+        showSnackbar("subje", "error", "", "3000");
+      }
+    });
+  }
+
+  useEffect(() => {
+    apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects/get-all-subjects`
+    ).then((data) => {
+      if (data.success) {
+        setSubjectList(data.data.subjects);
+        console.log(data.data.subjects);
+      } else {
+        setSubjectList([]);
+      }
+    });
+  }, []);
+
+  const dialogOpen = () => {
+    setIsDialogOPen(true);
+  };
+  const dialogClose = () => {
+    setIsDialogOPen(false);
+  };
+
   return (
     <Stack padding="20px" gap="20px">
-      <Header title="All Subjects" search button="Subject" icon={<Add />} onClick={dialogOpen} />
+      <Header
+        title="All Subjects"
+        search
+        button="Subject"
+        icon={<Add />}
+        onClick={dialogOpen}
+      />
       <DialogBox
-          isOpen={isDialogOpen}
-          onClose={dialogClose}
-          title="Add Subject"
-          actionText="Add Subject"
-        >
-          <DialogContent>
-            <FormControl
-              sx={{
-                width: "100%",
-              }}
-              size="small"
-            >
-              <InputLabel>Select Subject</InputLabel>
-              <Select
-              value={allSubject}
-              onChange={hanglechange}
-                label="Select Subject"
-                size="small"
-                sx={{
-                  "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "var(--sec-color)",
-                  },
-                }}
-              >
-                <MenuItem value="one">Numerical Ability</MenuItem>
-              </Select>
-            </FormControl>
-          </DialogContent>
-        </DialogBox>
+        isOpen={isDialogOpen}
+        onClose={dialogClose}
+        title="Add Subject"
+        actionText="Add Subject"
+        onClick={OnSubjectCreate}
+      >
+        <DialogContent>
+          <StyledTextField
+            placeholder="Enter Subject"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          />
+        </DialogContent>
+      </DialogBox>
       <Stack flexDirection="row" columnGap="40px" rowGap="15px" flexWrap="wrap">
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Numerical Ability"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Simplifications & simple equations"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
-        <SecondaryCard
-          icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
-          title="Blood Relations and Coding & Decoding"
-          options={menuOptions}
-          cardWidth="350px"
-        />
+        {subjectList.length > 0 ? (
+          subjectList.map((item, index) => (
+            <SecondaryCard
+              icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
+              title={item.title}
+              options={menuOptions}
+              cardWidth="350px"
+              key={index}
+            />
+          ))
+        ) : (
+          <NoDataFound info="No Subject Created yet" />
+        )}
       </Stack>
     </Stack>
   );

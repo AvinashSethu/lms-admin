@@ -2,15 +2,9 @@
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import Header from "@/src/components/Header/Header";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
+import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import { Add, Folder } from "@mui/icons-material";
-import {
-  DialogContent,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-} from "@mui/material";
+import { DialogContent, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -24,10 +18,7 @@ export default function Coursebank() {
   const dialogClose = () => {
     setIsDialogOPen(false);
   };
-  const [courseBankSelect, setCourseBankSelect] = useState();
-  const handleChange = (event) => {
-    setCourseBankSelect(event.target.value);
-  }
+
   return (
     <Stack padding="20px" gap="20px">
       <Header
@@ -44,30 +35,7 @@ export default function Coursebank() {
         actionText="Add Course bank"
       >
         <DialogContent>
-          <FormControl
-            sx={{
-              width: "100%",
-            }}
-            size="small"
-          >
-            <InputLabel>Select Course bank</InputLabel>
-            <Select
-            value={courseBankSelect}
-            onChange={handleChange}
-              label="Select Course bank"
-              size="small"
-              sx={{
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "var(--sec-color)",
-                },
-                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "var(--sec-color)",
-                },
-              }}
-            >
-              <MenuItem value="one">Numerical Ability</MenuItem>
-            </Select>
-          </FormControl>
+          <StyledSelect title="Select Course" value="one" />
         </DialogContent>
       </DialogBox>
       <Stack flexDirection="row" columnGap="40px" rowGap="15px" flexWrap="wrap">
@@ -78,7 +46,7 @@ export default function Coursebank() {
               onClick={() => {
                 router.push("/dashboard/library/coursebank/1");
               }}
-              style={{cursor:"pointer"}}
+              style={{ cursor: "pointer" }}
             >
               Numerical Ability
             </span>
@@ -87,14 +55,13 @@ export default function Coursebank() {
           cardWidth="350px"
         />
         <SecondaryCard
-          
           icon={<Folder sx={{ color: "var(--sec-color)" }} fontSize="large" />}
           title={
             <span
               onClick={() => {
                 router.push("/dashboard/library/coursebank/2");
               }}
-              style={{cursor:"pointer"}}
+              style={{ cursor: "pointer" }}
             >
               Simplifications & simple equations
             </span>
@@ -109,7 +76,7 @@ export default function Coursebank() {
               onClick={() => {
                 router.push("/dashboard/library/coursebank/3");
               }}
-              style={{cursor:"pointer"}}
+              style={{ cursor: "pointer" }}
             >
               Blood Relations and Coding & Decoding
             </span>
