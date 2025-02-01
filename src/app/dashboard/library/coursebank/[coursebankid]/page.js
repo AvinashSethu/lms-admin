@@ -6,22 +6,23 @@ import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { Add, PlayCircle } from "@mui/icons-material";
 import { DialogContent, Stack } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function CoursebankId() {
+export default function CoursebankId({course}) {
   const menuOptions = ["Remove"];
   const [isDialogOpen, setIsDialogOPen] = useState(false);
+
   const dialogOpen = () => {
     setIsDialogOPen(true);
   };
   const dialogClose = () => {
     setIsDialogOPen(false);
   };
-
+  
   return (
     <Stack padding="20px" gap="20px">
       <Header
-        title="Course bank"
+        title={course}
         search
         button="Video"
         icon={<Add />}
@@ -46,7 +47,7 @@ export default function CoursebankId() {
           icon={
             <PlayCircle sx={{ color: "var(--sec-color)" }} fontSize="large" />
           }
-          title="Numerical Ability"
+          // title="ability"
           options={menuOptions}
           cardWidth="350px"
         />

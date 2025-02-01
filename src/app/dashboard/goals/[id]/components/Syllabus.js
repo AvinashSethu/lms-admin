@@ -11,80 +11,65 @@ import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 
-export default function Syllabus() {
+export default function Syllabus({ goal, fetchGoal }) {
   const router = useRouter();
   const menuOptions = ["Remove"];
   const { showSnackbar } = useSnackbar();
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const [videoDialog, setVideoDialog] = useState(false);
   const [allSubjects, setAllSubjects] = useState([]);
-  const [subjectList, setSubjectList] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
 
   const fetchAllSubjects = () => {
     apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects/get-all-subjects`
-    ).then((data) => {
-      if (data.success) {
-        setAllSubjects(data.data.subjects);
-      }
-      else{
-        setAllSubjects([]);
-      }
-    })
-    .catch(() => {
-      showSnackbar("Failed","error","","3000");
-    });
+    )
+      .then((data) => {
+        if (data.success) {
+          setAllSubjects(data.data.subjects);
+        } else {
+          setAllSubjects([]);
+        }
+      })
+      .catch(() => {
+        showSnackbar("Failed", "error", "", "3000");
+      });
   };
-
-  const fetchSyllabusSubject = () => {
-    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/add-subjects`)
-    .then((data) => {
-      console.log(data);
-      
-      if(data.success) {
-        setSubjectList(data.data.subjects);
-      }
-      else {
-        setSubjectList([]);
-      }
-    })
-  }
 
   useEffect(() => {
     fetchAllSubjects();
-    fetchSyllabusSubject();
   }, []);
 
   const onAddSubjectSyllabus = () => {
-    if(!selectedSubject) {
-      showSnackbar("Select subject","error","","3000");
+    if (!selectedSubject) {
+      showSnackbar("Select subject", "error", "", "3000");
       return;
     }
-    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/add-subject`,{
-      method: "POST",
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
-      body: JSON.stringify({title: selectedSubject}),
-    })
-    .then((data) => {
-      if(data.success){
-        showSnackbar("Subject Added","success","","3000");
-        // setSubjectList(data.data.subjects);
-        fetchSyllabusSubject();
-        // setIsDialogOPen(false);
-      }
-      else{
-        showSnackbar("Failed","error","","3000");
-      }
-    })
-    .catch(() => {
-      showSnackbar("Failed sub","error","","3000");
+    console.log({
+      goalID: goal.goalID,
+      subjectID: selectedSubject.subjectID,
     });
-    
-  }
 
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/add-subject`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        goalID: goal.goalID,
+        subjectID: selectedSubject.subjectID,
+      }),
+    }).then((json) => {
+      console.log(json);
+      if (json.success) {
+        showSnackbar(json.message, "success", "", "3000");
+        fetchGoal();
+        setIsDialogOPen(false);
+      } else {
+        showSnackbar(json.message, "error", "", "3000");
+      }
+    });
+  };
 
   const dialogOpen = () => {
     setIsDialogOPen(true);
@@ -147,6 +132,7 @@ export default function Syllabus() {
               title="Select Subject"
               value={selectedSubject}
               onChange={(e) => {
+                console.log(e.target.value);
                 setSelectedSubject(e.target.value);
               }}
               options={allSubjects}
@@ -155,18 +141,22 @@ export default function Syllabus() {
         </DialogBox>
       </Stack>
       <Stack flexWrap="wrap" flexDirection="row" rowGap="20px" columnGap="50px">
-        {subjectList.length > 0 ? (
-          subjectList.map((item, index) => (
-            <SecondaryCard
-              icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-              title={item.title}
-              options={menuOptions}
-              cardWidth="350px"
-              key={index}
-            />
-          ))
+        {goal.subjectList ? (
+          goal.subjectList.length > 0 ? (
+            goal.subjectList.map((item, index) => (
+              <SecondaryCard
+                icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
+                title={item.title}
+                options={menuOptions}
+                cardWidth="350px"
+                key={index}
+              />
+            ))
+          ) : (
+            <Typography sx={{ color: "var(--text4)" }}>Add subjects</Typography>
+          )
         ) : (
-          <Typography sx={{ color: "var(--text4)" }}>Add subjects</Typography>
+          "Loading...."
         )}
       </Stack>
       <Stack flexDirection="row" justifyContent="space-between">

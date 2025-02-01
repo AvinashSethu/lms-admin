@@ -56,7 +56,7 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function GoalTabs({ tabs = [] }) {
+export default function GoalTabs({ tabs = [], goal, fetchGoal }) {
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -68,10 +68,10 @@ export default function GoalTabs({ tabs = [] }) {
           <StyledTab key={index} label={tab.label} />
         ))}
       </StyledTabs>
-      <CustomTabPanel value={value} index={0}><Syllabus /></CustomTabPanel>
-      <CustomTabPanel value={value} index={1}><Exam /> </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}><Info /></CustomTabPanel>
-      <CustomTabPanel value={value} index={3}><Settings /></CustomTabPanel>
+      <CustomTabPanel value={value} index={0}><Syllabus goal={goal} fetchGoal={fetchGoal}/></CustomTabPanel>
+      <CustomTabPanel value={value} index={1}><Exam goal={goal} fetchGoal={fetchGoal}/> </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}><Info goal={goal} fetchGoal={fetchGoal}/></CustomTabPanel>
+      <CustomTabPanel value={value} index={3}><Settings goal={goal} fetchGoal={fetchGoal} /></CustomTabPanel>
     </Stack>
   );
 }

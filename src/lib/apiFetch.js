@@ -19,9 +19,19 @@ export async function apiFetch(url, options = {}, showSnackbar) {
     return null;
   }
 
-  if (!response.ok) {
-    throw new Error(`API Error: ${response.statusText}`);
-  }
+  // if (!response.ok) {
+  //   console.log(response);
+  //   const data = await response.json()
+  //   console.log(data);
+  //   showSnackbar(
+  //     "Session expired, redirecting to login",
+  //     "error",
+  //     "",
+  //     "3000"
+  //   );
+  //   return await response.json();
+  //   // throw new Error(`API Error: ${response.statusText}`); 
+  // }
 
-  return response.json();
+  return await response.json();
 }

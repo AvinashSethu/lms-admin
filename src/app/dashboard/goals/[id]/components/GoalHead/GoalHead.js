@@ -5,8 +5,9 @@ import gate_cse from "@/public/Icons/gate_cse.svg";
 import { ArrowBackIosRounded } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 
-export default function GoalHead() {
+export default function GoalHead({ goal }) {
   const router = useRouter();
+
   return (
     <Stack
       sx={{
@@ -15,12 +16,11 @@ export default function GoalHead() {
         justifyContent: "space-between",
         alignItems: "center",
         flexDirection: "row",
-        border: "1px solid",
-        borderColor: "var(--border-color)",
+        border: "1px solid var(--border-color)",
+        borderRadius: "10px",
         backgroundColor: "var(--white)",
         padding: "20px",
-        borderRadius: "10px",
-        height:"60px"
+        height: "60px",
       }}
     >
       <Stack flexDirection="row" alignItems="center" gap="15px">
@@ -28,7 +28,12 @@ export default function GoalHead() {
           onClick={() => {
             router.back();
           }}
-          sx={{ color: "var(--sec-color)",fontSize:"18px",cursor:"pointer",fontWeight:"700" }}
+          sx={{
+            color: "var(--sec-color)",
+            fontSize: "18px",
+            cursor: "pointer",
+            fontWeight: "700",
+          }}
         />
         <Stack
           sx={{
@@ -46,7 +51,7 @@ export default function GoalHead() {
         <Typography
           sx={{ fontFamily: "Lato", fontSize: "14px", fontWeight: "700" }}
         >
-          GATE CSE
+          {goal.title}
         </Typography>
       </Stack>
       <Button
@@ -58,7 +63,7 @@ export default function GoalHead() {
           fontFamily: "Lato",
           fontSize: "14px",
           fontWeight: "700",
-          borderRadius:"5px"
+          borderRadius: "5px",
         }}
         disableElevation
       >

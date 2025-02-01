@@ -2,7 +2,6 @@
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import Header from "@/src/components/Header/Header";
-import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
@@ -13,10 +12,10 @@ import { useEffect, useState } from "react";
 
 export default function AllSubjects() {
   const menuOptions = ["Remove"];
-  const [title, setTitle] = useState("");
-  const [isDialogOpen, setIsDialogOPen] = useState(false);
-  const [subjectList, setSubjectList] = useState([]);
   const { showSnackbar } = useSnackbar();
+  const [title, setTitle] = useState("");
+  const [subjectList, setSubjectList] = useState([]);
+  const [isDialogOpen, setIsDialogOPen] = useState(false);
 
   function OnSubjectCreate() {
     if (!title) {
@@ -35,9 +34,8 @@ export default function AllSubjects() {
     ).then((data) => {
       if (data.success) {
         showSnackbar(data.message, "success", "", "3000");
-        console.log(data.message);
       } else {
-        showSnackbar("subje", "error", "", "3000");
+        showSnackbar(data.message, "error", "", "3000");
       }
     });
   }
@@ -88,19 +86,19 @@ export default function AllSubjects() {
         </DialogContent>
       </DialogBox>
       <Stack flexDirection="row" columnGap="40px" rowGap="15px" flexWrap="wrap">
-        {subjectList.length > 0 ? (
-          subjectList.map((item, index) => (
-            <SecondaryCard
-              icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
-              title={item.title}
-              options={menuOptions}
-              cardWidth="350px"
-              key={index}
-            />
-          ))
-        ) : [...Array(4)].map((_,index) => <SecondaryCardSkeleton key={index} />)
-          
-        }
+        {subjectList.length > 0
+          ? subjectList.map((item, index) => (
+              <SecondaryCard
+                icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
+                title={item.title}
+                options={menuOptions}
+                cardWidth="350px"
+                key={index}
+              />
+            ))
+          : [...Array(4)].map((_, index) => (
+              <SecondaryCardSkeleton key={index} />
+            ))}
       </Stack>
     </Stack>
   );
