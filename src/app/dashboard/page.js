@@ -51,6 +51,7 @@ export default function Home() {
         <Stack flexDirection="row" justifyContent="space-between">
           <GoalDialogBox isOpen={isDialogOpen} onClose={dialogClose} />
         </Stack>
+        {/* <UploadVideo /> */}
         <Stack flexDirection="row" gap="20px" flexWrap="wrap">
           {goalList.length > 0 ? (
             goalList.map((item, index) => (
@@ -67,6 +68,7 @@ export default function Home() {
           ) : [...Array(4)].map((_,index) => <PrimaryCardSkeleton key={index} />)
           }
         </Stack>
+        
       </Stack>
   );
 }

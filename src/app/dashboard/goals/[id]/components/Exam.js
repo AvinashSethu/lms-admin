@@ -3,9 +3,13 @@ import PrimaryCard from "@/src/components/PrimaryCard/PrimaryCard";
 import { Stack } from "@mui/material";
 import weekcalendar from "@/public/Icons/weekCalendar.svg";
 import series from "@/public/Icons/series.svg";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function Exam() {
+  const params = useParams();
+  const id = params.id;
+  console.log(params);
+  
   const router = useRouter();
   return (
     <Stack
@@ -25,7 +29,7 @@ export default function Exam() {
           title="Exam Groups"
           actionButton="View" 
           onClick={() => {
-            router.push("/dashboard/goals/1/examgroups");
+            router.push(`/dashboard/goals/${id}/examgroups`);
           }}
         />
         <PrimaryCard

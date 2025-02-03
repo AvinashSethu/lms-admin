@@ -3,36 +3,22 @@ import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import Header from "@/src/components/Header/Header";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
+import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Add, Folder } from "@mui/icons-material";
 import { DialogContent, Stack } from "@mui/material";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Coursebank() {
   const router = useRouter();
-  const params = useParams();
-  const id = params.id;
-  const [course, setCourse] = useState({});
   const menuOptions = ["Remove"];
   const { showSnackbar } = useSnackbar();
   const [title, setTitle] = useState("");
   const [courseList, setCourseList] = useState([]);
   const [isDialogOpen, setIsDialogOPen] = useState(false);
 
-  function fetchCourse() {
-    apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/course-bank/get-all-bank/${id}`
-    ).then((json) => {
-      setCourse(json.data);
-      console.log(json.data)
-    });    
-  }
-
-  useEffect(() => {
-    fetchCourse();
-  }, []);
 
   function OnCourseCreate() {
     if (!title) {
@@ -63,7 +49,6 @@ export default function Coursebank() {
     ).then((data) => {
       if (data.success) {
         setCourseList(data.data.banks);
-        
       } else {
         setCourseList([]);
       }
@@ -76,7 +61,6 @@ export default function Coursebank() {
   const dialogClose = () => {
     setIsDialogOPen(false);
   };
-  // console.log(data.data.banks[0].title);
 
   return (
     <Stack padding="20px" gap="20px">
@@ -86,8 +70,6 @@ export default function Coursebank() {
         button="Add"
         icon={<Add />}
         onClick={dialogOpen}
-        course={course}
-        fetchCourse={fetchCourse}
       />
       <DialogBox
         isOpen={isDialogOpen}
@@ -128,11 +110,9 @@ export default function Coursebank() {
                 }
                 options={menuOptions}
                 cardWidth="350px"
-                // course={}
-                // fetchCourse={fetchCourse}
               />
             ))
-          : ""}
+          : <SecondaryCardSkeleton />}
       </Stack>
     </Stack>
   );

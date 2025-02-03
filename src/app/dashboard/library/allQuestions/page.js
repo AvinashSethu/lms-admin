@@ -5,9 +5,11 @@ import Header from "@/src/components/Header/Header";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
 import { Add, FilterAlt } from "@mui/icons-material";
 import { Button, Pagination, Stack, Typography } from "@mui/material";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function AllQuestions() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const filterOpen = () => {
     setIsOpen(!isOpen);
@@ -24,7 +26,15 @@ export default function AllQuestions() {
 
   return (
     <Stack padding="20px" gap="20px" minHeight="100vh">
-      <Header title="Questions" button="Question" icon={<Add />} />
+      <Header
+        title="Questions"
+        button="Bulk import"
+        icon={<Add />}
+        buttons="Questions"
+        onClick={() => {
+          router.push(`/dashboard/library/allQuestions/1`);
+        }}
+      />
 
       <Stack flexDirection="row" justifyContent="space-between" gap="20px">
         <SearchBox />
