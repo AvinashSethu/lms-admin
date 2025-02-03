@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import * as tus from 'tus-js-client';
+import tus from 'tus-js-client';
 
 const UploadVideo = () => {
   const [file, setFile] = useState(null);
@@ -64,7 +64,7 @@ const UploadVideo = () => {
   return (
     <div>
       <h1>Upload Video</h1>
-      <input type="file" onChange={handleFileChange} />
+      <input type="file" accept='/video*' onChange={handleFileChange} />
       <button onClick={handleUpload} disabled={uploading}>
         {uploading ? 'Uploading...' : 'Upload Video'}
       </button>

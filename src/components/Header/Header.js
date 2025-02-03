@@ -11,7 +11,8 @@ export default function Header({
   onClick,
   search,
   back,
-  buttons
+  buttons,
+  course
 }) {
   const router = useRouter();
   return (

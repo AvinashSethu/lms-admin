@@ -6,9 +6,11 @@ import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { Add, PlayCircle } from "@mui/icons-material";
 import { DialogContent, Stack } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function CoursebankId({course}) {
+  console.log(course);
+  
   const menuOptions = ["Remove"];
   const [isDialogOpen, setIsDialogOPen] = useState(false);
 
@@ -47,7 +49,7 @@ export default function CoursebankId({course}) {
           icon={
             <PlayCircle sx={{ color: "var(--sec-color)" }} fontSize="large" />
           }
-          // title="ability"
+          title="ability"
           options={menuOptions}
           cardWidth="350px"
         />
