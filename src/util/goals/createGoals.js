@@ -1,6 +1,5 @@
 import crypto from "crypto";
-import dynamoDB from "../dbConnect";
-import { red } from "@mui/material/colors";
+import {dynamoDB} from "../awsAgent";
 
 export default async function createGoals({ title, icon }) {
   const params = {

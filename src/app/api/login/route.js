@@ -1,4 +1,4 @@
-import dynamoDB from "@/src/util/dbConnect";
+import {dynamoDB} from "@/src/util/awsAgent";
 import { comparePassword } from "@/src/lib/jwtToken";
 import { createSession } from "@/src/lib/session";
 

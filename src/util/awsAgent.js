@@ -20,4 +20,6 @@ AWS.config.update({
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
-export default dynamoDB;
+const s3 = new AWS.S3();
+
+export {dynamoDB, s3};

@@ -1,4 +1,4 @@
-import dynamoDB from "../dbConnect";
+import {dynamoDB} from "../awsAgent";
 
 export default async function addSubject({ subjectID, goalID, title }) {
   // Step 1: Check if the subject already exists in the goal's subjectList

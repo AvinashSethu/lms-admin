@@ -1,4 +1,4 @@
-import dynamoDB from "../dbConnect";
+import {dynamoDB} from "../awsAgent";
 
 export default async function getSubject({ subjectID }) {
   const params = {
