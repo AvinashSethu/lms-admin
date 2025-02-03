@@ -3,24 +3,31 @@ import { Button, DialogContent, Stack, Typography } from "@mui/material";
 import { Add, CalendarMonth, East } from "@mui/icons-material";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import GoalHead from "../components/GoalHead/GoalHead";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import { useState } from "react";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
+import Header from "@/src/components/Header/Header";
 
 export default function Examgroups() {
-  const [isDialogOpen, setIsDialogOPen] = useState(false);
-      const dialogOpen = () => {
-        setIsDialogOPen(true);
-      };
-      const dialogClose = () => {
-        setIsDialogOPen(false);
-      };
+  const params = useParams();
+  const id = params.id;
+  const groupid = params.id;
   const router = useRouter();
-  const menuOptions = ["subject1", "subject2"];
+  const menuOptions = ["Remove"];
+  const [isDialogOpen, setIsDialogOPen] = useState(false);
+
+  const dialogOpen = () => {
+    setIsDialogOPen(true);
+  };
+  const dialogClose = () => {
+    setIsDialogOPen(false);
+  };
+
   return (
     <Stack padding="20px" gap="15px">
-      <GoalHead />
+      {/* <GoalHead  /> */}
+      <Header title="Exam Groups" button="Publish" back />
       <Stack
         sx={{
           backgroundColor: "var(--white)",
@@ -56,10 +63,12 @@ export default function Examgroups() {
             create
           </Button>
         </Stack>
-        <DialogBox isOpen={isDialogOpen}
+        <DialogBox
+          isOpen={isDialogOpen}
           onClose={dialogClose}
           title="Exam Group"
-          actionText="Create">
+          actionText="Create"
+        >
           <DialogContent>
             <StyledTextField placeholder="Enter Group Name" />
           </DialogContent>
@@ -72,7 +81,7 @@ export default function Examgroups() {
         >
           <SecondaryCard
             icon={<CalendarMonth sx={{ color: "var(--sec-color)" }} />}
-            title= "Weekly Test"
+            title="Weekly Test"
             options={menuOptions}
             cardWidth="100%"
             subTitle="05/01/25 to 06/02/25"
@@ -87,14 +96,13 @@ export default function Examgroups() {
                 }}
                 endIcon={<East />}
                 onClick={() => {
-                  router.push("/dashboard/goals/1/examgroups/1")
-              }}
+                  router.push(`/dashboard/goals/${id}/examgroups/${groupid}`);
+                }}
                 disableElevation
               >
                 View
               </Button>
             }
-            
           />
           <SecondaryCard
             icon={<CalendarMonth sx={{ color: "var(--sec-color)" }} />}

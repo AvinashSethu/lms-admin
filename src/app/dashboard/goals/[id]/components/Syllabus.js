@@ -62,7 +62,7 @@ export default function Syllabus({ goal, fetchGoal }) {
     }).then((json) => {
       console.log(json);
       if (json.success) {
-        showSnackbar(json.message, "success", "", "3000");  
+        showSnackbar(json.message, "success", "", "3000");
         fetchGoal();
         setIsDialogOPen(false);
       } else {

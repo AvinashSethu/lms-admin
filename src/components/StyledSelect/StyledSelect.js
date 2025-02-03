@@ -15,6 +15,7 @@ export default function StyledSelect({ title, value, onChange, options = [] }) {
         size="small"
         value={value}
         onChange={onChange}
+        MenuProps={{disableScrollLock:true}}
         sx={{
           "&:hover .MuiOutlinedInput-notchedOutline": {
             borderColor: "var(--sec-color)",

@@ -14,14 +14,18 @@ import GoalHead from "../../components/GoalHead/GoalHead";
 import { Add, Info, Settings } from "@mui/icons-material";
 import PrimaryCard from "@/src/components/PrimaryCard/PrimaryCard";
 import calendar from "@/public/Icons/weekCalendar.svg";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import { useState } from "react";
 import StatusCard from "@/src/components/CreateExam/Components/StatusCard";
 import StyledSwitchButton from "@/src/components/StyledSwitch/StyledSwitch";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
+import Header from "@/src/components/Header/Header";
 
 export default function Groupid() {
+  const params = useParams();
+    const examid = params.id;
+    const groupid = params.id;
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const [isSettingDialog, setIsSettingDialog] = useState(false);
   const dialogOpen = () => {
@@ -40,7 +44,8 @@ export default function Groupid() {
   const router = useRouter();
   return (
     <Stack padding="20px" gap="15px">
-      <GoalHead />
+      {/* <GoalHead /> */}
+      <Header title="Weekly test" button="Publish" back />
       <Stack
         sx={{
           backgroundColor: "var(--white)",
@@ -214,7 +219,7 @@ export default function Groupid() {
             subtitle="05/01/25 to 06/02/25"
             actionButton="View"
             onClick={() => {
-              router.push("/dashboard/goals/1/examgroups/1/1");
+              router.push(`/dashboard/goals/${groupid}/examgroups/${examid}/1`);
             }}
           />
           <PrimaryCard
