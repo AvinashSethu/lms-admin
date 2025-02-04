@@ -19,14 +19,13 @@ export default function Coursebank() {
   const [courseList, setCourseList] = useState([]);
   const [isDialogOpen, setIsDialogOPen] = useState(false);
 
-
   function OnCourseCreate() {
     if (!title) {
       showSnackbar("Fill all data", "error", "", "3000");
       return;
     }
     apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/course-bank/create-bank`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/create-bank`,
       {
         method: "POST",
         headers: {
@@ -45,7 +44,7 @@ export default function Coursebank() {
 
   useEffect(() => {
     apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api//courses/course-bank/get-all-bank`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/get-all-bank`
     ).then((data) => {
       if (data.success) {
         setCourseList(data.data.banks);

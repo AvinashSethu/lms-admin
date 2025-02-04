@@ -1,6 +1,6 @@
 "use client";
-import { useState } from 'react';
-import tus from 'tus-js-client';
+import { useState } from "react";
+import tus from "tus-js-client";
 
 const UploadVideo = () => {
   const [file, setFile] = useState(null);
@@ -66,7 +66,7 @@ const UploadVideo = () => {
   return (
     <div>
       <h1>Upload Video</h1>
-      <input type="file" accept='/video*' onChange={handleFileChange} />
+      <input type="file" accept="video/mp4" onChange={handleFileChange} />
       <button onClick={handleUpload} disabled={uploading}>
         {uploading ? "Uploading..." : "Upload Video"}
       </button>
@@ -77,7 +77,6 @@ const UploadVideo = () => {
 };
 
 export default UploadVideo;
-
 
 async function uploadToS3(file, setResponseMessage) {
   // Request presigned URL from your backend

@@ -28,11 +28,11 @@ export default function CoursebankId() {
 
   function fetchCourse() {
     apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/course-bank/get-bank/${bankID}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/get-bank/${bankID}`
     ).then((data) => {
       if (data.success) {
         setBank(data.data);
-        console.log(data.data);
+        console.log(data.data.bankTitle);
       } else {
         showSnackbar("No Bank Found", "error", "", "3000");
         router.push(`/404`);
@@ -61,7 +61,7 @@ export default function CoursebankId() {
   return (
     <Stack padding="20px" gap="20px">
       <Header
-        // title={bank}
+        title={bank.bankTitle}
         search
         button={[
           <Button
@@ -103,6 +103,7 @@ export default function CoursebankId() {
           <Stack gap="15px">
             <StyledTextField placeholder="Enter File title" />
             <StyledSelect title="Select File" value="one" />
+            <input type="file" style={{width:"100%"}} />
           </Stack>
         </DialogContent>
       </DialogBox>
