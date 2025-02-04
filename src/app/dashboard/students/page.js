@@ -44,7 +44,38 @@ export default function Students() {
 
   return (
     <Stack padding="20px" gap="20px">
-      <Header title="Students" button="Student" icon={<Add />} />
+      <Header
+        title="Students"
+        search
+        button={[
+          <Button
+            key="Add"
+            variant="contained"
+            startIcon={<Add />}
+            // onClick={dialogOpen}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
+            disableElevation
+          >
+            Students
+          </Button>,
+          <Button
+            key="Add"
+            variant="contained"
+            endIcon={<FilterAlt />}
+            onClick={filterOpen}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
+            disableElevation
+          >
+            Filter
+          </Button>,
+        ]}
+      />
       <Stack
         sx={{
           backgroundColor: "var(--white)",
@@ -56,33 +87,6 @@ export default function Students() {
           minHeight: "100vh",
         }}
       >
-        <Stack>
-          <Stack flexDirection="row" gap="10px" alignItems="flex-end">
-            <SearchBox />
-            <Button
-              variant="contained"
-              endIcon={<FilterAlt />}
-              onClick={filterOpen}
-              sx={{
-                backgroundColor: "var(--primary-color)",
-                textTransform: "none",
-                height: "40px",
-                borderRadius: "4px",
-                minWidth: "100px",
-              }}
-              disableElevation
-            >
-              Filter
-            </Button>
-            <FilterSideNav
-              isOpen={isOpen}
-              toggleDrawer={toggleDrawer}
-              select_1="Question type"
-              select_2="Select date from & to"
-              select_3="Sort Marks"
-            />
-          </Stack>
-        </Stack>
         <Stack gap="15px">
           <SecondaryCard
             icon={

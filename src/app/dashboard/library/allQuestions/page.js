@@ -28,14 +28,24 @@ export default function AllQuestions() {
     <Stack padding="20px" gap="20px" minHeight="100vh">
       <Header
         title="Questions"
-        button="Bulk import"
-        icon={<Add />}
-        buttons="Questions"
-        onClick={() => {
-          router.push(`/dashboard/library/allQuestions/1`);
-        }}
+        button={[
+          <Button
+            key="Filter"
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => {
+              router.push(`/dashboard/library/allQuestions/1`);
+            }}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
+            disableElevation
+          >
+            Questions
+          </Button>,
+        ]}
       />
-
       <Stack flexDirection="row" justifyContent="space-between" gap="20px">
         <SearchBox />
         <Button

@@ -6,12 +6,9 @@ import { useRouter } from "next/navigation";
 
 export default function Header({
   title,
-  button,
-  icon,
-  onClick,
+  button=[],
   search,
   back,
-  buttons,
 }) {
   const router = useRouter();
   return (
@@ -52,42 +49,13 @@ export default function Header({
       </Stack>
       <Stack flexDirection="row" gap="15px" alignItems="center">
         {search && <SearchBox />}
-        <Button
-          variant="contained"
-          onClick={onClick}
-          sx={{
-            textTransform: "none",
-            minWidth: "120px",
-            backgroundColor: "var(--primary-color)",
-            fontFamily: "Lato",
-            fontSize: "14px",
-            fontWeight: "700",
-            borderRadius: "5px",
-          }}
-          startIcon={icon ? icon : null}
-          disableElevation
-        >
-          {button}
-        </Button>
-        {buttons && (
-          <Button
-            variant="contained"
-            onClick={onClick}
-            sx={{
-              textTransform: "none",
-              minWidth: "120px",
-              backgroundColor: "var(--primary-color)",
-              fontFamily: "Lato",
-              fontSize: "14px",
-              fontWeight: "700",
-              borderRadius: "5px",
-            }}
-            startIcon={icon ? icon : null}
-            disableElevation
-          >
-            {buttons}
-          </Button>
-        )}
+        <Stack flexDirection="row" gap="10px" alignItems="center">
+          {button.map((buttons,index) => (
+            <Stack key={index}>
+              {buttons}
+            </Stack>
+          ))}
+        </Stack>
       </Stack>
     </Stack>
   );

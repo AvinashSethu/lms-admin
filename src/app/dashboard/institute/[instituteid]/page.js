@@ -1,8 +1,10 @@
 "use client";
+import DialogBox from "@/src/components/DialogBox/DialogBox";
 import Header from "@/src/components/Header/Header";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
+import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { Add, GroupsSharp } from "@mui/icons-material";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, DialogContent, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -19,12 +21,29 @@ export default function Instituteid() {
   return (
     <Stack padding="20px" gap="20px">
       <Header
-        back
         title="P.S.R Engineering College"
         search
-        button="Batch"
-        icon={<Add />}
+        button={[
+          <Button
+            key="psr"
+            variant="contained"
+            startIcon={<Add />}
+            onClick={dialogOpen}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+              width: "120px",
+            }}
+            disableElevation
+          >Batch</Button>,
+        ]}
+        back
       />
+      <DialogBox isOpen={isDialogOpen} onClose={dialogClose} title="Add Batch" actionText="Create">
+        <DialogContent>
+          <StyledTextField placeholder="Batch Name" />
+        </DialogContent>
+      </DialogBox>
       <Stack
         sx={{
           border: "1px solid var(--border-color)",

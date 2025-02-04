@@ -7,7 +7,7 @@ import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/Second
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Add, Folder } from "@mui/icons-material";
-import { DialogContent, Stack } from "@mui/material";
+import { Button, DialogContent, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -67,9 +67,21 @@ export default function Coursebank() {
       <Header
         title="Course bank"
         search
-        button="Add"
-        icon={<Add />}
-        onClick={dialogOpen}
+        button={[
+          <Button
+            key="Add"
+            variant="contained"
+            startIcon={<Add />}
+            onClick={dialogOpen}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
+            disableElevation
+          >
+            Add
+          </Button>,
+        ]}
       />
       <DialogBox
         isOpen={isDialogOpen}

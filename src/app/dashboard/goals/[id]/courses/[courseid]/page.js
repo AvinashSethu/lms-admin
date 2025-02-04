@@ -16,7 +16,7 @@ export default function Courseid({id,goal}) {
   return (
     <Stack padding="20px" gap="20px">
       {/* <GoalHead /> */}
-      <Header title="hi"  back />
+      {/* <Header title="hi"   back /> */}
       <Stack
         sx={{
           padding: "20px",

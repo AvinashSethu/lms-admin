@@ -27,7 +27,7 @@ export default function Examgroups() {
   return (
     <Stack padding="20px" gap="15px">
       {/* <GoalHead  /> */}
-      <Header title="Exam Groups" button="Publish" back />
+      {/* <Header title="Exam Groups" button="Publish" back /> */}
       <Stack
         sx={{
           backgroundColor: "var(--white)",

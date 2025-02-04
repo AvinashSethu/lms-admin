@@ -1,9 +1,9 @@
 "use client";
 import PrimaryCard from "@/src/components/PrimaryCard/PrimaryCard";
 import { Add } from "@mui/icons-material";
-import { Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import Header from "@/src/components/Header/Header";
 import GoalDialogBox from "./goals/[id]/components/GoalDialogBox/GoalDialogBox";
 import { apiFetch } from "@/src/lib/apiFetch";
@@ -30,7 +30,7 @@ export default function Home() {
         setIsLoading(false);
         console.error(err);
       });
-  }, []); 
+  }, []);
 
   const dialogOpen = () => {
     setIsDialogOpen(true);
@@ -41,20 +41,30 @@ export default function Home() {
   };
 
   return (
-      <Stack padding="20px" gap="15px">
-        <Header
-          title="Goals"
-          button="Goal"
-          icon={<Add />}
-          onClick={dialogOpen}
-        />
-        <Stack flexDirection="row" justifyContent="space-between">
-          <GoalDialogBox isOpen={isDialogOpen} onClose={dialogClose} />
-        </Stack>
-        {/* <UploadVideo /> */}
-        <Stack flexDirection="row" gap="20px" flexWrap="wrap">
-          {goalList.length > 0 ? (
-            goalList.map((item, index) => (
+    <Stack padding="20px" gap="15px">
+      <Header
+        title="Goals"
+        button={[
+          <Button
+          key="goal"
+            variant="contained"
+            onClick={dialogOpen}
+            startIcon={<Add />}
+
+            sx={{backgroundColor:"var(--primary-color)",textTransform:"none"}}
+            disableElevation
+          >
+            Goal
+          </Button>,
+        ]}
+      />
+      <Stack flexDirection="row" justifyContent="space-between">
+        <GoalDialogBox isOpen={isDialogOpen} onClose={dialogClose} />
+      </Stack>
+      {/* <UploadVideo /> */}
+      <Stack flexDirection="row" gap="20px" flexWrap="wrap">
+        {goalList.length > 0
+          ? goalList.map((item, index) => (
               <PrimaryCard
                 key={index}
                 icon={`/Icons/gate_cse.svg`}
@@ -65,10 +75,10 @@ export default function Home() {
                 }}
               />
             ))
-          ) : [...Array(4)].map((_,index) => <PrimaryCardSkeleton key={index} />)
-          }
-        </Stack>
-        
+          : [...Array(4)].map((_, index) => (
+              <PrimaryCardSkeleton key={index} />
+            ))}
       </Stack>
+    </Stack>
   );
 }

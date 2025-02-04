@@ -14,11 +14,11 @@ import { useEffect, useState } from "react";
 export default function CoursebankId() {
   const { bankID } = useParams();
   console.log(bankID);
-  const {showSnackbar} = useSnackbar();
+  const { showSnackbar } = useSnackbar();
   const menuOptions = ["Remove"];
   const [bank, setBank] = useState({});
-  const [isDialogOpen, setIsDialogOPen] = useState(false);
-  const [isDialogOpenButtons, setIsDialogOpenButtons] = useState(false);
+  const [isDialogOpenFile, setIsDialogOPenFile] = useState(false);
+  const [isDialogOpenVideo, setIsDialogOpenVideo] = useState(false);
 
   // function OnResourseAdd() {
   //   apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/courses/course-bank/resource/create-video`,{
@@ -44,41 +44,77 @@ export default function CoursebankId() {
     fetchCourse();
   }, []);
 
-  const dialogOpen = () => {
-    setIsDialogOPen(true);
+  const dialogOpenFile = () => {
+    setIsDialogOPenFile(true);
   };
-  const dialogClose = () => {
-    setIsDialogOPen(false);
+  const dialogCloseFile = () => {
+    setIsDialogOPenFile(false);
   };
 
-  const dialogOpenButtons = () => {
-    setIsDialogOPen(true);
+  const dialogOpenVideo = () => {
+    setIsDialogOpenVideo(true);
   };
-  const dialogCloseButtons = () => {
-    setIsDialogOPen(false);
+  const dialogCloseVideo = () => {
+    setIsDialogOpenVideo(false);
   };
 
   return (
     <Stack padding="20px" gap="20px">
       <Header
-        title={""}
+        // title={bank}
         search
-        button="File"
-        icon={<Add />}
-        onClick={dialogOpen}
-        onClickButton={dialogOpenButtons}
-        buttons="Video"
+        button={[
+          <Button
+            key="Add"
+            variant="contained"
+            startIcon={<Add />}
+            onClick={dialogOpenFile}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
+            disableElevation
+          >
+            File
+          </Button>,
+          <Button
+            key="file"
+            variant="contained"
+            startIcon={<Add />}
+            onClick={dialogOpenVideo}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
+            disableElevation
+          >
+            Video
+          </Button>,
+        ]}
         back
       />
       <DialogBox
-        isOpen={isDialogOpen}
-        onClose={dialogClose}
+        isOpen={isDialogOpenFile}
+        onClose={dialogCloseFile}
+        title="Add File"
+        actionText="Upload"
+      >
+        <DialogContent>
+          <Stack gap="15px">
+            <StyledTextField placeholder="Enter File title" />
+            <StyledSelect title="Select File" value="one" />
+          </Stack>
+        </DialogContent>
+      </DialogBox>
+      <DialogBox
+        isOpen={isDialogOpenVideo}
+        onClose={dialogCloseVideo}
         title="Add Video"
         actionText="Upload"
       >
         <DialogContent>
           <Stack gap="15px">
-            <StyledTextField placeholder="Enter video title" />
+            <StyledTextField placeholder="Enter Video title" />
             <StyledSelect title="Select video" value="one" />
           </Stack>
         </DialogContent>

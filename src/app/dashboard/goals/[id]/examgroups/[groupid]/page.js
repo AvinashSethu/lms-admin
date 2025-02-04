@@ -45,7 +45,7 @@ export default function Groupid() {
   return (
     <Stack padding="20px" gap="15px">
       {/* <GoalHead /> */}
-      <Header title="Weekly test" button="Publish" back />
+      {/* <Header title="Weekly test" button="Publish" back /> */}
       <Stack
         sx={{
           backgroundColor: "var(--white)",
