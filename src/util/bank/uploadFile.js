@@ -1,16 +1,16 @@
-import { dynamoDB } from "../awsAgent";
+import { dynamoDB, s3 } from "../awsAgent";
 import { randomUUID } from "crypto";
 
 // 📌 Create a new file record in DynamoDB and generate a pre-signed URL for S3 upload
 
 export async function createFile({ title, bankID, fileType }) {
+  // 🛠 Generate unique file name
+  const fileExtension = fileType.split("/")[1];
+  const fileName = `${process.env.AWS_BANK_PATH}${randomUUID()}-${title.replace(
+    /\s+/g,
+    "_"
+  )}.${fileExtension}`;
   try {
-    // 🛠 Generate unique file name
-    const fileExtension = fileType.split("/")[1];
-    const fileName = `${
-      process.env.AWS_BANK_PATH
-    }${randomUUID()}-${title.replace(/\s+/g, "_")}.${fileExtension}`;
-
     // 🏦 Check if the bank exists in DynamoDB
     const bankParams = {
       TableName: `${process.env.AWS_DB_NAME}content`,

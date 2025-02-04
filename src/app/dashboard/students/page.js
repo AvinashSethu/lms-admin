@@ -76,6 +76,13 @@ export default function Students() {
           </Button>,
         ]}
       />
+      <FilterSideNav
+        isOpen={isOpen}
+        toggleDrawer={toggleDrawer}
+        select_1="Question type"
+        select_2="Select date from & to"
+        select_3="Sort Marks"
+      />
       <Stack
         sx={{
           backgroundColor: "var(--white)",

@@ -6,25 +6,36 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, PlayCircle } from "@mui/icons-material";
-import { Button, DialogContent, Stack } from "@mui/material";
+import { uploadToS3, verifyFile } from "@/src/lib/uploadFile";
+import { Add, East, PlayCircle } from "@mui/icons-material";
+import {
+  Button,
+  DialogContent,
+  LinearProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function CoursebankId() {
+  const MAX_FILE_SIZE = 1 * 1024 * 1024;
+  const FileSizeDisplay = sizeConverter(MAX_FILE_SIZE);
   const { bankID } = useParams();
-  console.log(bankID);
   const { showSnackbar } = useSnackbar();
   const menuOptions = ["Remove"];
   const [bank, setBank] = useState({});
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [responseMessage, setResponseMessage] = useState("");
   const [isDialogOpenFile, setIsDialogOPenFile] = useState(false);
   const [isDialogOpenVideo, setIsDialogOpenVideo] = useState(false);
+  const [isFileSizeExceed, setIsFileSizeExceed] = useState(false);
 
-  // function OnResourseAdd() {
-  //   apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/courses/course-bank/resource/create-video`,{
-  //     method:"POST",
-  //   }).then(())
-  // }
+  function sizeConverter(bytes) {
+    return (bytes / 1024).toFixed();
+  }
 
   function fetchCourse() {
     apiFetch(
@@ -32,7 +43,6 @@ export default function CoursebankId() {
     ).then((data) => {
       if (data.success) {
         setBank(data.data);
-        console.log(data.data.bankTitle);
       } else {
         showSnackbar("No Bank Found", "error", "", "3000");
         router.push(`/404`);
@@ -56,6 +66,40 @@ export default function CoursebankId() {
   };
   const dialogCloseVideo = () => {
     setIsDialogOpenVideo(false);
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      if (selectedFile.size > MAX_FILE_SIZE) {
+        setIsFileSizeExceed(true);
+        setResponseMessage(
+          `File size is exceeded.. maximum size is  ${FileSizeDisplay} KB `
+        );
+        setFile(null);
+      } else {
+        setIsFileSizeExceed(false);
+        setFile(selectedFile);
+      }
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      setResponseMessage("Please select a file to upload.");
+      return;
+    }
+
+    setUploading(true);
+    setResponseMessage("File is uploading");
+    setProgress(0);
+
+    const success = await uploadToS3(file, setProgress, setResponseMessage);
+    if (success) {
+      const verification = await verifyFile(file);
+      setResponseMessage(verification);
+    }
+    setUploading(false);
   };
 
   return (
@@ -97,13 +141,50 @@ export default function CoursebankId() {
         isOpen={isDialogOpenFile}
         onClose={dialogCloseFile}
         title="Add File"
-        actionText="Upload"
+        actionButton={
+          <Button
+            variant="text"
+            endIcon={<East />}
+            onClick={handleUpload}
+            sx={{
+              textTransform: "none",
+              color: "var(--primary-color)",
+              fontFamily: "Lato",
+              fontSize: "14px",
+            }}
+            disabled={isFileSizeExceed || uploading}
+          >Upload</Button>
+        }
       >
         <DialogContent>
           <Stack gap="15px">
             <StyledTextField placeholder="Enter File title" />
-            <StyledSelect title="Select File" value="one" />
-            <input type="file" style={{width:"100%"}} />
+            <Stack
+              flexDirection="row"
+              justifyContent="space-between"
+              sx={{
+                width: "100%",
+                height: "40px",
+                border: "1px solid var(--border-color)",
+                borderRadius: "4px",
+              }}
+            >
+              <input type="file" onChange={handleFileChange} />
+              
+            </Stack>
+            {isFileSizeExceed && (
+              <Typography color="error" sx={{ fontSize: "12px" }}>
+                {responseMessage}
+              </Typography>
+            )}
+            {uploading && (
+              <Stack>
+                <LinearProgress variant="determinate" value={progress} sx={{"& .MuiLinearProgress-colorPrimary":{
+                  
+                }}} />
+                <Typography>{`Uploading: ${progress}%`}</Typography>
+              </Stack>
+            )}
           </Stack>
         </DialogContent>
       </DialogBox>
@@ -117,6 +198,25 @@ export default function CoursebankId() {
           <Stack gap="15px">
             <StyledTextField placeholder="Enter Video title" />
             <StyledSelect title="Select video" value="one" />
+            <Stack
+              flexDirection="row"
+              justifyContent="space-between"
+              sx={{
+                width: "100%",
+                height: "40px",
+                border: "1px solid var(--border-color)",
+                borderRadius: "4px",
+              }}
+            >
+              <input type="file" onChange={handleFileChange} />
+              <Button
+                variant="text"
+                onClick={handleUpload}
+                sx={{ color: "var(--primary-color)", textTransform: "none" }}
+              >
+                Upload
+              </Button>
+            </Stack>
           </Stack>
         </DialogContent>
       </DialogBox>

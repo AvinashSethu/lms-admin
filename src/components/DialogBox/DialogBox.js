@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Stack,
 } from "@mui/material";
 
 export default function DialogBox({
@@ -13,6 +14,7 @@ export default function DialogBox({
   onClose,
   title,
   actionText,
+  actionButton,
   onClick
 }) {
   return (
@@ -44,7 +46,8 @@ export default function DialogBox({
       </DialogTitle>
       <DialogContent sx={{padding:"0px"}}>{children}</DialogContent>
       <DialogActions sx={{ justifyContent: "center" }}>
-        <Button
+        <Stack>{actionButton}</Stack>
+        {/* <Button
           variant="text"
           onClick={onClick}
           sx={{
@@ -56,7 +59,7 @@ export default function DialogBox({
           endIcon={<East />}
         >
           {actionText}
-        </Button>
+        </Button> */}
       </DialogActions>
     </Dialog>
   );

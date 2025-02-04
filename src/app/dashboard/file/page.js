@@ -22,7 +22,7 @@ const UploadVideo = () => {
     }
 
     setUploading(true);
-    setResponseMessage("");
+    setResponseMessage("Video is uploading");
     uploadToS3(file, setResponseMessage);
     setUploading(false);
 
@@ -66,7 +66,7 @@ const UploadVideo = () => {
   return (
     <div>
       <h1>Upload Video</h1>
-      <input type="file" accept="video/mp4" onChange={handleFileChange} />
+      <input type="file" accept="video/*" onChange={handleFileChange} />
       <button onClick={handleUpload} disabled={uploading}>
         {uploading ? "Uploading..." : "Upload Video"}
       </button>
@@ -82,7 +82,7 @@ async function uploadToS3(file, setResponseMessage) {
   // Request presigned URL from your backend
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/courses/course-bank/resource/create-file`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/create-file`,
       {
         method: "POST",
         body: JSON.stringify({
