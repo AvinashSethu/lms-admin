@@ -1,4 +1,4 @@
-import {dynamoDB} from "../../awsAgent";
+import { dynamoDB } from "../awsAgent";
 import { randomUUID } from "crypto";
 
 export default async function createBank({ title }) {

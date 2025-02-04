@@ -1,15 +1,15 @@
-import createBank from "@/src/util/courses/bank/createBank";
+import { createVideo } from "@/src/util/bank/uploadVideo";
 
 export async function POST(request) {
-  const { title } = await request.json();
-  if (!title) {
+  const { title, bankID } = await request.json();
+  if (!title || !bankID) {
     return Response.json(
-      { success: false, message: "Title is required" },
+      { success: false, message: "Title and bankID are required" },
       { status: 400 }
     );
   }
   try {
-    const result = await createBank({ title });
+    const result = await createVideo({ title, bankID });
     return Response.json(result, { status: 201 });
   } catch (err) {
     console.log(err);

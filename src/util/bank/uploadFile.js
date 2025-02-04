@@ -1,4 +1,4 @@
-import { dynamoDB, s3 } from "../../awsAgent";
+import { dynamoDB } from "../awsAgent";
 import { randomUUID } from "crypto";
 
 // 📌 Create a new file record in DynamoDB and generate a pre-signed URL for S3 upload

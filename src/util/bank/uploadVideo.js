@@ -1,4 +1,4 @@
-import {dynamoDB} from "../../awsAgent";
+import { dynamoDB } from "../awsAgent";
 import { randomUUID, createHash } from "crypto";
 
 export async function createVideo({ title, bankID }) {

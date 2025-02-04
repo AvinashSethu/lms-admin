@@ -1,5 +1,5 @@
 // import { createHash } from "crypto";
-import getAllBank from "@/src/util/courses/bank/getAllBank";
+import getAllBank from "@/src/util/bank/getAllBank";
 
 export async function GET() {
   try {

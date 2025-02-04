@@ -1,4 +1,4 @@
-import {dynamoDB} from "../../awsAgent";
+import { dynamoDB } from "../awsAgent";
 
 export default async function getAllBank() {
   const params = {
