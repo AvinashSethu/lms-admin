@@ -1,4 +1,4 @@
-import dynamoDB from "../../dbConnect";
+import {dynamoDB} from "../../awsAgent";
 
 export default async function getAllBank() {
   const params = {
@@ -16,7 +16,7 @@ export default async function getAllBank() {
       data: {
         banks: response.Items.map((bank) => {
           const { pKey, title } = bank;
-          return { bankID: pKey.split("#")[1], title };
+          return { bankID: pKey.split("#")[1], title,};
         }),
       },
     };

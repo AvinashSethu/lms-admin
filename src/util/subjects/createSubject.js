@@ -1,4 +1,4 @@
-import dynamoDB from "../dbConnect";
+import {dynamoDB} from "../awsAgent";
 import { randomUUID } from "crypto";
 
 export default async function createSubject({ title }) {
