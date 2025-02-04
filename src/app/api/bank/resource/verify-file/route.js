@@ -1,4 +1,4 @@
-import { verifyFile } from "@/src/util/courses/bank/uploadFile";
+import { verifyFile } from "@/src/util/bank/uploadFile";
 
 export async function POST(request) {
     const { resourceID } = await request.json();

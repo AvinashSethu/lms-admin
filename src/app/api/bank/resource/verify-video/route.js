@@ -1,4 +1,4 @@
-import { verifyUpload } from "@/src/util/courses/bank/uploadVideo";
+import { verifyUpload } from "@/src/util/bank/uploadVideo";
 
 export async function POST(request) {
   const { videoID, bankID, resourceID } = await request.json();

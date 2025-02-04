@@ -1,4 +1,4 @@
-import getAllResources from "@/src/util/courses/bank/getAllResources";
+import getAllResources from "@/src/util/bank/getAllResources";
 
 export async function GET(request, { params }) {
   const { bankID } = params;

@@ -1,4 +1,4 @@
-import {dynamoDB} from "../../awsAgent";
+import { dynamoDB } from "../awsAgent";
 
 export default async function getAllResources({ bankID }) {
   const bankParams = {
@@ -18,7 +18,7 @@ export default async function getAllResources({ bankID }) {
   try {
     const bankResponse = await dynamoDB.get(bankParams).promise();
     console.log("bankResponse", bankResponse);
-    
+
     const response = await dynamoDB.scan(params).promise();
     return {
       success: true,
@@ -28,8 +28,17 @@ export default async function getAllResources({ bankID }) {
         bankTitle: bankResponse.Item.title,
         videoCollectionID: bankResponse.Item.videoCollectionID,
         resources: response.Items.map((resource) => {
-          const { pKey, name, isUploaded, type, thumbnail, url, videoID } = resource;
-          return { resourceID: pKey.split("#")[1], type, name, isUploaded, thumbnail, videoID, url };
+          const { pKey, name, isUploaded, type, thumbnail, url, videoID } =
+            resource;
+          return {
+            resourceID: pKey.split("#")[1],
+            type,
+            name,
+            isUploaded,
+            thumbnail,
+            videoID,
+            url,
+          };
         }),
       },
     };

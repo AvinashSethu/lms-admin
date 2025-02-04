@@ -1,4 +1,4 @@
-import { createFile } from "@/src/util/courses/bank/uploadFile";
+import { createFile } from "@/src/util/bank/uploadFile";
 
 export async function POST(request) {
   const { title, fileType, bankID } = await request.json();
