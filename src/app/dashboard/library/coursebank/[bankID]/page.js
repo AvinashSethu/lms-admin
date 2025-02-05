@@ -80,7 +80,7 @@ export default function CoursebankId() {
         ]}
         back
       />
-      <FileUpload isOpen={isDialogFileOpen} onClose={dialogCloseFile} />
+      <FileUpload isOpen={isDialogFileOpen} onClose={dialogCloseFile} bankID={bankID}/>
 
       {/* Video Upload Dialog */}
       <DialogBox

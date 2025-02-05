@@ -22,7 +22,7 @@ export async function createFile({ file, title, bankID }) {
     {
       title: "hello", // Make sure this is dynamic if needed
       fileType: file.type,
-      bankID: "a94fbab2-5eea-47a4-819b-e8f089c2d5ec",
+      bankID: bankID,
     }
   );
   return json.data;
@@ -34,10 +34,11 @@ export async function uploadToS3(
   setResponseMessage,
   fileData,
   setUploading,
-  setProgressVarient,
-  onClose
+  setProgressVariant,
+  onClose,
+  setFile
 ) {
-  setProgressVarient("determinate");
+  setProgressVariant("determinate");
   const data = fileData;
   const fileStream = file.stream();
   const reader = fileStream.getReader();
@@ -55,7 +56,7 @@ export async function uploadToS3(
     uploadedBytes += value.length;
     const percent = Math.round((uploadedBytes / file.size) * 100);
     setProgress(percent);
-    setResponseMessage(`Upload progress: ${percent}%`);
+    setResponseMessage(`Uploading ${percent}%`);
   };
 
   const readChunks = async () => {
@@ -63,7 +64,14 @@ export async function uploadToS3(
       const { done, value } = await reader.read();
       if (done) {
         setResponseMessage("Upload completed");
-        await verifyFile(data.resourceID, setResponseMessage, setUploading, setProgressVarient);
+        await verifyFile(
+          data.resourceID,
+          setResponseMessage,
+          setUploading,
+          setProgressVariant
+        );
+        setFile(null);
+        setResponseMessage("No file selected");
         onClose();
         return;
       }
@@ -79,8 +87,13 @@ export async function uploadToS3(
   readChunks(); // Start reading and uploading
 }
 
-async function verifyFile(resourceID, setResponseMessage, setUploading, setProgressVarient) {
-  setProgressVarient("indeterminate");
+async function verifyFile(
+  resourceID,
+  setResponseMessage,
+  setUploading,
+  setProgressVariant
+) {
+  setProgressVariant("indeterminate");
   setResponseMessage("Verifying File...");
 
   try {

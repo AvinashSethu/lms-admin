@@ -14,35 +14,46 @@ import { Close, East } from "@mui/icons-material";
 import { createFile, uploadToS3 } from "@/src/lib/uploadFile";
 
 export default function FileUpload({ isOpen, onClose, bankID }) {
-  const MAX_FILE_SIZE = 100 * 1024 * 1024;
+  const MAX_FILE_SIZE =
+    Number(process.env.NEXT_PUBLIC_MAX_UPLOAD_FILE_SIZE_MB) * 1024 * 1024;
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [isFileSizeExceed, setIsFileSizeExceed] = useState(false);
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
-  const [responseMessage, setResponseMessage] = useState("");
-  const [progressVarient, setProgressVarient] = useState("indeterminate");
+  const [responseMessage, setResponseMessage] = useState("No file selected");
+  const [progressVariant, setProgressVariant] = useState("indeterminate");
   const [dialog, setDialog] = useState(true);
   const closeDialog = () => {
     setDialog(false);
-  }
+  };
 
   const sizeConverter = (bytes) => (bytes / 1024).toFixed();
 
+  function formatFileSize(bytes) {
+    if (bytes < 1024) return `${bytes} B`;
+    else if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
+    else if (bytes < 1024 * 1024 * 1024)
+      return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    else return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+  }
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
+    const fileSizeDisplay = formatFileSize(selectedFile.size);
     if (selectedFile) {
       if (selectedFile.size > MAX_FILE_SIZE) {
         setIsFileSizeExceed(true);
+        setFile(selectedFile);
         setResponseMessage(
-          `File size exceeded. Max size is ${
-            sizeConverter(MAX_FILE_SIZE) / 1024
-          } MB`
+          `File size ${fileSizeDisplay}. Max limit is ${formatFileSize(
+            MAX_FILE_SIZE
+          )}`
         );
       } else {
         setIsFileSizeExceed(false);
         setFile(selectedFile);
-        setResponseMessage("");
+        setResponseMessage(`File size ${fileSizeDisplay}. Ready to upload.`);
       }
     }
   };
@@ -68,14 +79,13 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
         setResponseMessage,
         fileData,
         setUploading,
-        setProgressVarient,
-        onClose
+        setProgressVariant,
+        onClose,
+        setFile
       );
-    
     } catch (error) {
       setResponseMessage("Upload failed. Please try again.");
       setUploading(false);
-      
     }
   };
 
@@ -84,7 +94,11 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
       isOpen={isOpen}
       icon={
         <IconButton
-          onClick={onClose}
+          onClick={() => {
+            setFile(null);
+            setResponseMessage("No file selected");
+            onClose();
+          }}
           sx={{ borderRadius: "10px", padding: "6px" }}
           disabled={uploading}
         >
@@ -125,30 +139,36 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
               onChange={handleFileChange}
               style={{ visibility: "hidden", position: "absolute" }}
             />
-            {file ? <Typography>{file.name}</Typography> : <Typography>Select File</Typography>}
+            {file ? (
+              <Typography>{file.name}</Typography>
+            ) : (
+              <Typography>Select File</Typography>
+            )}
             <Button
               variant="contained"
               sx={{
                 backgroundColor: "var(--primary-color)",
                 height: "30px",
                 textTransform: "none",
-                marginLeft:"auto"
+                marginLeft: "auto",
               }}
               onClick={triggerFileInput}
             >
               Choose File
             </Button>
-            
           </Stack>
-          {isFileSizeExceed && (
-            <Typography color="error" sx={{ fontSize: "12px" }}>
+          {!uploading && (
+            <Typography
+              color={isFileSizeExceed ? "error" : ""}
+              sx={{ fontSize: "12px" }}
+            >
               {responseMessage}
             </Typography>
           )}
           {uploading && (
-            <Stack>
+            <Stack gap={1}>
               <LinearProgress
-                variant={progressVarient}
+                variant={progressVariant}
                 value={progress}
                 sx={{
                   "& .MuiLinearProgress-bar": {
@@ -157,7 +177,7 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
                   backgroundColor: "var(--sec-color-acc-2)",
                 }}
               />
-              <Typography>{responseMessage}</Typography>
+              <Typography fontSize={14}>{responseMessage}</Typography>
             </Stack>
           )}
         </Stack>
