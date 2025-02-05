@@ -9,7 +9,9 @@ import { apiFetch } from "@/src/lib/apiFetch";
 import { uploadToS3, verifyFile } from "@/src/lib/uploadFile";
 import { Add, East, PlayCircle } from "@mui/icons-material";
 import {
+  Backdrop,
   Button,
+  CircularProgress,
   DialogContent,
   LinearProgress,
   Stack,
@@ -153,7 +155,9 @@ export default function CoursebankId() {
               fontSize: "14px",
             }}
             disabled={isFileSizeExceed || uploading}
-          >Upload</Button>
+          >
+            Upload
+          </Button>
         }
       >
         <DialogContent>
@@ -170,7 +174,6 @@ export default function CoursebankId() {
               }}
             >
               <input type="file" onChange={handleFileChange} />
-              
             </Stack>
             {isFileSizeExceed && (
               <Typography color="error" sx={{ fontSize: "12px" }}>
@@ -179,15 +182,27 @@ export default function CoursebankId() {
             )}
             {uploading && (
               <Stack>
-                <LinearProgress variant="determinate" value={progress} sx={{"& .MuiLinearProgress-colorPrimary":{
-                  
-                }}} />
+                <LinearProgress
+                  variant="determinate"
+                  value={progress}
+                  sx={{ "& .MuiLinearProgress-colorPrimary": {} }}
+                />
                 <Typography>{`Uploading: ${progress}%`}</Typography>
               </Stack>
             )}
           </Stack>
+          <Backdrop
+        open={uploading}
+        sx={{
+          color: "var(--border-color)",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+      >
+        {/* <CircularProgress /> */}
+      </Backdrop>
         </DialogContent>
       </DialogBox>
+      
       <DialogBox
         isOpen={isDialogOpenVideo}
         onClose={dialogCloseVideo}
