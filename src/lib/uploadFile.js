@@ -1,91 +1,96 @@
-export async function uploadToS3(file, setProgress,setResponseMessage) {
-  // Request presigned URL from your backend
+import { apiFetch } from "./apiFetch";
+
+async function postRequest(url, body) {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/create-file`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          title: file.name,
-          fileType: file.type,
-          bankID:"a94fbab2-5eea-47a4-819b-e8f089c2d5ec"
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (!response.ok) {
-      console.log(await response.json());
-      setResponseMessage("Failed to get presigned URL");
-      return;
-      // throw new Error("Failed to get presigned URL");
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error("Request failed");
+    return data;
+  } catch (error) {
+    console.error("Request error:", error);
+    throw error;
+  }
+}
+
+export async function createFile({ file, title, bankID }) {
+  const json = await postRequest(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/create-file`,
+    {
+      title: "hello", // Make sure this is dynamic if needed
+      fileType: file.type,
+      bankID: "a94fbab2-5eea-47a4-819b-e8f089c2d5ec",
     }
+  );
+  return json.data;
+}
 
-    const { data } = await response.json();
+export async function uploadToS3(
+  file,
+  setProgress,
+  setResponseMessage,
+  fileData,
+  setUploading,
+  setProgressVarient,
+  onClose
+) {
+  setProgressVarient("determinate");
+  const data = fileData;
+  const fileStream = file.stream();
+  const reader = fileStream.getReader();
+  let uploadedBytes = 0;
 
-    const fileStream = file.stream();
-    const reader = fileStream.getReader();
-    let uploadedBytes = 0;
+  const uploadChunk = async (value) => {
+    const uploadResponse = await fetch(data.url, {
+      method: "PUT",
+      headers: { "Content-Type": file.type },
+      body: value,
+    });
 
-    const uploadChunk = async (value) => {
-      const uploadResponse = await fetch(data.url, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: value,
-      });
+    if (!uploadResponse.ok) throw new Error("Upload failed");
 
-      if (uploadResponse.ok) {
-        uploadedBytes += value.length;
-        const percent = ((uploadedBytes / file.size) * 100).toFixed(2);
-        setResponseMessage(`Upload progress: ${percent}%`);
-        setProgress(percent);
-        console.log(`Upload progress: ${percent}%`);
-      } else {
-        setResponseMessage("Upload failed");
-        console.error("Upload failed");
-        return;
-      }
-    };
+    uploadedBytes += value.length;
+    const percent = Math.round((uploadedBytes / file.size) * 100);
+    setProgress(percent);
+    setResponseMessage(`Upload progress: ${percent}%`);
+  };
 
-    const readChunks = async () => {
+  const readChunks = async () => {
+    try {
       const { done, value } = await reader.read();
       if (done) {
         setResponseMessage("Upload completed");
-        console.log("Upload completed");
+        await verifyFile(data.resourceID, setResponseMessage, setUploading, setProgressVarient);
+        onClose();
         return;
       }
       await uploadChunk(value);
       readChunks(); // Continue with the next chunk
-    };
+    } catch (error) {
+      setResponseMessage("Error during file upload");
+      console.error("Error during file upload:", error);
+      throw error;
+    }
+  };
 
-    readChunks(); // Start reading and uploading
-  } catch (error) {
-    setResponseMessage("Error during file upload");
-    console.error("Error during file upload:", error);
-  }
+  readChunks(); // Start reading and uploading
 }
 
-export async function verifyFile(file) {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/verify-file`,
-        {
-          method: "POST",
-          body: JSON.stringify({ resourceID:"bank-resources/0cc070b7-831f-4e9d-a866-d637cf51d8c8-TEST.jpg" }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-  
-      const data = await response.json();
-      if (response.ok && data.isValid) {
-        return "File verified successfully.";
-      } else {
-        return "File verification failed: Invalid size.";
-      }
-    } catch (error) {
-      return "Error verifying file.";
-    }
+async function verifyFile(resourceID, setResponseMessage, setUploading, setProgressVarient) {
+  setProgressVarient("indeterminate");
+  setResponseMessage("Verifying File...");
+
+  try {
+    const data = await postRequest(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/verify-file`,
+      { resourceID }
+    );
+    setResponseMessage("File verified");
+    setUploading(false);
+  } catch (error) {
+    setResponseMessage("Error verifying file.");
   }
+}

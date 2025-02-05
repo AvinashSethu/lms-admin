@@ -13,7 +13,7 @@ export default function DialogBox({
   isOpen,
   onClose,
   title,
-  actionText,
+  icon,
   actionButton,
   onClick
 }) {
@@ -42,7 +42,8 @@ export default function DialogBox({
         }}
       >
         {title}
-        <Close onClick={onClose} sx={{ cursor: "pointer" }} />
+        {icon}
+        {/* <Close onClick={onClose} sx={{ cursor: "pointer" }}  /> */}
       </DialogTitle>
       <DialogContent sx={{padding:"0px"}}>{children}</DialogContent>
       <DialogActions sx={{ justifyContent: "center" }}>

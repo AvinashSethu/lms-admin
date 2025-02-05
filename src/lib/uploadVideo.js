@@ -78,7 +78,7 @@ export async function uploadToS3(file, setProgress,setResponseMessage) {
             },
           }
         );
-    
+
         const data = await response.json();
         if (response.ok && data.isValid) {
           return "File verified successfully.";
