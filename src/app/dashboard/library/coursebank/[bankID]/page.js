@@ -1,13 +1,12 @@
 "use client";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
-import DialogBox from "@/src/components/DialogBox/DialogBox";
 import FileUpload from "@/src/components/FileUpload/FileUpload";
 import Header from "@/src/components/Header/Header";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
-import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
+import VideoUpload from "@/src/components/VideoUpload/VideoUpload";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Add, PlayCircle } from "@mui/icons-material";
-import { Button, DialogContent, Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 export default function CoursebankId() {
@@ -41,6 +40,14 @@ export default function CoursebankId() {
   const dialogCloseFile = () => {
     setIsDialogFileOPen(false);
   };
+
+  const dialogOpenVideo = () => {
+    setIsDialogVideoOPen(true);
+  };
+  const dialogCloseVideo = () => {
+    setIsDialogVideoOPen(false);
+  };
+
   return (
     <Stack padding="20px" gap="20px">
       <Header
@@ -64,6 +71,7 @@ export default function CoursebankId() {
             key="file"
             variant="contained"
             startIcon={<Add />}
+            onClick={dialogOpenVideo}
             sx={{
               backgroundColor: "var(--primary-color)",
               textTransform: "none",
@@ -75,39 +83,16 @@ export default function CoursebankId() {
         ]}
         back
       />
-      <FileUpload isOpen={isDialogFileOpen} onClose={dialogCloseFile} bankID={bankID}/>
-      {/* Video Upload Dialog */}
-      <DialogBox
-        // isOpen={isDialogOpen.video}
-        // onClose={() => toggleDialog("video")}
-        title="Add Video"
-        actionText="Upload"
-      >
-        <DialogContent>
-          <Stack gap="15px">
-            <StyledTextField placeholder="Enter Video title" />
-            <Stack
-              flexDirection="row"
-              justifyContent="space-between"
-              sx={{
-                width: "100%",
-                height: "40px",
-                border: "1px solid var(--border-color)",
-                borderRadius: "4px",
-              }}
-            >
-              {/* <input type="file" accept="video/*" onChange={handleFileChange} /> */}
-              <Button
-                variant="text"
-                // onClick={handleUpload}
-                sx={{ color: "var(--primary-color)", textTransform: "none" }}
-              >
-                Upload
-              </Button>
-            </Stack>
-          </Stack>
-        </DialogContent>
-      </DialogBox>
+      <FileUpload
+        isOpen={isDialogFileOpen}
+        onClose={dialogCloseFile}
+        bankID={bankID}
+      />
+      <VideoUpload
+        isOpen={isDialogVideoOpen}
+        onClose={dialogCloseVideo}
+        bankID={bankID}
+      />
       <Stack flexDirection="row" columnGap="40px" rowGap="15px" flexWrap="wrap">
         <SecondaryCard
           icon={

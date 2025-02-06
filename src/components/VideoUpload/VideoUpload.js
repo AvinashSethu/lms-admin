@@ -1,4 +1,3 @@
-"use client";
 import {
   Button,
   DialogContent,
@@ -7,24 +6,24 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import StyledTextField from "../StyledTextField/StyledTextField";
-import { useState, useRef } from "react";
 import DialogBox from "../DialogBox/DialogBox";
 import { Close, East } from "@mui/icons-material";
-import { createFile, uploadToS3 } from "@/src/lib/uploadFile";
+import StyledTextField from "../StyledTextField/StyledTextField";
+import { useRef, useState } from "react";
+import { title } from "@uiw/react-md-editor";
+import { uploadToS3 } from "@/src/lib/uploadVideo";
 
-export default function FileUpload({ isOpen, onClose, bankID }) {
-  const MAX_FILE_SIZE =
-    Number(process.env.NEXT_PUBLIC_MAX_UPLOAD_FILE_SIZE_MB) * 1024 * 1024;
-  const fileInputRef = useRef(null);
-  const [file, setFile] = useState(null);
-  const [isFileSizeExceed, setIsFileSizeExceed] = useState(false);
+export default function VideoUpload({ isOpen, onClose, bankID }) {
+  const MAX_VIDEO_SIZE = 1024;
+  const videoInputRef = useRef(null);
+  const [video, setVideo] = useState(null);
+  const [isVideoSizeExceed, setIsVideoSizeExceed] = useState(false);
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("No file selected");
   const [progressVariant, setProgressVariant] = useState("indeterminate");
 
-  function formatFileSize(bytes) {
+  function formatVideoSize(bytes) {
     if (bytes < 1024) return `${bytes} B`;
     else if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`;
     else if (bytes < 1024 * 1024 * 1024)
@@ -32,57 +31,55 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
     else return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
   }
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    const fileSizeDisplay = formatFileSize(selectedFile.size);
-    
-    if (selectedFile) {
-      if (selectedFile.size > MAX_FILE_SIZE) {
-        setIsFileSizeExceed(true);
-        setFile(selectedFile);
-        setResponseMessage(
-          `File size ${fileSizeDisplay}. Max limit is ${formatFileSize(
-            MAX_FILE_SIZE
-          )}`
-        );
-      } else {
-        setIsFileSizeExceed(false);
-        setFile(selectedFile);
-        setResponseMessage(`File size ${fileSizeDisplay}. Ready to upload.`);
-      }
+  const handleVideoChange = (e) => {
+    const selectedVideo = e.target.files[0];
+    const videoSizeDisplay = formatVideoSize(selectedVideo.size);
+    if(selectedVideo) {
+        if(selectedVideo.size > MAX_VIDEO_SIZE){
+            setIsVideoSizeExceed(true);
+            setVideo(selectedVideo);
+            setResponseMessage(
+                `Video Size ${videoSizeDisplay}. Max limit is ${formatVideoSize(MAX_VIDEO_SIZE)}`
+            );
+
+        }else{
+            setIsVideoSizeExceed(false);
+            setVideo(selectedVideo);
+            setResponseMessage(`Video size ${videoSizeDisplay}. Ready to upload.`);
+        }
     }
   };
 
-  const triggerFileInput = () => {
-    fileInputRef.current.click();
-  };
+  const triggerVideoInput = () => {
+    videoInputRef.current.click();
+  }
 
   const handleUpload = async () => {
-    if (!file) {
-      setResponseMessage("Please select a file to upload.");
-      return;
+    if(!video) {
+        setResponseMessage("Please select a video to upload");
+        return;
     }
     setUploading(true);
     setResponseMessage("Creating File");
 
-    try {
-      const fileData = await createFile({ file, bankID });
-      setResponseMessage("Preparing for upload");
-      await uploadToS3(
-        file,
-        setProgress,
-        setResponseMessage,
-        fileData,
-        setUploading,
-        setProgressVariant,
-        onClose,
-        setFile
-      );
-    } catch (error) {
-      setResponseMessage("Upload failed. Please try again.");
-      setUploading(false);
+    try{
+        const videoData = await createVideo({title,bankID});
+        setResponseMessage("Preparing for upload");
+        await uploadToS3(
+            setProgress,
+            setResponseMessage,
+            videoData,
+            setUploading,
+            setProgressVariant,
+            onClose,
+            setVideo 
+        );
+    }catch(error) {
+        setResponseMessage("Upload failed. Please try again.");
+            setUploading(false);
     }
-  };
+  }
+
 
   return (
     <DialogBox
@@ -90,8 +87,8 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
       icon={
         <IconButton
           onClick={() => {
-            setFile(null);
-            setResponseMessage("No file selected");
+            setVideo(null);
+            setResponseMessage("No file Selected");
             onClose();
           }}
           sx={{ borderRadius: "10px", padding: "6px" }}
@@ -100,14 +97,14 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
           <Close />
         </IconButton>
       }
-      title="Add File"
+      title="Add Video"
       actionButton={
         <Button
           variant="text"
           endIcon={<East />}
           onClick={handleUpload}
           sx={{ textTransform: "none", color: "var(--primary-color)" }}
-          disabled={isFileSizeExceed || uploading || !file}
+          disabled={isVideoSizeExceed || uploading || !video}
         >
           Upload
         </Button>
@@ -115,7 +112,7 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
     >
       <DialogContent>
         <Stack gap="15px">
-          <StyledTextField placeholder="Enter File title" />
+          <StyledTextField placeholder="Enter Video title" />
           <Stack
             flexDirection="row"
             justifyContent="space-between"
@@ -130,32 +127,33 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
           >
             <input
               type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
+              accept="video/*"
+              ref={videoInputRef}
+              onChange={handleVideoChange}
               style={{ visibility: "hidden", position: "absolute" }}
             />
-            {file ? (
-              <Typography>{file.name}</Typography>
+            {video ? (
+              <Typography>{video.name}</Typography>
             ) : (
-              <Typography>Select File</Typography>
+              <Typography>Select Video</Typography>
             )}
             <Button
               variant="contained"
               sx={{
                 backgroundColor: "var(--primary-color)",
                 height: "30px",
+                minWidth:"130px",
                 textTransform: "none",
                 marginLeft: "auto",
-                minWidth:"130px"
               }}
-              onClick={triggerFileInput}
+              onClick={triggerVideoInput}
             >
-              Choose File
+              Choose Video
             </Button>
           </Stack>
           {!uploading && (
             <Typography
-              color={isFileSizeExceed ? "error" : ""}
+              color={isVideoSizeExceed ? "error" : ""}
               sx={{ fontSize: "12px" }}
             >
               {responseMessage}

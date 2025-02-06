@@ -2,12 +2,12 @@ import { apiFetch } from "./apiFetch";
 
 async function postRequest(url, body) {
   try {
-    const response = await fetch(url, {
+    const data = await apiFetch(url, {
       method: "POST",
       body: JSON.stringify(body),
       headers: { "Content-Type": "application/json" },
     });
-    const data = await response.json();
+    // const data = await response.json();
     if (!data.success) throw new Error("Request failed");
     return data;
   } catch (error) {
@@ -20,12 +20,12 @@ export async function createFile({ file, title, bankID }) {
   const json = await postRequest(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/create-file`,
     {
-      title: "hello", // Make sure this is dynamic if needed
-      fileType: file.type,
+      title: "hello",
+      fileName: file.name,
       bankID: bankID,
     }
   );
-  return json.data;
+  return data;
 }
 
 export async function uploadToS3(
@@ -45,13 +45,13 @@ export async function uploadToS3(
   let uploadedBytes = 0;
 
   const uploadChunk = async (value) => {
-    const uploadResponse = await fetch(data.url, {
+    const uploadResponse = await apiFetch(data.url, {
       method: "PUT",
       headers: { "Content-Type": file.type },
       body: value,
     });
 
-    if (!uploadResponse.ok) throw new Error("Upload failed");
+    if (!uploadResponse) throw new Error("Upload failed");
 
     uploadedBytes += value.length;
     const percent = Math.round((uploadedBytes / file.size) * 100);
