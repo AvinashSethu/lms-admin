@@ -1,15 +1,15 @@
+import path from "path";
 import { dynamoDB, s3 } from "../awsAgent";
 import { randomUUID } from "crypto";
 
 // 📌 Create a new file record in DynamoDB and generate a pre-signed URL for S3 upload
 
-export async function createFile({ title, bankID, fileType }) {
+export async function createFile({ title, bankID, fileName }) {
   // 🛠 Generate unique file name
-  const fileExtension = fileType.split("/")[1];
-  const fileName = `${process.env.AWS_BANK_PATH}${randomUUID()}-${title.replace(
-    /\s+/g,
-    "_"
-  )}.${fileExtension}`;
+  const fileExtension = fileName.split(".")[1];
+  const awsFileName = `${
+    process.env.AWS_BANK_PATH
+  }${randomUUID()}-${title.replace(/\s+/g, "_")}.${fileExtension}`;
   try {
     // 🏦 Check if the bank exists in DynamoDB
     const bankParams = {
@@ -26,12 +26,12 @@ export async function createFile({ title, bankID, fileType }) {
     const resourceParams = {
       TableName: `${process.env.AWS_DB_NAME}content`,
       Item: {
-        pKey: `RESOURCE#${fileName}`,
+        pKey: `RESOURCE#${randomUUID()}`,
         sKey: `RESOURCE@${bankID}`,
         type: "FILE",
         name: title,
         url: "",
-        path: fileName,
+        path: awsFileName,
         fileType,
         isUploaded: false,
       },
@@ -54,10 +54,10 @@ export async function createFile({ title, bankID, fileType }) {
       success: true,
       message: "File created successfully",
       data: {
-        resourceID: fileName, // Use fileName directly
+        resourceID: resourceParams.Item.pKey, // Use fileName directly
         url,
-        type: fileType,
         name: title,
+        path: awsFileName,
       },
     };
   } catch (err) {
@@ -76,10 +76,10 @@ export async function createFile({ title, bankID, fileType }) {
 
 // 📌 Verify the uploaded file in S3 and update the record in DynamoDB
 
-export async function verifyFile(resourceID) {
+export async function verifyFile(resourceID, path) {
   const s3Params = {
     Bucket: process.env.AWS_BUCKET_NAME,
-    Key: resourceID,
+    Key: path,
   };
 
   try {
