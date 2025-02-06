@@ -26,41 +26,41 @@ const UploadVideo = () => {
     uploadToS3(file, setResponseMessage);
     setUploading(false);
 
-    // const upload = new tus.Upload(file, {
-    //   endpoint: 'https://video.bunnycdn.com/tusupload',
-    //   retryDelays: [0, 3000, 5000, 10000, 20000, 60000, 60000],
-    //   headers: {
-    //     AuthorizationSignature: "b77be140c28ba7e0dc628b9c040ad09eb2933b0114c8cdc67d77e9c07144ad54", // SHA256 signature (server-side generated)
-    //     AuthorizationExpire: 1738230380, // Expiration time (Unix timestamp)
-    //     VideoId: 'd174b55a-71af-4edb-8385-751f606145a8', // Video GUID
-    //     LibraryId: 376973
-    //     , // Your Bunny.net library ID
-    //   },
-    //   metadata: {
-    //     filetype: file.type,
-    //     title: 'Video Title',
-    //     collection: 'collectionID',
-    //   },
-    //   onError: function (error) {
-    //     setUploading(false);
-    //     setResponseMessage('Error: ' + error.message);
-    //   },
-    //   onProgress: function (bytesUploaded, bytesTotal) {
-    //     setProgress((bytesUploaded / bytesTotal) * 100);
-    //   },
-    //   onSuccess: function () {
-    //     setUploading(false);
-    //     setResponseMessage('Upload complete!');
-    //   },
-    // });
+    const upload = new tus.Upload(file, {
+      endpoint: 'https://video.bunnycdn.com/tusupload',
+      retryDelays: [0, 3000, 5000, 10000, 20000, 60000, 60000],
+      headers: {
+        AuthorizationSignature: "b77be140c28ba7e0dc628b9c040ad09eb2933b0114c8cdc67d77e9c07144ad54", // SHA256 signature (server-side generated)
+        AuthorizationExpire: 1738230380, // Expiration time (Unix timestamp)
+        VideoId: 'd174b55a-71af-4edb-8385-751f606145a8', // Video GUID
+        LibraryId: 376973
+        , // Your Bunny.net library ID
+      },
+      metadata: {
+        filetype: file.type,
+        title: 'Video Title',
+        collection: 'collectionID',
+      },
+      onError: function (error) {
+        setUploading(false);
+        setResponseMessage('Error: ' + error.message);
+      },
+      onProgress: function (bytesUploaded, bytesTotal) {
+        setProgress((bytesUploaded / bytesTotal) * 100);
+      },
+      onSuccess: function () {
+        setUploading(false);
+        setResponseMessage('Upload complete!');
+      },
+    });
 
-    // upload.findPreviousUploads().then(function (previousUploads) {
-    //   if (previousUploads.length) {
-    //     upload.resumeFromPreviousUpload(previousUploads[0]);
-    //   }
+    upload.findPreviousUploads().then(function (previousUploads) {
+      if (previousUploads.length) {
+        upload.resumeFromPreviousUpload(previousUploads[0]);
+      }
 
-    //   upload.start();
-    // });
+      upload.start();
+    });
   };
 
   return (

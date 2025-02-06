@@ -1,94 +1,115 @@
 import { apiFetch } from "./apiFetch";
+import * as tus from "tus-js-client";
 
-async function postRequest(url,body) {
-  try{
-    const data = await apiFetch(url,{
-      method:"POST",
-      body:JSON.stringify(body),
-      headers:{"Content-Type": "application/json"},
-    })
-    if(!data.success) throw new Error("Request Failed");
-    return data;
-  }catch(error) {
-    console.error("Request error:", error);
-    throw error;
-  }
-}
-
-export async function createVideo(title, bankID) {
-  const json = await postRequest(
+export async function createVideo({ title, bankID }) {
+  const json = await apiFetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/create-video`,
     {
-      title:"",
-      bankID:bankID,
+      method: "POST",
+      body: JSON.stringify({
+        title: title,
+        bankID: bankID,
+      }),
+      headers: { "Content-Type": "application/json" },
     }
   );
-  return json.data;
+  return json;
 }
 
-export async function uploadToS3(video,setProgress,
-  setResponseMessage,
-  videoData,
-  setUploading,
-  setProgressVariant,
-  onClose,
-  setVideo) {
-  setProgressVariant("determinate");
-  const data = videoData;
-  const videoStream = video.stream();
-  const reader = videoStream.getReader();
-  let uploadBytes = 0;
-
-  const uploadChunk = async (value) => {
-    const uploadResponse = await apiFetch(data.url, {
-      method:"PUT",
-      headers:{"Content-Type": video.type},
-      body:value,
-    });
-    if(!uploadResponse.ok) throw new Error ("Upload failed");
-
-    uploadBytes += value.length;
-    const percent = Math.round((uploadBytes/ video.size) * 100);
-    setProgress(percent);
-    setResponseMessage(`Uploading ${percent} %`);
-  }
-
-  const readChunks = async () => {
-    try {
-      const {done, value} = await reader.read();
-      if(done) {
-        setResponseMessage("Upload Completed");
-        await verifyVideo(
-          data.resourceID,
-
-        )
-      }
-    } catch(error) {
-      setResponseMessage()
-    }
-  };
-  readChunks();
-}
-
-async function VerifyVideo(
+export async function verifyVideo({
   resourceID,
   videoID,
   bankID,
   setResponseMessage,
   setUploading,
-  setProgressVariant
-) {
-  setProgressVariant("indeterminate");
+  setProgressVariant,
+}) {
   setResponseMessage("Verifying Video..");
+  setProgressVariant("indeterminate");
 
   try {
-    const data = await postRequest(
+    const data = await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/verify-video`,
-      {resourceID}
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resourceID,
+          videoID,
+          bankID,
+        }),
+      }
     );
     setResponseMessage("Video Verified");
+    // onClose();
     setUploading(false);
-  }catch(error){
-    setResponseMessage("Error verifying Video")
+  } catch (error) {
+    setResponseMessage("Error verifying Video");
+  }
+}
+
+export async function uploadingVideo({
+  video,
+  setResponseMessage,
+  setUploading,
+  bankID,
+  title,
+  setProgressVariant,
+  onClose,
+}) {
+  setProgressVariant("determinate");
+
+  try {
+    const json = await createVideo({ title, bankID });
+
+    setResponseMessage(`Uploading.. %`);
+
+    const upload = new tus.Upload(video, {
+      endpoint: "https://video.bunnycdn.com/tusupload",
+      retryDelays: [0, 3000, 5000, 10000, 20000, 60000, 60000],
+      headers: {
+        AuthorizationSignature: json.data.signature, // SHA256 signature (server-side generated)
+        AuthorizationExpire: json.data.expirationTime, // Expiration time (Unix timestamp)
+        VideoId: json.data.videoID, // Video GUID
+        LibraryId: json.data.libraryID, // Your Bunny.net library ID
+      },
+      metadata: {
+        filetype: video.type,
+        title: title,
+        videoId: json.data.videoID,
+        collection: "collectionID",
+      },
+      onError: function (error) {
+        setUploading(false);
+        setResponseMessage("Error: " + error.message);
+      },
+      onProgress: function (bytesUploaded, bytesTotal) {
+        setResponseMessage(`Uploading ${Math.round((bytesUploaded / bytesTotal) * 100)}%`);
+      },
+      onSuccess: async () => {
+        setResponseMessage("Verifying Video");
+        await verifyVideo({
+          resourceID: json.data.resourceID,
+          videoID: json.data.videoID,
+          bankID,
+          setResponseMessage,
+          setProgressVariant,
+          setUploading,
+        });
+        setUploading(false);
+        setResponseMessage("Upload complete!");
+        onClose();
+      },
+    });
+
+    upload.findPreviousUploads().then(function (previousUploads) {
+      if (previousUploads.length) {
+        upload.resumeFromPreviousUpload(previousUploads[0]);
+      }
+      upload.start();
+    });
+  } catch (error) {
+    setResponseMessage(error.message);
+    throw error;
   }
 }

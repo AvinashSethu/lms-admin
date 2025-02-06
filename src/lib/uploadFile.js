@@ -6,7 +6,7 @@ export async function createFile({ file, title, bankID }) {
     {
       method: "POST",
       body: JSON.stringify({
-        title: "hello",
+        title: title,
         fileName: file.name,
         fileType: file.type,
         bankID: bankID,
@@ -42,7 +42,7 @@ export async function uploadToS3(
       body: value,
     });
 
-    if (!uploadResponse) throw new Error("Upload failed");
+    if (!uploadResponse.ok) throw new Error("Upload failed");
 
     uploadedBytes += value.length;
     const percent = Math.round((uploadedBytes / file.size) * 100);

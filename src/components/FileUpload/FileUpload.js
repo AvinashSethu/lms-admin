@@ -18,6 +18,7 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
     Number(process.env.NEXT_PUBLIC_MAX_UPLOAD_FILE_SIZE_MB) * 1024 * 1024;
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
+  const [title, setTitle] = useState("");
   const [isFileSizeExceed, setIsFileSizeExceed] = useState(false);
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
@@ -35,7 +36,7 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     const fileSizeDisplay = formatFileSize(selectedFile.size);
-    
+
     if (selectedFile) {
       if (selectedFile.size > MAX_FILE_SIZE) {
         setIsFileSizeExceed(true);
@@ -58,7 +59,7 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
   };
 
   const handleUpload = async () => {
-    if (!file) {
+    if (!file && !title) {
       setResponseMessage("Please select a file to upload.");
       return;
     }
@@ -66,7 +67,7 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
     setResponseMessage("Creating File");
 
     try {
-      const fileData = await createFile({ file, bankID });
+      const fileData = await createFile({ file, title, bankID });
       setResponseMessage("Preparing for upload");
       await uploadToS3(
         file,
@@ -76,7 +77,7 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
         setUploading,
         setProgressVariant,
         onClose,
-        setFile
+        setFile,
       );
     } catch (error) {
       setResponseMessage("Upload failed. Please try again.");
@@ -115,7 +116,13 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
     >
       <DialogContent>
         <Stack gap="15px">
-          <StyledTextField placeholder="Enter File title" />
+          <StyledTextField
+            placeholder="Enter File title"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          />
           <Stack
             flexDirection="row"
             justifyContent="space-between"
@@ -146,7 +153,7 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
                 height: "30px",
                 textTransform: "none",
                 marginLeft: "auto",
-                minWidth:"130px"
+                minWidth: "130px",
               }}
               onClick={triggerFileInput}
             >

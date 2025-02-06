@@ -1,3 +1,4 @@
+"use client";
 import {
   Button,
   DialogContent,
@@ -10,13 +11,13 @@ import DialogBox from "../DialogBox/DialogBox";
 import { Close, East } from "@mui/icons-material";
 import StyledTextField from "../StyledTextField/StyledTextField";
 import { useRef, useState } from "react";
-import { title } from "@uiw/react-md-editor";
-import { uploadToS3 } from "@/src/lib/uploadVideo";
+import { createVideo, uploadingVideo } from "@/src/lib/uploadVideo";
 
 export default function VideoUpload({ isOpen, onClose, bankID }) {
-  const MAX_VIDEO_SIZE = 1024;
+  const MAX_VIDEO_SIZE = 10 * 1024 * 1024;
   const videoInputRef = useRef(null);
   const [video, setVideo] = useState(null);
+  const [title, setTitle] = useState("");
   const [isVideoSizeExceed, setIsVideoSizeExceed] = useState(false);
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
@@ -34,52 +35,55 @@ export default function VideoUpload({ isOpen, onClose, bankID }) {
   const handleVideoChange = (e) => {
     const selectedVideo = e.target.files[0];
     const videoSizeDisplay = formatVideoSize(selectedVideo.size);
-    if(selectedVideo) {
-        if(selectedVideo.size > MAX_VIDEO_SIZE){
-            setIsVideoSizeExceed(true);
-            setVideo(selectedVideo);
-            setResponseMessage(
-                `Video Size ${videoSizeDisplay}. Max limit is ${formatVideoSize(MAX_VIDEO_SIZE)}`
-            );
-
-        }else{
-            setIsVideoSizeExceed(false);
-            setVideo(selectedVideo);
-            setResponseMessage(`Video size ${videoSizeDisplay}. Ready to upload.`);
-        }
+    if (selectedVideo) {
+      if (selectedVideo.size > MAX_VIDEO_SIZE) {
+        setIsVideoSizeExceed(true);
+        setVideo(selectedVideo);
+        setResponseMessage(
+          `Video Size ${videoSizeDisplay}. Max limit is ${formatVideoSize(
+            MAX_VIDEO_SIZE
+          )}`
+        );
+      } else {
+        setIsVideoSizeExceed(false);
+        setVideo(selectedVideo);
+        setResponseMessage(`Video size ${videoSizeDisplay}. Ready to upload.`);
+      }
     }
   };
 
   const triggerVideoInput = () => {
     videoInputRef.current.click();
-  }
+  };
 
   const handleUpload = async () => {
-    if(!video) {
-        setResponseMessage("Please select a video to upload");
-        return;
+    if (!video && !title) {
+      setResponseMessage("Please select a video to upload");
+      return;
     }
     setUploading(true);
-    setResponseMessage("Creating File");
+    setResponseMessage("Creating Video");
 
-    try{
-        const videoData = await createVideo({title,bankID});
-        setResponseMessage("Preparing for upload");
-        await uploadToS3(
-            setProgress,
-            setResponseMessage,
-            videoData,
-            setUploading,
-            setProgressVariant,
-            onClose,
-            setVideo 
-        );
-    }catch(error) {
-        setResponseMessage("Upload failed. Please try again.");
-            setUploading(false);
+    try {
+      const videoData = await createVideo({title,bankID});
+      setResponseMessage("Preparing for upload");
+      await uploadingVideo({
+        video,
+        title,
+        setResponseMessage,
+        setProgress,
+        setUploading,
+        setProgressVariant,
+        bankID,
+        onClose,
+        videoData
+      });
+      
+    } catch (error) {
+      setResponseMessage("Upload failed. Please try again.");
+      setUploading(false);
     }
-  }
-
+  };
 
   return (
     <DialogBox
@@ -112,7 +116,13 @@ export default function VideoUpload({ isOpen, onClose, bankID }) {
     >
       <DialogContent>
         <Stack gap="15px">
-          <StyledTextField placeholder="Enter Video title" />
+          <StyledTextField
+            placeholder="Enter Video title"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          />
           <Stack
             flexDirection="row"
             justifyContent="space-between"
@@ -142,7 +152,7 @@ export default function VideoUpload({ isOpen, onClose, bankID }) {
               sx={{
                 backgroundColor: "var(--primary-color)",
                 height: "30px",
-                minWidth:"130px",
+                minWidth: "130px",
                 textTransform: "none",
                 marginLeft: "auto",
               }}

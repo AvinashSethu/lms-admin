@@ -9,6 +9,7 @@ import { Add, PlayCircle } from "@mui/icons-material";
 import { Button, Stack } from "@mui/material";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 export default function CourseBankId() {
   const { bankID } = useParams();
   const router = useRouter();
@@ -16,9 +17,11 @@ export default function CourseBankId() {
   const [bank, setBank] = useState({});
   const [isDialogFileOpen, setIsDialogFileOPen] = useState(false);
   const [isDialogVideoOpen, setIsDialogVideoOPen] = useState(false);
+
   useEffect(() => {
     fetchCourse();
   }, []);
+  
   const fetchCourse = async () => {
     try {
       const data = await apiFetch(
