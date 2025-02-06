@@ -1,31 +1,19 @@
 import { apiFetch } from "./apiFetch";
 
-async function postRequest(url, body) {
-  try {
-    const data = await apiFetch(url, {
-      method: "POST",
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-    });
-    // const data = await response.json();
-    if (!data.success) throw new Error("Request failed");
-    return data;
-  } catch (error) {
-    console.error("Request error:", error);
-    throw error;
-  }
-}
-
 export async function createFile({ file, title, bankID }) {
-  const json = await postRequest(
+  const json = await apiFetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/create-file`,
     {
-      title: "hello",
-      fileName: file.name,
-      bankID: bankID,
+      method: "POST",
+      body: JSON.stringify({
+        title: "hello",
+        fileName: file.name,
+        bankID: bankID,
+      }),
+      headers: { "Content-Type": "application/json" },
     }
   );
-  return data;
+  return json;
 }
 
 export async function uploadToS3(
@@ -36,7 +24,7 @@ export async function uploadToS3(
   setUploading,
   setProgressVariant,
   onClose,
-  setFile
+  setFile,
 ) {
   setProgressVariant("determinate");
   const data = fileData;
@@ -68,7 +56,8 @@ export async function uploadToS3(
           data.resourceID,
           setResponseMessage,
           setUploading,
-          setProgressVariant
+          setProgressVariant,
+          data.path
         );
         setFile(null);
         setResponseMessage("No file selected");
@@ -91,15 +80,23 @@ async function verifyFile(
   resourceID,
   setResponseMessage,
   setUploading,
-  setProgressVariant
+  setProgressVariant,
+  path
 ) {
   setProgressVariant("indeterminate");
   setResponseMessage("Verifying File...");
 
   try {
-    const data = await postRequest(
+    const data = await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/verify-file`,
-      { resourceID }
+      {
+        method: "PUT",  
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          resourceID,
+          path
+        }),
+      }
     );
     setResponseMessage("File verified");
     setUploading(false);
