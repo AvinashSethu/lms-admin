@@ -32,7 +32,7 @@ export async function createFile({ title, bankID, fileName }) {
         name: title,
         url: "",
         path: awsFileName,
-        fileType,
+        fileType: fileExtension,
         isUploaded: false,
       },
     };
