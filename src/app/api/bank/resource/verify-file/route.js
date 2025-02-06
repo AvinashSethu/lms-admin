@@ -6,7 +6,7 @@ export async function POST(request) {
         return Response.json({ error: "Missing required fields" }, { status: 400 });
     }
     try {
-        const response = await verifyFile(resourceID);
+        const response = await verifyFile(resourceID, path);
         return Response.json(response);
     } catch (error) {
         console.error("Failed to verify file:", error);
