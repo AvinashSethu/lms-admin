@@ -9,7 +9,7 @@ import { Add, PlayCircle } from "@mui/icons-material";
 import { Button, Stack } from "@mui/material";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-export default function CoursebankId() {
+export default function CourseBankId() {
   const { bankID } = useParams();
   const router = useRouter();
   const { showSnackbar } = useSnackbar();

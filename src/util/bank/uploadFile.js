@@ -4,7 +4,7 @@ import { randomUUID } from "crypto";
 
 // 📌 Create a new file record in DynamoDB and generate a pre-signed URL for S3 upload
 
-export async function createFile({ title, bankID, fileName }) {
+export async function createFile({ title, bankID, fileName, fileType }) {
   // 🛠 Generate unique file name
   const fileExtension = fileName.split(".")[1];
   const awsFileName = `${
@@ -32,7 +32,7 @@ export async function createFile({ title, bankID, fileName }) {
         name: title,
         url: "",
         path: awsFileName,
-        fileType: fileExtension,
+        fileType,
         isUploaded: false,
       },
     };
@@ -43,7 +43,7 @@ export async function createFile({ title, bankID, fileName }) {
     // 📂 Generate a pre-signed upload URL from S3
     const fileParams = {
       Bucket: process.env.AWS_BUCKET_NAME,
-      Key: fileName,
+      Key: awsFileName,
       Expires: 60 * 60, // 1 - hour expiry
       ContentType: fileType,
     };

@@ -8,6 +8,7 @@ export async function createFile({ file, title, bankID }) {
       body: JSON.stringify({
         title: "hello",
         fileName: file.name,
+        fileType: file.type,
         bankID: bankID,
       }),
       headers: { "Content-Type": "application/json" },
@@ -24,16 +25,18 @@ export async function uploadToS3(
   setUploading,
   setProgressVariant,
   onClose,
-  setFile,
+  setFile
 ) {
   setProgressVariant("determinate");
-  const data = fileData;
+  const data = fileData.data;
+  console.log(data);
+
   const fileStream = file.stream();
   const reader = fileStream.getReader();
   let uploadedBytes = 0;
 
   const uploadChunk = async (value) => {
-    const uploadResponse = await apiFetch(data.url, {
+    const uploadResponse = await fetch(data.url, {
       method: "PUT",
       headers: { "Content-Type": file.type },
       body: value,
@@ -90,11 +93,11 @@ async function verifyFile(
     const data = await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/verify-file`,
       {
-        method: "PUT",  
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           resourceID,
-          path
+          path,
         }),
       }
     );
