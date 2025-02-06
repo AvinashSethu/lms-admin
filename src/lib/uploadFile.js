@@ -29,8 +29,6 @@ export async function uploadToS3(
 ) {
   setProgressVariant("determinate");
   const data = fileData.data;
-  console.log(data);
-
   const fileStream = file.stream();
   const reader = fileStream.getReader();
   let uploadedBytes = 0;
@@ -75,7 +73,6 @@ export async function uploadToS3(
       throw error;
     }
   };
-
   readChunks(); // Start reading and uploading
 }
 

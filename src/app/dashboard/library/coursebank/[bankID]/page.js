@@ -6,11 +6,16 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import VideoUpload from "@/src/components/VideoUpload/VideoUpload";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Add, PlayCircle } from "@mui/icons-material";
-import { Button, Stack } from "@mui/material";
+import { Button, Slide, Stack } from "@mui/material";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />
+});
 export default function CourseBankId() {
+  
+  
   const { bankID } = useParams();
   const router = useRouter();
   const { showSnackbar } = useSnackbar();
@@ -90,6 +95,7 @@ export default function CourseBankId() {
         isOpen={isDialogFileOpen}
         onClose={dialogCloseFile}
         bankID={bankID}
+        TransitionComponent={Transition}
       />
       <VideoUpload
         isOpen={isDialogVideoOpen}
@@ -97,6 +103,7 @@ export default function CourseBankId() {
         bankID={bankID}
       />
       <Stack flexDirection="row" columnGap="40px" rowGap="15px" flexWrap="wrap">
+
         <SecondaryCard
           icon={
             <PlayCircle sx={{ color: "var(--sec-color)" }} fontSize="large" />

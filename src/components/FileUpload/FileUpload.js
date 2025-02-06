@@ -13,7 +13,9 @@ import DialogBox from "../DialogBox/DialogBox";
 import { Close, East } from "@mui/icons-material";
 import { createFile, uploadToS3 } from "@/src/lib/uploadFile";
 
-export default function FileUpload({ isOpen, onClose, bankID }) {
+
+
+export default function FileUpload({ isOpen,TransitionComponent, onClose, bankID }) {
   const MAX_FILE_SIZE =
     Number(process.env.NEXT_PUBLIC_MAX_UPLOAD_FILE_SIZE_MB) * 1024 * 1024;
   const fileInputRef = useRef(null);
@@ -77,7 +79,7 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
         setUploading,
         setProgressVariant,
         onClose,
-        setFile,
+        setFile
       );
     } catch (error) {
       setResponseMessage("Upload failed. Please try again.");
@@ -88,6 +90,8 @@ export default function FileUpload({ isOpen, onClose, bankID }) {
   return (
     <DialogBox
       isOpen={isOpen}
+      TransitionComponent={TransitionComponent}
+      keepMounted
       icon={
         <IconButton
           onClick={() => {
