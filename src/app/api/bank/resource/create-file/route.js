@@ -2,7 +2,7 @@ import { createFile } from "@/src/util/bank/uploadFile";
 
 export async function POST(request) {
   const { title, fileName, bankID } = await request.json();
-  if (!title || !fileType || !bankID) {
+  if (!title || !fileName || !bankID) {
     return Response.json({ error: "Missing required fields" }, { status: 400 });
   }
   try {
