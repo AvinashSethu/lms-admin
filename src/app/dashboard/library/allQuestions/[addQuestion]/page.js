@@ -56,7 +56,6 @@ export default function AddQuestion() {
           <hr style={{ border: "1px solid var(--border-color)" }} />
           <StyledSelect title="Question type" />
           <StyledSelect title="Subject" />
-          <StyledSelect title="Question tag" />
           <Stack
             flexDirection="row"
             width="100%"

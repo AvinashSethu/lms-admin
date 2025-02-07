@@ -1,5 +1,5 @@
 "use client";
-import { MoreVert, East } from "@mui/icons-material";
+import { MoreVert, East, Delete } from "@mui/icons-material";
 import {
   Card,
   IconButton,
@@ -13,7 +13,7 @@ import { useState } from "react";
 export default function SecondaryCard({
   icon,
   title,
-  options,
+  options=[],
   subTitle,
   cardWidth,
   onClick,
@@ -107,28 +107,35 @@ export default function SecondaryCard({
                 open={Boolean(isMenuOpen)}
                 onClose={menuClose}
                 disableScrollLock={true}
+                sx={{"& .MuiList-root":{padding:"3px"}}}
                 slotProps={{
                   paper: {
                     style: {
                       border: "1px solid",
-                      borderColor: "var(--border-color)",
+                      borderColor:"var(--border-color)",
+                      borderRadius:"8px",
+                      padding:"0px"
                     },
                   },
                 }}
                 elevation={0}
               >
                 {options.map((option, index) => (
-                  <MenuItem
-                    key={index}
-                    onClick={menuClose}
-                    sx={{
-                      color: "var(text4)",
-                      fontSize: "14px",
-                      fontFamily: "Lato",
-                    }}
-                  >
+                  // <MenuItem
+                  //   key={index}
+                  //   onClick={menuClose}
+                  //   sx={{
+                  //     color: "var(text4)",
+                  //     fontSize: "14px",
+                  //     fontFamily: "Lato",
+                  //   }}
+                  // >
+                    
+                  //   {option}
+                  // </MenuItem>
+                  <Stack key={index} onClick={menuClose}>
                     {option}
-                  </MenuItem>
+                  </Stack>
                 ))}
               </Menu>
             </>

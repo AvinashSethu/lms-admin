@@ -8,6 +8,7 @@ export default function SecondaryCardSkeleton() {
         height: "80px",
         padding: "10px",
         borderRadius: "10px",
+        border: "1px solid var(--border-color)",
       }}
       elevation={0}
     >

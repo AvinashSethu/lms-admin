@@ -13,7 +13,7 @@ import StyledTextField from "../StyledTextField/StyledTextField";
 import { useRef, useState } from "react";
 import { createVideo, uploadingVideo } from "@/src/lib/uploadVideo";
 
-export default function VideoUpload({ isOpen, onClose, bankID }) {
+export default function VideoUpload({ isOpen, onClose, bankID,fetchCourse }) {
   const MAX_VIDEO_SIZE = 10 * 1024 * 1024;
   const videoInputRef = useRef(null);
   const [video, setVideo] = useState(null);
@@ -76,6 +76,7 @@ export default function VideoUpload({ isOpen, onClose, bankID }) {
         onClose,
         setTitle,
         setVideo,
+        fetchCourse
       });
     } catch (error) {
       setResponseMessage("Upload failed. Please try again.");

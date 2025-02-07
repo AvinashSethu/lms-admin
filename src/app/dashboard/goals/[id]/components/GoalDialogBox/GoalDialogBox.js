@@ -1,7 +1,14 @@
 "use client";
-import DialogBox from "@/src/components/DialogBox/DialogBox";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
-import { DialogActions, DialogContent, Stack, Typography } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Slide,
+  Stack,
+  Typography,
+} from "@mui/material";
 import gatecse_img from "@/public/Icons/gate_cse.svg";
 import placements_img from "@/public/Icons/placements.svg";
 import banking_img from "@/public/Icons/banking.svg";
@@ -9,8 +16,9 @@ import { useState } from "react";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/src/lib/apiFetch";
+import { Close } from "@mui/icons-material";
 
-export default function GoalDialogBox({ isOpen, onClose,actionButton }) {
+export default function GoalDialogBox({ isOpen, onClose, actionButton }) {
   const [title, setTitle] = useState("");
   const [icon, setIcon] = useState(false);
   const router = useRouter();
@@ -47,13 +55,30 @@ export default function GoalDialogBox({ isOpen, onClose,actionButton }) {
   }
 
   return (
-    <DialogBox
-      isOpen={isOpen}
-      onClose={onClose}
-      title="Goal"
-      actionText="Create goal"
-      onClick={OnGoalCreate}
+    <Dialog
+      open={isOpen}
+      TransitionComponent={Slide}
+      sx={{
+        "& .MuiDialog-paper": {
+          width: "600px",
+          borderRadius: "10px",
+          border: "1px solid var(--border-color)",
+        },
+      }}
     >
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          fontFamily: "Lato",
+          fontSize: "20px",
+          fontWeight: "700",
+        }}
+      >
+        Goal
+        {<Close onClick={onClose} sx={{ cursor: "pointer" }} />}
+      </DialogTitle>
       <DialogContent
         sx={{ gap: "15px", display: "flex", flexDirection: "column" }}
       >
@@ -94,10 +119,10 @@ export default function GoalDialogBox({ isOpen, onClose,actionButton }) {
           />
         </Stack>
       </DialogContent>
-      <DialogActions sx={{justifyContent:"center"}}>
+      <DialogActions sx={{ justifyContent: "center" }} onClick={OnGoalCreate}>
         <stack>{actionButton}</stack>
       </DialogActions>
-    </DialogBox>
+    </Dialog>
   );
 }
 

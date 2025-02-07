@@ -3,8 +3,8 @@ import DialogBox from "@/src/components/DialogBox/DialogBox";
 import Header from "@/src/components/Header/Header";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
-import { Add, GroupsSharp } from "@mui/icons-material";
-import { Button, DialogContent, Stack, Typography } from "@mui/material";
+import { Add, Close, GroupsSharp } from "@mui/icons-material";
+import { Button, DialogContent, IconButton, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -39,7 +39,14 @@ export default function Instituteid() {
         ]}
         back
       />
-      <DialogBox isOpen={isDialogOpen} onClose={dialogClose} title="Add Batch" actionText="Create">
+      <DialogBox isOpen={isDialogOpen} onClose={dialogClose} title="Add Batch" actionText="Create" icon={
+          <IconButton
+            onClick={dialogClose}
+            sx={{ borderRadius: "10px", padding: "6px" }}
+          >
+            <Close sx={{ color: "var(--text2)" }} />
+          </IconButton>
+        }>
         <DialogContent>
           <StyledTextField placeholder="Batch Name" />
         </DialogContent>

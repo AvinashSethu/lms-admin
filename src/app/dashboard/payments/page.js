@@ -10,6 +10,7 @@ import TransactionCard from "@/src/components/TransactionCard/TransactionCard";
 import CustomTabs from "@/src/components/CustomTabs/CustomTabs";
 import Transactions from "./Transactions";
 import Coupons from "./Coupons";
+import Header from "@/src/components/Header/Header";
 
 // export const metadata = {
 //   title: "Transaction",
@@ -34,7 +35,8 @@ export default function Payments() {
         { label: "Coupons", content: <Coupons /> },
   ]
   return (
-    <Stack padding="20px">
+    <Stack padding="20px" gap="20px">
+      <Header title="Payments & Coupons" />
       <CustomTabs tabs={tabs} />
     </Stack>
   );

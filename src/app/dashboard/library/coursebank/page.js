@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 export default function Coursebank() {
   const router = useRouter();
-  const menuOptions = ["Remove"];
+  const menuOptions = ["delete"];
   const { showSnackbar } = useSnackbar();
   const [title, setTitle] = useState("");
   const [courseList, setCourseList] = useState([]);
@@ -128,11 +128,9 @@ export default function Coursebank() {
                 cardWidth="350px"
               />
             ))
-          : 
-          [...Array(4)].map((_,index) => (
-            <SecondaryCardSkeleton key={index} />
-          ))
-          }
+          : [...Array(4)].map((_, index) => (
+              <SecondaryCardSkeleton key={index} />
+            ))}
       </Stack>
     </Stack>
   );

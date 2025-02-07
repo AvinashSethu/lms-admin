@@ -1,7 +1,7 @@
 "use client";
-import { Button, DialogContent, Stack } from "@mui/material";
+import { Button, DialogContent, IconButton, Stack } from "@mui/material";
 import Header from "@/src/components/Header/Header";
-import { AccountBalance, Add } from "@mui/icons-material";
+import { AccountBalance, Add, Close } from "@mui/icons-material";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import { useRouter } from "next/navigation";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
@@ -49,6 +49,14 @@ export default function Institute() {
         onClose={dialogClose}
         title="Institute"
         actionText="Create"
+        icon={
+          <IconButton
+            onClick={dialogClose}
+            sx={{ borderRadius: "10px", padding: "6px" }}
+          >
+            <Close sx={{ color: "var(--text2)" }} />
+          </IconButton>
+        }
       >
         <DialogContent>
           <StyledTextField placeholder="Add Institute" />

@@ -1,11 +1,12 @@
 "use client";
 import FilterSideNav from "@/src/components/FilterSideNav/FilterSideNav";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
-import { Add, CalendarToday, FilterAlt } from "@mui/icons-material";
+import { Add, CalendarToday, Close, FilterAlt } from "@mui/icons-material";
 import {
   Button,
   DialogContent,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -115,6 +116,14 @@ export default function Coupons() {
           onClose={dialogClose}
           title="Add Coupon"
           actionText="Add Coupon"
+          icon={
+            <IconButton
+              onClick={dialogClose}
+              sx={{ borderRadius: "10px", padding: "6px" }}
+            >
+              <Close sx={{ color: "var(--text2)" }} />
+            </IconButton>
+          }
         >
           <DialogContent>
             <Stack gap="15px">

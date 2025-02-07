@@ -1,8 +1,14 @@
 "use client";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import CourseCard from "@/src/components/CourseCard/CourseCard";
-import { Add, InsertDriveFile } from "@mui/icons-material";
-import { Button, DialogContent, Stack, Typography } from "@mui/material";
+import { Add, Close, East, InsertDriveFile } from "@mui/icons-material";
+import {
+  Button,
+  DialogContent,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import videoThumbnail from "@/public/Images/videoThumbnail.svg";
 import { useEffect, useState } from "react";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
@@ -10,6 +16,7 @@ import { useRouter } from "next/navigation";
 import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
+import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 
 export default function Syllabus({ goal, fetchGoal }) {
   const router = useRouter();
@@ -122,10 +129,17 @@ export default function Syllabus({ goal, fetchGoal }) {
         </Button>
         <DialogBox
           isOpen={isDialogOpen}
-          onClose={dialogClose}
           title="Add Subject"
           actionText="Add subject"
           onClick={onAddSubjectSyllabus}
+          icon={
+            <IconButton
+              sx={{ borderRadius: "10px", padding: "6px" }}
+              onClick={dialogClose}
+            >
+              <Close />
+            </IconButton>
+          }
         >
           <DialogContent>
             <StyledSelect
@@ -156,7 +170,7 @@ export default function Syllabus({ goal, fetchGoal }) {
             <Typography sx={{ color: "var(--text4)" }}>Add subjects</Typography>
           )
         ) : (
-          "Loading...."
+          [...Array(3)].map((_, index) => <SecondaryCardSkeleton key={index} />)
         )}
       </Stack>
       <Stack flexDirection="row" justifyContent="space-between">
@@ -185,13 +199,30 @@ export default function Syllabus({ goal, fetchGoal }) {
       </Stack>
       <DialogBox
         isOpen={videoDialog}
-        onClose={videoDialogClose}
         title="Add Course"
         actionText="Create"
-        onClick={() => {
-          videoDialogClose();
-          router.push("/dashboard/goals/1/courses/1");
-        }}
+        
+        icon={
+          <IconButton
+            sx={{ borderRadius: "10px", padding: "6px" }}
+            onClick={videoDialogClose}
+          >
+            <Close />
+          </IconButton>
+        }
+        actionButton={
+          <Button
+            variant="text"
+            endIcon={<East />}
+            sx={{ textTransform: "none", color: "var(--primary-color)" }}
+            onClick={() => {
+              videoDialogClose();
+              router.push("/dashboard/goals/1/courses/1");
+            }}
+          >
+            Add Video
+          </Button>
+        }
       >
         <DialogContent>
           <StyledSelect title="Select Video" value="course" />

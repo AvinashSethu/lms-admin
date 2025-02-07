@@ -53,7 +53,7 @@ export default function Home() {
             sx={{
               backgroundColor: "var(--primary-color)",
               textTransform: "none",
-            }}
+            }}  
             disableElevation
           >
             Goal
@@ -65,7 +65,7 @@ export default function Home() {
           isOpen={isDialogOpen}
           onClose={dialogClose}
           actionButton={
-            <Button variant="text" endIcon={<East />} sx={{}}>
+            <Button variant="text" endIcon={<East />} sx={{textTransform:"none",color:"var(--primary-color)"}}>
               Create
             </Button>
           }

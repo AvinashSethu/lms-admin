@@ -18,14 +18,15 @@ export async function createFile({ file, title, bankID }) {
 }
 
 export async function uploadToS3(
-  file,
+  {file,
   setProgress,
   setResponseMessage,
   fileData,
   setUploading,
   setProgressVariant,
   onClose,
-  setFile
+  setFile,
+fetchCourse}
 ) {
   setProgressVariant("determinate");
   const data = fileData.data;
@@ -63,6 +64,7 @@ export async function uploadToS3(
         setFile(null);
         setResponseMessage("No file selected");
         onClose();
+        fetchCourse();
         return;
       }
       await uploadChunk(value);

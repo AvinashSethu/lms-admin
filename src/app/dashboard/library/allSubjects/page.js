@@ -6,8 +6,8 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, InsertDriveFile } from "@mui/icons-material";
-import { Button, DialogContent, Stack } from "@mui/material";
+import { Add, Close, InsertDriveFile } from "@mui/icons-material";
+import { Button, DialogContent, IconButton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 
 export default function AllSubjects() {
@@ -86,6 +86,14 @@ export default function AllSubjects() {
         title="Add Subject"
         actionText="Add Subject"
         onClick={OnSubjectCreate}
+        icon={
+          <IconButton
+            onClick={dialogClose}
+            sx={{ borderRadius: "10px", padding: "6px" }}
+          >
+            <Close sx={{ color: "var(--text2)" }} />
+          </IconButton>
+        }
       >
         <DialogContent>
           <StyledTextField

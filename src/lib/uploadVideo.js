@@ -57,6 +57,7 @@ export async function uploadingVideo({
   onClose,
   setTitle,
   setVideo,
+  fetchCourse
 }) {
   setProgressVariant(0);
 
@@ -107,6 +108,7 @@ export async function uploadingVideo({
         setVideo(null);
         setProgressVariant(0);
         setResponseMessage("No file selected");
+        fetchCourse();
       },
     });
 

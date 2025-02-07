@@ -1,5 +1,5 @@
 "use client";
-import { Button, Stack, Typography } from "@mui/material";
+import { Button, Skeleton, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import gate_cse from "@/public/Icons/gate_cse.svg";
 import { ArrowBackIosRounded } from "@mui/icons-material";
@@ -51,7 +51,7 @@ export default function GoalHead({ goal }) {
         <Typography
           sx={{ fontFamily: "Lato", fontSize: "14px", fontWeight: "700" }}
         >
-          {goal.title}
+          {goal.title ? goal.title : <Skeleton variant="text" animation="wave" width="100px" />}
         </Typography>
       </Stack>
       <Button

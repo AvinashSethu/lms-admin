@@ -3,6 +3,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Slide,
   Stack,
 } from "@mui/material";
 
@@ -17,6 +18,7 @@ export default function DialogBox({
     <Dialog
       open={isOpen}
       disableScrollLock={true}
+      TransitionComponent={Slide}
       sx={{
         "& .MuiDialog-paper": {
           width: "600px",

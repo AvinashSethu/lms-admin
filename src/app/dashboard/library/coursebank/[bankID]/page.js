@@ -1,5 +1,6 @@
 "use client";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
+import DeleteDialogBox from "@/src/components/DeleteDialogBox/DeleteDialogBox";
 import FileUpload from "@/src/components/FileUpload/FileUpload";
 import Header from "@/src/components/Header/Header";
 import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
@@ -7,14 +8,17 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import VideoUpload from "@/src/components/VideoUpload/VideoUpload";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, InsertDriveFile, PlayCircle } from "@mui/icons-material";
-import { Button, Skeleton, Slide, Stack } from "@mui/material";
+import {
+  Add,
+  Delete,
+  DriveFileRenameOutlineRounded,
+  InsertDriveFile,
+  PlayArrowRounded,
+  PlayCircle,
+} from "@mui/icons-material";
+import { Button, Divider, MenuItem, Skeleton, Stack } from "@mui/material";
 import { useParams, useRouter } from "next/navigation";
-import { forwardRef, useEffect, useState } from "react";
-
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="left" ref={ref} {...props} />;
-});
+import { useEffect, useState } from "react";
 
 export default function CourseBankId() {
   const { bankID } = useParams();
@@ -24,6 +28,7 @@ export default function CourseBankId() {
   const [resourceList, setResourceList] = useState([]);
   const [isDialogFileOpen, setIsDialogFileOPen] = useState(false);
   const [isDialogVideoOpen, setIsDialogVideoOPen] = useState(false);
+  const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
 
   useEffect(() => {
     fetchCourse();
@@ -37,13 +42,32 @@ export default function CourseBankId() {
       if (data.success) {
         setBank(data.data);
         setResourceList(data.data.resources);
-        console.log(data.data.resources[0].type);
       } else {
         showSnackbar("No Bank Found", "error", "", "3000");
         router.push(`/404`);
       }
     } catch (error) {
       console.error("Error fetching course data:", error);
+    }
+  };
+  const handleDelete = async (resourceID, bankID) => {
+    try {
+      const data = await apiFetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/delete-resource`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ resourceID, bankID }),
+        }
+      );
+      if (data.success) {
+        fetchCourse();
+        showSnackbar(data.message, "success", "", "3000");
+      } else {
+        showSnackbar(data.message, "error", "", "3000");
+      }
+    } catch (error) {
+      console.error("Error deleting course  :", error);
     }
   };
 
@@ -61,10 +85,23 @@ export default function CourseBankId() {
     setIsDialogVideoOPen(false);
   };
 
+  const dialogOpenDelete = () => {
+    setIsDialogDeleteOpen(true);
+  };
+  const dialogCloseDelete = () => {
+    setIsDialogDeleteOpen(false);
+  };
+
   return (
     <Stack padding="20px" gap="20px">
       <Header
-        title={bank.bankTitle ? bank.bankTitle : <Skeleton variant="text" animation="wave" width="100px" />}
+        title={
+          bank.bankTitle ? (
+            bank.bankTitle
+          ) : (
+            <Skeleton variant="text" animation="wave" width="100px" />
+          )
+        }
         search
         button={[
           <Button
@@ -100,44 +137,81 @@ export default function CourseBankId() {
         isOpen={isDialogFileOpen}
         onClose={dialogCloseFile}
         bankID={bankID}
-        TransitionComponent={Transition}
-        keepMounted
+        fetchCourse={fetchCourse}
       />
       <VideoUpload
         isOpen={isDialogVideoOpen}
         onClose={dialogCloseVideo}
         bankID={bankID}
+        fetchCourse={fetchCourse}
       />
       <Stack flexDirection="row" columnGap="40px" rowGap="15px" flexWrap="wrap">
-        {resourceList.length > 0
-          ? resourceList.map((item, index) => (
-              <SecondaryCard
-                key={index}
-                icon={
-                  item.type === "VIDEO" ? (
-                    <PlayCircle
-                      sx={{ color: "var(--sec-color)" }}
-                      fontSize="large"
-                    />
-                  ) : (
-                    <InsertDriveFile
-                      sx={{ color: "var(--sec-color)" }}
-                      fontSize="large"
-                    />
-                  )
-                }
-                title={item.name}
-                options={["Remove"]}
-                cardWidth="350px"
-              />
-            ))
-          :
+        {resourceList.length > 0 ? (
+          resourceList.map((item, index) => (
+            <SecondaryCard
+              key={index}
+              icon={
+                item.type === "VIDEO" ? (
+                  <PlayCircle
+                    sx={{ color: "var(--sec-color)" }}
+                    fontSize="large"
+                  />
+                ) : (
+                  <InsertDriveFile
+                    sx={{ color: "var(--sec-color)" }}
+                    fontSize="large"
+                  />
+                )
+              }
+              title={item.name}
+              options={[
+                <MenuItem
+                  key="one"
+                  sx={{ gap: "10px", padding: "5px 12px", fontSize: "13px" }}
+                >
+                  <PlayArrowRounded
+                    fontSize="small"
+                    sx={{ fontSize: "16px" }}
+                  />
+                  Play
+                </MenuItem>,
+                <MenuItem
+                  key="one"
+                  sx={{ gap: "10px", padding: "5px 12px", fontSize: "13px" }}
+                >
+                  <DriveFileRenameOutlineRounded sx={{ fontSize: "15px" }} />
+                  Rename
+                </MenuItem>,
+                <Divider key="2" />,
+                <MenuItem
+                  key="two"
+                  // onClick={() => {
+                  //   handleDelete(item.resourceID, bankID);
+                  // }}
+                  onClick={dialogOpenDelete}
+                  sx={{
+                    gap: "10px",
+                    color: "red",
+                    padding: "5px 12px",
+                    fontSize: "13px",
+                  }}
+                  disableRipple
+                >
+                  <Delete fontSize="small" sx={{ fontSize: "16px" }} /> Delete
+                </MenuItem>,
+              ]}
+              cardWidth="350px"
+            />
+          ))
+        ) : (
           //  [
           //     ...Array(3).map((_, index) => (
           //       <SecondaryCardSkeleton key={index} />
           //     )),
           //   ]
-            <NoDataFound info="No Files or Videos created" /> }
+          <NoDataFound info="No Files or Videos created" />
+        )}
+        <DeleteDialogBox isOpen={isDialogDeleteOpen} onClose={dialogCloseDelete} />
       </Stack>
     </Stack>
   );
