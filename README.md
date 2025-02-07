@@ -1,36 +1,187 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+📚 LMS Project
 
-## Getting Started
+A scalable Learning Management System (LMS) built with Next.js 14 (App Router), DynamoDB, and AWS S3, deployed on Vercel.
 
-First, run the development server:
+🚀 Features
 
-```bash
+User & Admin Dashboards
+
+Course Management
+
+Exam Scheduling & Practice Tests
+
+Video Streaming via Bunny.net
+
+Resource Uploads & S3 Storage
+
+DynamoDB Single-Table Design
+
+Serverless Architecture (Vercel Functions)
+
+🛠️ Tech Stack
+
+Frontend: Next.js 14 (App Router)
+
+Backend: AWS DynamoDB, AWS S3
+
+Authentication: JWT-based authentication
+
+Video Streaming: Bunny.net
+
+Hosting: Vercel
+
+📦 Installation & Setup
+
+1. Clone the repository
+
+git clone https://github.com/yourusername/lms-project.git
+cd lms-project
+
+2. Install dependencies
+
+npm install
+
+3. Configure environment variables
+
+Create a .env.local file and add the following:
+
+AWS_REGION=us-east-1
+AWS_DB_NAME=your-dynamodb-name
+AWS_BUCKET_NAME=your-s3-bucket
+AWS_BANK_PATH=uploads/
+VERCEL_TOKEN=your-vercel-token
+
+4. Start the development server
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📡 API Endpoints
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Authentication
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Method
 
-## Learn More
+Endpoint
 
-To learn more about Next.js, take a look at the following resources:
+Description
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+POST
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+/api/auth/login
 
-## Deploy on Vercel
+User Login
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+POST
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+/api/auth/signup
+
+User Signup
+
+Goals & Resources
+
+Method
+
+Endpoint
+
+Description
+
+POST
+
+/api/goals
+
+Create a new goal
+
+GET
+
+/api/goals
+
+Fetch all goals
+
+POST
+
+/api/resources
+
+Upload a resource (S3)
+
+POST
+
+/api/verify-upload
+
+Verify file & update isUploaded
+
+Courses & Exams
+
+Method
+
+Endpoint
+
+Description
+
+POST
+
+/api/courses
+
+Create a new course
+
+GET
+
+/api/courses
+
+Get all courses
+
+POST
+
+/api/exams
+
+Create a new exam
+
+GET
+
+/api/exams
+
+Get all exams
+
+📜 Project Structure
+
+lms-project/
+│── app/
+│   ├── api/
+│   │   ├── auth/
+│   │   ├── courses/
+│   │   ├── exams/
+│   │   ├── goals/
+│   │   ├── resources/
+│── lib/
+│   ├── dynamodb.js
+│   ├── s3.js
+│── utils/
+│   ├── verifyFile.js
+│   ├── createFile.js
+│── .env.local
+│── package.json
+│── README.md
+
+🎯 Roadmap
+
+
+
+🤝 Contributing
+
+Fork the repo
+
+Create a new branch (feature-name)
+
+Commit your changes
+
+Push to your branch
+
+Open a Pull Request 🚀
+
+📄 License
+
+MIT License © 2025 INCRIX
+
+🌟 Acknowledgments
+
+Built with ❤️ by Avinash & the INCRIX team.
+
