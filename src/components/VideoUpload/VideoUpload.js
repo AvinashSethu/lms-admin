@@ -22,7 +22,7 @@ export default function VideoUpload({ isOpen, onClose, bankID }) {
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [responseMessage, setResponseMessage] = useState("No file selected");
-  const [progressVariant, setProgressVariant] = useState("indeterminate");
+  const [progressVariant, setProgressVariant] = useState("determinate");
 
   function formatVideoSize(bytes) {
     if (bytes < 1024) return `${bytes} B`;
@@ -65,20 +65,18 @@ export default function VideoUpload({ isOpen, onClose, bankID }) {
     setResponseMessage("Creating Video");
 
     try {
-      const videoData = await createVideo({title,bankID});
       setResponseMessage("Preparing for upload");
       await uploadingVideo({
         video,
         title,
         setResponseMessage,
-        setProgress,
         setUploading,
-        setProgressVariant,
+        setProgressVariant: setProgress,
         bankID,
         onClose,
-        videoData
+        setTitle,
+        setVideo,
       });
-      
     } catch (error) {
       setResponseMessage("Upload failed. Please try again.");
       setUploading(false);

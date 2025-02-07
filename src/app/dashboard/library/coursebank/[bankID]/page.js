@@ -3,30 +3,31 @@ import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import FileUpload from "@/src/components/FileUpload/FileUpload";
 import Header from "@/src/components/Header/Header";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
+import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import VideoUpload from "@/src/components/VideoUpload/VideoUpload";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, PlayCircle } from "@mui/icons-material";
+import { Add, InsertDriveFile, PlayCircle } from "@mui/icons-material";
 import { Button, Slide, Stack } from "@mui/material";
 import { useParams, useRouter } from "next/navigation";
 import { forwardRef, useEffect, useState } from "react";
 
 const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="down" ref={ref} {...props} />
+  return <Slide direction="left" ref={ref} {...props} />;
 });
+
 export default function CourseBankId() {
-  
-  
   const { bankID } = useParams();
   const router = useRouter();
   const { showSnackbar } = useSnackbar();
   const [bank, setBank] = useState({});
+  const [resourceList, setResourceList] = useState([]);
   const [isDialogFileOpen, setIsDialogFileOPen] = useState(false);
   const [isDialogVideoOpen, setIsDialogVideoOPen] = useState(false);
 
   useEffect(() => {
     fetchCourse();
   }, []);
-  
+
   const fetchCourse = async () => {
     try {
       const data = await apiFetch(
@@ -34,6 +35,8 @@ export default function CourseBankId() {
       );
       if (data.success) {
         setBank(data.data);
+        setResourceList(data.data.resources);
+        console.log(data.data.resources[0].type);
       } else {
         showSnackbar("No Bank Found", "error", "", "3000");
         router.push(`/404`);
@@ -42,6 +45,7 @@ export default function CourseBankId() {
       console.error("Error fetching course data:", error);
     }
   };
+
   const dialogOpenFile = () => {
     setIsDialogFileOPen(true);
   };
@@ -96,6 +100,7 @@ export default function CourseBankId() {
         onClose={dialogCloseFile}
         bankID={bankID}
         TransitionComponent={Transition}
+        keepMounted
       />
       <VideoUpload
         isOpen={isDialogVideoOpen}
@@ -103,15 +108,33 @@ export default function CourseBankId() {
         bankID={bankID}
       />
       <Stack flexDirection="row" columnGap="40px" rowGap="15px" flexWrap="wrap">
-
-        <SecondaryCard
-          icon={
-            <PlayCircle sx={{ color: "var(--sec-color)" }} fontSize="large" />
-          }
-          title="resources"
-          options={["Remove"]}
-          cardWidth="350px"
-        />
+        {resourceList.length > 0
+          ? resourceList.map((item, index) => (
+              <SecondaryCard
+                key={index}
+                icon={
+                  item.type === "VIDEO" ? (
+                    <PlayCircle
+                      sx={{ color: "var(--sec-color)" }}
+                      fontSize="large"
+                    />
+                  ) : (
+                    <InsertDriveFile
+                      sx={{ color: "var(--sec-color)" }}
+                      fontSize="large"
+                    />
+                  )
+                }
+                title={item.name}
+                options={["Remove"]}
+                cardWidth="350px"
+              />
+            ))
+          : [
+              ...Array(3).map((_, index) => (
+                <SecondaryCardSkeleton key={index} />
+              )),
+            ]}
       </Stack>
     </Stack>
   );

@@ -41,7 +41,6 @@ export async function verifyVideo({
       }
     );
     setResponseMessage("Video Verified");
-    // onClose();
     setUploading(false);
   } catch (error) {
     setResponseMessage("Error verifying Video");
@@ -56,8 +55,10 @@ export async function uploadingVideo({
   title,
   setProgressVariant,
   onClose,
+  setTitle,
+  setVideo,
 }) {
-  setProgressVariant("determinate");
+  setProgressVariant(0);
 
   try {
     const json = await createVideo({ title, bankID });
@@ -84,10 +85,13 @@ export async function uploadingVideo({
         setResponseMessage("Error: " + error.message);
       },
       onProgress: function (bytesUploaded, bytesTotal) {
-        setResponseMessage(`Uploading ${Math.round((bytesUploaded / bytesTotal) * 100)}%`);
+        const progress = Math.round((bytesUploaded / bytesTotal) * 100);
+        setResponseMessage(`Uploading ${progress} %`);
+        setProgressVariant(progress);
       },
       onSuccess: async () => {
         setResponseMessage("Verifying Video");
+        setProgressVariant(100);
         await verifyVideo({
           resourceID: json.data.resourceID,
           videoID: json.data.videoID,
@@ -99,6 +103,10 @@ export async function uploadingVideo({
         setUploading(false);
         setResponseMessage("Upload complete!");
         onClose();
+        setTitle("");
+        setVideo(null);
+        setProgressVariant(0);
+        setResponseMessage("No file selected");
       },
     });
 
