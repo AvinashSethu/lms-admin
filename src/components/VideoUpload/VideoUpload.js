@@ -96,7 +96,7 @@ export default function VideoUpload({ isOpen, onClose, bankID }) {
           sx={{ borderRadius: "10px", padding: "6px" }}
           disabled={uploading}
         >
-          <Close />
+          <Close sx={{color:"var(--text2)"}} />
         </IconButton>
       }
       title="Add Video"

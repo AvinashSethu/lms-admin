@@ -1,7 +1,7 @@
 "use client";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
-import { DialogContent, Stack, Typography } from "@mui/material";
+import { DialogActions, DialogContent, Stack, Typography } from "@mui/material";
 import gatecse_img from "@/public/Icons/gate_cse.svg";
 import placements_img from "@/public/Icons/placements.svg";
 import banking_img from "@/public/Icons/banking.svg";
@@ -10,7 +10,7 @@ import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/src/lib/apiFetch";
 
-export default function GoalDialogBox({ isOpen, onClose }) {
+export default function GoalDialogBox({ isOpen, onClose,actionButton }) {
   const [title, setTitle] = useState("");
   const [icon, setIcon] = useState(false);
   const router = useRouter();
@@ -94,6 +94,9 @@ export default function GoalDialogBox({ isOpen, onClose }) {
           />
         </Stack>
       </DialogContent>
+      <DialogActions sx={{justifyContent:"center"}}>
+        <stack>{actionButton}</stack>
+      </DialogActions>
     </DialogBox>
   );
 }

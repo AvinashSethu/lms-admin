@@ -102,7 +102,7 @@ export default function FileUpload({ isOpen,TransitionComponent, onClose, bankID
           sx={{ borderRadius: "10px", padding: "6px" }}
           disabled={uploading}
         >
-          <Close />
+          <Close sx={{color:"var(--text2)"}} />
         </IconButton>
       }
       title="Add File"

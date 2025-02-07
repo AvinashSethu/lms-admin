@@ -1,6 +1,4 @@
-import { Close, East } from "@mui/icons-material";
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -11,11 +9,9 @@ import {
 export default function DialogBox({
   children,
   isOpen,
-  onClose,
   title,
   icon,
   actionButton,
-  onClick
 }) {
   return (
     <Dialog

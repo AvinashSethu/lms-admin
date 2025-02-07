@@ -1,6 +1,6 @@
 "use client";
 import PrimaryCard from "@/src/components/PrimaryCard/PrimaryCard";
-import { Add } from "@mui/icons-material";
+import { Add, East } from "@mui/icons-material";
 import { Button, Stack } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -46,12 +46,14 @@ export default function Home() {
         title="Goals"
         button={[
           <Button
-          key="goal"
+            key="goal"
             variant="contained"
             onClick={dialogOpen}
             startIcon={<Add />}
-
-            sx={{backgroundColor:"var(--primary-color)",textTransform:"none"}}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
             disableElevation
           >
             Goal
@@ -59,9 +61,16 @@ export default function Home() {
         ]}
       />
       <Stack flexDirection="row" justifyContent="space-between">
-        <GoalDialogBox isOpen={isDialogOpen} onClose={dialogClose} />
+        <GoalDialogBox
+          isOpen={isDialogOpen}
+          onClose={dialogClose}
+          actionButton={
+            <Button variant="text" endIcon={<East />} sx={{}}>
+              Create
+            </Button>
+          }
+        />
       </Stack>
-      {/* <UploadVideo /> */}
       <Stack flexDirection="row" gap="20px" flexWrap="wrap">
         {goalList.length > 0
           ? goalList.map((item, index) => (

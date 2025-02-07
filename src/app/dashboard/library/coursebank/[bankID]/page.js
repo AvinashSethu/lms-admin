@@ -2,12 +2,13 @@
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import FileUpload from "@/src/components/FileUpload/FileUpload";
 import Header from "@/src/components/Header/Header";
+import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import VideoUpload from "@/src/components/VideoUpload/VideoUpload";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Add, InsertDriveFile, PlayCircle } from "@mui/icons-material";
-import { Button, Slide, Stack } from "@mui/material";
+import { Button, Skeleton, Slide, Stack } from "@mui/material";
 import { useParams, useRouter } from "next/navigation";
 import { forwardRef, useEffect, useState } from "react";
 
@@ -63,7 +64,7 @@ export default function CourseBankId() {
   return (
     <Stack padding="20px" gap="20px">
       <Header
-        title={bank.bankTitle}
+        title={bank.bankTitle ? bank.bankTitle : <Skeleton variant="text" animation="wave" width="100px" />}
         search
         button={[
           <Button
@@ -130,11 +131,13 @@ export default function CourseBankId() {
                 cardWidth="350px"
               />
             ))
-          : [
-              ...Array(3).map((_, index) => (
-                <SecondaryCardSkeleton key={index} />
-              )),
-            ]}
+          :
+          //  [
+          //     ...Array(3).map((_, index) => (
+          //       <SecondaryCardSkeleton key={index} />
+          //     )),
+          //   ]
+            <NoDataFound info="No Files or Videos created" /> }
       </Stack>
     </Stack>
   );

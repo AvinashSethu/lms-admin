@@ -6,8 +6,8 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, Folder } from "@mui/icons-material";
-import { Button, DialogContent, Stack } from "@mui/material";
+import { Add, Close, Folder } from "@mui/icons-material";
+import { Button, DialogContent, IconButton, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -24,16 +24,13 @@ export default function Coursebank() {
       showSnackbar("Fill all data", "error", "", "3000");
       return;
     }
-    apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/create-bank`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title }),
-      }
-    ).then((data) => {
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/create-bank`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title }),
+    }).then((data) => {
       if (data.success) {
         showSnackbar(data.message, "success", "", "3000");
       } else {
@@ -43,15 +40,15 @@ export default function Coursebank() {
   }
 
   useEffect(() => {
-    apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/get-all-bank`
-    ).then((data) => {
-      if (data.success) {
-        setCourseList(data.data.banks);
-      } else {
-        setCourseList([]);
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/get-all-bank`).then(
+      (data) => {
+        if (data.success) {
+          setCourseList(data.data.banks);
+        } else {
+          setCourseList([]);
+        }
       }
-    });
+    );
   }, []);
 
   const dialogOpen = () => {
@@ -88,6 +85,14 @@ export default function Coursebank() {
         title="Add Course bank"
         actionText="Add Course bank"
         onClick={OnCourseCreate}
+        icon={
+          <IconButton
+            onClick={dialogClose}
+            sx={{ borderRadius: "10px", padding: "6px" }}
+          >
+            <Close sx={{ color: "var(--text2)" }} />
+          </IconButton>
+        }
       >
         <DialogContent>
           <StyledTextField
@@ -123,7 +128,11 @@ export default function Coursebank() {
                 cardWidth="350px"
               />
             ))
-          : <SecondaryCardSkeleton />}
+          : 
+          [...Array(4)].map((_,index) => (
+            <SecondaryCardSkeleton key={index} />
+          ))
+          }
       </Stack>
     </Stack>
   );
