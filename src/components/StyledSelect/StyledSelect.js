@@ -1,7 +1,14 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import NoDataFound from "../NoDataFound/NoDataFound";
 
-export default function StyledSelect({ title, value, onChange, options = [] }) {
+export default function StyledSelect({
+  title,
+  value,
+  onChange,
+  options = [],
+  getLabel = (option) => option?.title,
+  getValue = (option) => option?.id,
+}) {
   return (
     <FormControl
       sx={{
@@ -9,13 +16,21 @@ export default function StyledSelect({ title, value, onChange, options = [] }) {
       }}
       size="small"
     >
-      <InputLabel>{title}</InputLabel>
+      <InputLabel
+        sx={{
+          "&.Mui-focused": {
+            color: "var(--sec-color)",
+          },
+        }}
+      >
+        {title}
+      </InputLabel>
       <Select
         label={title}
         size="small"
         value={value}
         onChange={onChange}
-        MenuProps={{disableScrollLock:true}}
+        MenuProps={{ disableScrollLock: true }}
         sx={{
           "&:hover .MuiOutlinedInput-notchedOutline": {
             borderColor: "var(--sec-color)",
@@ -26,15 +41,15 @@ export default function StyledSelect({ title, value, onChange, options = [] }) {
         }}
       >
         {options.length > 0 ? (
-          options.map((subject) => {
+          options.map((option, index) => {
             return (
-              <MenuItem key={subject.subjectID} value={subject}>
-                {subject.title}
+              <MenuItem key={index} value={getValue(option)}>
+                {getLabel(option)}
               </MenuItem>
             );
           })
         ) : (
-          <NoDataFound info="No data found" />
+          <MenuItem>No data found</MenuItem>
         )}
       </Select>
     </FormControl>

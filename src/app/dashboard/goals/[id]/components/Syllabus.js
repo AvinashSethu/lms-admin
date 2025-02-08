@@ -150,6 +150,8 @@ export default function Syllabus({ goal, fetchGoal }) {
                 setSelectedSubject(e.target.value);
               }}
               options={allSubjects}
+              getOptionLabel={(subject) => subject.title}
+              getOptionValue={(subject) => subject.subjectID}
             />
           </DialogContent>
         </DialogBox>
@@ -201,7 +203,6 @@ export default function Syllabus({ goal, fetchGoal }) {
         isOpen={videoDialog}
         title="Add Course"
         actionText="Create"
-        
         icon={
           <IconButton
             sx={{ borderRadius: "10px", padding: "6px" }}

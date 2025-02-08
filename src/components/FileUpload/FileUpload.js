@@ -13,8 +13,7 @@ import DialogBox from "../DialogBox/DialogBox";
 import { Close, East } from "@mui/icons-material";
 import { createFile, uploadToS3 } from "@/src/lib/uploadFile";
 
-
-export default function FileUpload({ isOpen,onClose, bankID,fetchCourse }) {
+export default function FileUpload({ isOpen, onClose, bankID, fetchCourse }) {
   const MAX_FILE_SIZE =
     Number(process.env.NEXT_PUBLIC_MAX_UPLOAD_FILE_SIZE_MB) * 1024 * 1024;
   const fileInputRef = useRef(null);
@@ -70,8 +69,8 @@ export default function FileUpload({ isOpen,onClose, bankID,fetchCourse }) {
     try {
       const fileData = await createFile({ file, title, bankID });
       setResponseMessage("Preparing for upload");
-      await uploadToS3(
-        {file,
+      await uploadToS3({
+        file,
         setProgress,
         setResponseMessage,
         fileData,
@@ -79,8 +78,8 @@ export default function FileUpload({ isOpen,onClose, bankID,fetchCourse }) {
         setProgressVariant,
         onClose,
         setFile,
-        fetchCourse}
-      );
+        fetchCourse,
+      });
     } catch (error) {
       setResponseMessage("Upload failed. Please try again.");
       setUploading(false);
@@ -100,7 +99,7 @@ export default function FileUpload({ isOpen,onClose, bankID,fetchCourse }) {
           sx={{ borderRadius: "10px", padding: "6px" }}
           disabled={uploading}
         >
-          <Close sx={{color:"var(--text2)"}} />
+          <Close sx={{ color: "var(--text2)" }} />
         </IconButton>
       }
       title="Add File"

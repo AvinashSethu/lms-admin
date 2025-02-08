@@ -34,7 +34,7 @@ export default function AllQuestions() {
             variant="contained"
             startIcon={<Add />}
             onClick={() => {
-              router.push(`/dashboard/library/allQuestions/1`);
+              router.push(`/dashboard/library/allQuestions/addQuestion`);
             }}
             sx={{
               backgroundColor: "var(--primary-color)",

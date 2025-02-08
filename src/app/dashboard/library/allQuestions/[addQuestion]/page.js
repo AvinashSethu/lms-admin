@@ -1,9 +1,7 @@
 "use client";
 import { useState } from "react";
 import Header from "@/src/components/Header/Header";
-import MarkdownEditor from "@/src/components/MarkdownEditor/MarkdownEditor";
-import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
-import { East } from "@mui/icons-material";
+import { East, SaveAlt, West } from "@mui/icons-material";
 import {
   Button,
   Stack,
@@ -12,14 +10,23 @@ import {
   StepLabel,
   Stepper,
 } from "@mui/material";
+import BasicStepper from "./Components/BasicStepper";
+import AdditionalStepper from "./Components/AdditionalStepper";
+import ExplanationStepper from "./Components/ExplanationStepper";
 
 export default function AddQuestion() {
-  const steps = ["Basic Info", "Additional Info", "Explanation"];
-  const [activeStep, setActiveStep] = useState(0); // State to track active step
+  const steps = ["Basic Info", "Additional Info", "Explanation", "Preview"];
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
       setActiveStep((prevStep) => prevStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (activeStep > 0) {
+      setActiveStep((prevStep) => prevStep - 1);
     }
   };
 
@@ -33,8 +40,8 @@ export default function AddQuestion() {
             border: "1px solid var(--border-color)",
             borderRadius: "10px",
             backgroundColor: "var(--white)",
-            minHeight: "100vh",
-            width: "600px",
+            minHeight: "60vh",
+            width: "650px",
             padding: "20px",
             gap: "20px",
           }}
@@ -48,8 +55,9 @@ export default function AddQuestion() {
                   sx={{
                     "& .MuiStepConnector-line": {
                       borderColor: "var(--primary-color)",
-                      borderWidth: 8,
+                      borderWidth: 7,
                       borderRadius: "50px",
+                      margin: "0px 10px",
                     },
                   }}
                 />
@@ -57,37 +65,82 @@ export default function AddQuestion() {
             >
               {steps.map((label) => (
                 <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
+                  <StepLabel
+                    sx={{
+                      "& .MuiStepIcon-root": {
+                        color: "var(--text4)",
+                        width: "30px",
+                        height: "30px",
+                      },
+                      "& .Mui-active .MuiStepIcon-root": {
+                        color: "var(--primary-color)",
+                      },
+                      "& .Mui-completed .MuiStepIcon-root": {
+                        color: "var(--primary-color)",
+                      },
+                    }}
+                  >
+                    {label}
+                  </StepLabel>
                 </Step>
               ))}
             </Stepper>
+
+            <hr
+              style={{
+                border: "1px solid var(--border-color)",
+                marginTop: "25px",
+              }}
+            />
           </Stack>
-          <hr style={{ border: "1px solid var(--border-color)" }} />
 
-          {/* Step Content Rendering */}
-          {activeStep === 0 && (
-            <>
-              <StyledSelect title="Question type" />
-              <StyledSelect title="Subject" />
-            </>
-          )}
-          {/* {activeStep === 1 && <MarkdownEditor />} */}
-          {activeStep === 2 && <p>Final Step: Explanation</p>}
+          {activeStep === 0 && <BasicStepper />}
+          {activeStep === 1 && <AdditionalStepper />}
+          {activeStep === 2 && <ExplanationStepper />}
+          <Stack flexDirection="row" sx={{ marginTop: "auto", gap: "20px" }}>
+            {activeStep > 0 && (
+              <Button
+                variant="text"
+                startIcon={<West />}
+                onClick={handleBack}
+                sx={{
+                  textTransform: "none",
+                  width: "100px",
+                  color: "var(--primary-color)",
+                }}
+              >
+                Previous
+              </Button>
+            )}
 
-          <Button
-            variant="text"
-            endIcon={<East />}
-            sx={{
-              marginTop: "auto",
-              textTransform: "none",
-              width: "100px",
-              color: "var(--primary-color)",
-            }}
-            onClick={handleNext}
-            disabled={activeStep === steps.length - 1} // Disable at last step
-          >
-            Next
-          </Button>
+            {activeStep < steps.length - 1 ? (
+              <Button
+                variant="text"
+                endIcon={<East />}
+                sx={{
+                  textTransform: "none",
+                  width: "100px",
+                  color: "var(--primary-color)",
+                }}
+                onClick={handleNext}
+              >
+                Next
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                endIcon={<SaveAlt />}
+                sx={{
+                  textTransform: "none",
+                  width: "100px",
+                  backgroundColor: "var(--primary-color)",
+                }}
+                disableElevation
+              >
+                Save
+              </Button>
+            )}
+          </Stack>
         </Stack>
       </Stack>
     </Stack>
