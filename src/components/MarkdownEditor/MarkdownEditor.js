@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import MDEditor,{commands} from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
-import MarkdownPreview from "@uiw/react-markdown-preview";
-import katex from "katex";
-import { getCodeString } from "rehype-rewrite";
-import "katex/dist/katex.css";
+// import MDEditor,{commands} from "@uiw/react-md-editor";
+// import rehypeSanitize from "rehype-sanitize";
+// import MarkdownPreview from "@uiw/react-markdown-preview";
+// import katex from "katex";
+// import { getCodeString } from "rehype-rewrite";
+// import "katex/dist/katex.css";
 
 const mdKaTeX = `This is to display the 
 \$$c = \\pm\\sqrt{a^2 + b^2}$$\
@@ -26,7 +26,7 @@ c = \\pm\\sqrt{a^2 + b^2}
 \\\`
 `;
 
-const rehypePlugins = [rehypeSanitize];
+// const rehypePlugins = [rehypeSanitize];
 
 export default function MarkdownEditor() {
   const [value, setValue] = React.useState(mdKaTeX);

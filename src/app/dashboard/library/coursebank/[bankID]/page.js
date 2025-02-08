@@ -185,9 +185,7 @@ export default function CourseBankId() {
                 <Divider key="2" />,
                 <MenuItem
                   key="two"
-                  // onClick={() => {
-                  //   handleDelete(item.resourceID, bankID);
-                  // }}
+                  
                   onClick={dialogOpenDelete}
                   sx={{
                     gap: "10px",
@@ -211,7 +209,49 @@ export default function CourseBankId() {
           //   ]
           <NoDataFound info="No Files or Videos created" />
         )}
-        <DeleteDialogBox isOpen={isDialogDeleteOpen} onClose={dialogCloseDelete} />
+        <DeleteDialogBox
+          isOpen={isDialogDeleteOpen}
+          onClose={dialogCloseDelete}
+          
+          actionButton={
+            <Stack
+              flexDirection="row"
+              justifyContent="space-between"
+              sx={{ gap: "10px", width: "100%" }}
+            >
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleDelete(item.resourceID, bankID);
+                }}
+                sx={{
+                  textTransform: "none",
+                  backgroundColor: "red",
+                  borderRadius: "5px",
+                  width: "130px",
+                }}
+                disableElevation
+              >
+                Delete
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  borderRadius: "5px",
+                  backgroundColor: "white",
+                  color: "var(--text2)",
+                  border: "1px solid var(--border-color)",
+                  width: "130px",
+                }}
+                onClick={dialogCloseDelete}
+                disableElevation
+              >
+                Cancel
+              </Button>
+            </Stack>
+          }
+        />
       </Stack>
     </Stack>
   );

@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import Header from "@/src/components/Header/Header";
 import MarkdownEditor from "@/src/components/MarkdownEditor/MarkdownEditor";
 import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
@@ -13,6 +15,14 @@ import {
 
 export default function AddQuestion() {
   const steps = ["Basic Info", "Additional Info", "Explanation"];
+  const [activeStep, setActiveStep] = useState(0); // State to track active step
+
+  const handleNext = () => {
+    if (activeStep < steps.length - 1) {
+      setActiveStep((prevStep) => prevStep + 1);
+    }
+  };
+
   return (
     <Stack padding="20px" gap="20px">
       <Header title="Back" back />
@@ -31,7 +41,7 @@ export default function AddQuestion() {
         >
           <Stack sx={{ width: "100%" }}>
             <Stepper
-              activeStep={1}
+              activeStep={activeStep}
               alternativeLabel
               connector={
                 <StepConnector
@@ -40,7 +50,6 @@ export default function AddQuestion() {
                       borderColor: "var(--primary-color)",
                       borderWidth: 8,
                       borderRadius: "50px",
-                      // maxWidth: "100px",
                     },
                   }}
                 />
@@ -54,58 +63,17 @@ export default function AddQuestion() {
             </Stepper>
           </Stack>
           <hr style={{ border: "1px solid var(--border-color)" }} />
-          <StyledSelect title="Question type" />
-          <StyledSelect title="Subject" />
-          <Stack
-            flexDirection="row"
-            width="100%"
-            gap="20px"
-            justifyContent="space-between"
-          >
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "var(--border-color)",
-                textTransform: "none",
-                color: "var(--text3)",
-                fontFamily: "Lato",
-                fontSize: "14px",
-                fontWeight: "700",
-                width: "170px",
-              }}
-            >
-              Easy
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "var(--border-color)",
-                textTransform: "none",
-                color: "var(--text3)",
-                fontFamily: "Lato",
-                fontSize: "14px",
-                fontWeight: "700",
-                width: "170px",
-              }}
-            >
-              Medium
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "var(--border-color)",
-                textTransform: "none",
-                color: "var(--text3)",
-                fontFamily: "Lato",
-                fontSize: "14px",
-                fontWeight: "700",
-                width: "170px",
-              }}
-            >
-              Hard
-            </Button>
-          </Stack>
-          <MarkdownEditor />
+
+          {/* Step Content Rendering */}
+          {activeStep === 0 && (
+            <>
+              <StyledSelect title="Question type" />
+              <StyledSelect title="Subject" />
+            </>
+          )}
+          {/* {activeStep === 1 && <MarkdownEditor />} */}
+          {activeStep === 2 && <p>Final Step: Explanation</p>}
+
           <Button
             variant="text"
             endIcon={<East />}
@@ -115,6 +83,8 @@ export default function AddQuestion() {
               width: "100px",
               color: "var(--primary-color)",
             }}
+            onClick={handleNext}
+            disabled={activeStep === steps.length - 1} // Disable at last step
           >
             Next
           </Button>
