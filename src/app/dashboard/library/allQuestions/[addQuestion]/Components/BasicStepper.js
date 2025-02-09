@@ -5,9 +5,9 @@ import { apiFetch } from "@/src/lib/apiFetch";
 import { Button, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 
-export default function BasicStepper() {
+export default function BasicStepper({ setQuestionData }) {
   const [level, setLevel] = useState("");
-  const [questionType,setQuestionType] = useState();
+  const [questionType, setQuestionType] = useState();
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
 
@@ -15,7 +15,9 @@ export default function BasicStepper() {
     setLevel(selectedLevel);
   };
 
-
+  const handelChange = (e) => {
+    setQuestionData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const fetchAllSubjects = () => {
     apiFetch(
@@ -45,12 +47,16 @@ export default function BasicStepper() {
         options={questionType}
         getLabel={(question) => question.label}
         getValue={(question) => question.value}
+        onChange={(e) => {
+          setQuestionData((prev) => ({ ...prev, type: e.target.value }));
+        }}
       />
       <StyledSelect
         title="Subject"
         value={selectedSubject}
         onChange={(e) => {
           setSelectedSubject(e.target.value);
+          setQuestionData((prev) => ({ ...prev, subject: e.target.value }));
         }}
         options={allSubjects}
         getLabel={(subject) => subject.title}
@@ -77,7 +83,12 @@ export default function BasicStepper() {
           </Button>
         ))}
       </Stack>
-      <MarkdownEditor placeholder="Type Preview" />
+      <MarkdownEditor
+        placeholder="Type Preview"
+        onChange={(content) =>
+          setQuestionData((prev) => ({ ...prev, content }))
+        }
+      />
     </Stack>
   );
 }

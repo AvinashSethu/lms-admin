@@ -1,11 +1,12 @@
 "use client";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import CourseCard from "@/src/components/CourseCard/CourseCard";
-import { Add, Close, East, InsertDriveFile } from "@mui/icons-material";
+import { Add, Close, Delete, East, InsertDriveFile } from "@mui/icons-material";
 import {
   Button,
   DialogContent,
   IconButton,
+  MenuItem,
   Stack,
   Typography,
 } from "@mui/material";
@@ -130,8 +131,8 @@ export default function Syllabus({ goal, fetchGoal }) {
         <DialogBox
           isOpen={isDialogOpen}
           title="Add Subject"
-          actionText="Add subject"
-          onClick={onAddSubjectSyllabus}
+          // actionText="Add subject"
+          // onClick={onAddSubjectSyllabus}
           icon={
             <IconButton
               sx={{ borderRadius: "10px", padding: "6px" }}
@@ -140,11 +141,12 @@ export default function Syllabus({ goal, fetchGoal }) {
               <Close />
             </IconButton>
           }
+          actionButton={<Button variant="text" endIcon={<East />} onClick={onAddSubjectSyllabus} sx={{ textTransform: "none", color: "var(--primary-color)" }}>Add Subject</Button>}
         >
           <DialogContent>
             <StyledSelect
               title="Select Subject"
-              value={selectedSubject}
+              value={selectedSubject || ""}
               onChange={(e) => {
                 console.log(e.target.value);
                 setSelectedSubject(e.target.value);
@@ -161,11 +163,25 @@ export default function Syllabus({ goal, fetchGoal }) {
           goal.subjectList.length > 0 ? (
             goal.subjectList.map((item, index) => (
               <SecondaryCard
+                key={index}
                 icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
                 title={item.title}
-                options={menuOptions}
+                // options={menuOptions}
                 cardWidth="350px"
-                key={index}
+                options={[
+                  <MenuItem
+                    key={index}
+                    sx={{
+                      gap: "5px",
+                      padding: "5px 12px",
+                      fontSize: "13px",
+                      color: "red",
+                    }}
+                  >
+                    <Delete fontSize="small" sx={{ fontSize: "16px" }} />
+                    Delete
+                  </MenuItem>,
+                ]}
               />
             ))
           ) : (

@@ -13,10 +13,22 @@ import {
 import BasicStepper from "./Components/BasicStepper";
 import AdditionalStepper from "./Components/AdditionalStepper";
 import ExplanationStepper from "./Components/ExplanationStepper";
+import { apiFetch } from "@/src/lib/apiFetch";
+import QuestionCard from "@/src/components/CreateExam/Components/QuestionCard";
 
 export default function AddQuestion() {
   const steps = ["Basic Info", "Additional Info", "Explanation", "Preview"];
   const [activeStep, setActiveStep] = useState(0);
+  const [questionData, setQuestionData] = useState({
+    type:"",
+    subject:"",
+    level:"",
+    content:"",
+    options:[],
+    answer:"",
+  });
+
+  const [submittedQuestion,setSubmittedQuestion] = useState(null);
 
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
@@ -30,6 +42,27 @@ export default function AddQuestion() {
     }
   };
 
+  const handleSave = async () => {
+    try{
+      const data = await apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/add`,{
+        method:"POST",
+        headers:{"Content-Type": "application/json"},
+        body:JSON.stringify(questionData),
+      });
+      console.log(questionData);
+      
+      if(data.success) {
+        setSubmittedQuestion(questionData);
+        
+      }
+      else{
+        console.error("Failed");
+        
+      }
+    }catch(error){
+      console.error("Catch error");
+    }
+  }
   return (
     <Stack padding="20px" gap="20px">
       <Header title="Back" back />
@@ -94,9 +127,9 @@ export default function AddQuestion() {
             />
           </Stack>
 
-          {activeStep === 0 && <BasicStepper />}
-          {activeStep === 1 && <AdditionalStepper />}
-          {activeStep === 2 && <ExplanationStepper />}
+          {activeStep === 0 && <BasicStepper setQuestionData={setQuestionData} />}
+          {activeStep === 1 && <AdditionalStepper setQuestionData={setQuestionData} />}
+          {activeStep === 2 && <ExplanationStepper setQuestionData={setQuestionData} />}
           <Stack flexDirection="row" sx={{ marginTop: "auto", gap: "20px" }}>
             {activeStep > 0 && (
               <Button
@@ -130,6 +163,7 @@ export default function AddQuestion() {
               <Button
                 variant="contained"
                 endIcon={<SaveAlt />}
+                onClick={handleSave}
                 sx={{
                   textTransform: "none",
                   width: "100px",
@@ -143,6 +177,7 @@ export default function AddQuestion() {
           </Stack>
         </Stack>
       </Stack>
+      {submittedQuestion && <QuestionCard data={submittedQuestion} />}
     </Stack>
   );
 }
