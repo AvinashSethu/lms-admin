@@ -59,7 +59,7 @@ export default function AddQuestion() {
         }
       );
 
-      if (data) {
+      if (data.success) {
         setSubmittedQuestion(data);
         setQuestionData(
           { 
@@ -79,7 +79,7 @@ export default function AddQuestion() {
         console.error("Failed");
       }
     } catch (error) {
-      // console.error("Catch error");
+      console.error("Catch error");
     }
   };
   return (

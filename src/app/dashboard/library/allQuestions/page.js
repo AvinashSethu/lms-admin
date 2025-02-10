@@ -8,7 +8,7 @@ import { Button, Pagination, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function AllQuestions({questionData, setQuestionData}) {
+export default function AllQuestions() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const filterOpen = () => {
@@ -55,7 +55,7 @@ export default function AllQuestions({questionData, setQuestionData}) {
           sx={{
             backgroundColor: "var(--primary-color)",
             textTransform: "none",
-            borderRadius: "4px",
+            borderRadius: "4px"
           }}
           disableElevation
         >

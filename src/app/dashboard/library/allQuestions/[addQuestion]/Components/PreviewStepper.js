@@ -14,7 +14,7 @@ ${questionData.question.title}
 
 ### Options:
 ${questionData.question.options
-  .map((opt, index) => `- ${opt.title} ${opt.isCorrect ? "(✅ Correct)" : ""}`)
+  .map((opt, index) => `- ${opt.title} ${opt.isCorrect ? "(Correct)" : ""}`)
   .join("\n")}
 
 ### Solution:

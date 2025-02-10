@@ -35,9 +35,9 @@ export default function BasicStepper({ questionData, setQuestionData }) {
     fetchAllSubjects();
 
     setQuestionType([
-      { label: "Multiple Choice (MCQ)", value: "mcq" },
-      { label: "Multiple Select (MSQ)", value: "true_false" },
-      { label: "Fill in the blanks", value: "short_answer" },
+      { label: "Multiple Choice (MCQ)", value: "MCQ" },
+      { label: "Multiple Select (MSQ)", value: "MSQ" },
+      { label: "Fill in the blanks", value: "FIB" },
     ]);
   }, []);
 
