@@ -1,4 +1,3 @@
-import path from "path";
 import { dynamoDB, s3 } from "../awsAgent";
 import { randomUUID } from "crypto";
 
