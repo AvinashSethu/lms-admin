@@ -5,34 +5,35 @@ import { apiFetch } from "@/src/lib/apiFetch";
 import { Button, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 
-export default function BasicStepper({questionData, setQuestionData }) {
-  // const [level, setLevel] = useState( questionData.level ||"");
-  const [questionType, setQuestionType] = useState();
+export default function BasicStepper({ questionData, setQuestionData }) {
+  const [questionType, setQuestionType] = useState([]);
   const [allSubjects, setAllSubjects] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState("");
 
   const handleLevel = (selectedLevel) => {
-    setLevel(selectedLevel);
-  };
-
-  const handelChange = (e) => {
-    setQuestionData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const fetchAllSubjects = () => {
-    apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects/get-all-subjects`
-    ).then((data) => {
-      if (data.success) {
-        setAllSubjects(data.data.subjects);
-      } else {
-        setAllSubjects([]);
-      }
-    });
+    setQuestionData((prev) => ({
+      ...prev,
+      question: { ...prev.question, difficulty: selectedLevel.toLowerCase() },
+    }));
   };
 
   useEffect(() => {
+    const fetchAllSubjects = async () => {
+      try {
+        const data = await apiFetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects/get-all-subjects`
+        );
+        if (data.success) {
+          setAllSubjects(data.data.subjects);
+        } else {
+          setAllSubjects([]);
+        }
+      } catch (error) {
+        console.error("Error fetching subjects:", error);
+      }
+    };
+
     fetchAllSubjects();
+
     setQuestionType([
       { label: "Multiple Choice (MCQ)", value: "mcq" },
       { label: "Multiple Select (MSQ)", value: "true_false" },
@@ -40,43 +41,59 @@ export default function BasicStepper({questionData, setQuestionData }) {
     ]);
   }, []);
 
+  // console.log(questionData);
+
   return (
     <Stack gap="25px">
       <StyledSelect
         title="Question type"
+        value={questionData.question.type}
         options={questionType}
-        getLabel={(question) => question.label}
-        getValue={(question) => question.value}
+        getLabel={(ques) => ques.label}
+        getValue={(ques) => ques.value}
         onChange={(e) => {
-          setQuestionData((prev) => ({ ...prev, type: e.target.value }));
+          setQuestionData((prev) => ({
+            ...prev,
+            question: { ...prev.question, type: e.target.value },
+          }));
         }}
       />
       <StyledSelect
         title="Subject"
-        value={selectedSubject}
+        value={questionData.subjectID}
         onChange={(e) => {
-          setSelectedSubject(e.target.value);
-          setQuestionData((prev) => ({ ...prev, subject: e.target.value }));
+          setQuestionData((prev) => ({ ...prev, subjectID: e.target.value }));
         }}
         options={allSubjects}
-        getLabel={(subject) => subject.title}
-        getValue={(subject) => subject.subjectID}
+        getLabel={(sub) => sub.title}
+        getValue={(sub) => sub.subjectID}
       />
       <Stack flexDirection="row" justifyContent="space-between">
         {["Easy", "Medium", "Hard"].map((level) => (
           <Button
             key={level}
-            variant={questionData.level === level ? "contained" : "outlined"}
+            variant={
+              questionData.question.difficulty === level.toLocaleLowerCase()
+                ? "contained"
+                : "outlined"
+            }
             sx={{
               width: "170px",
               textTransform: "none",
               border:
-                level === level ? "none" : "1px solid var(--border-color)",
+                questionData.question.difficulty === level
+                  ? "none"
+                  : "1px solid var(--border-color)",
               backgroundColor:
-                level === level ? "var(--primary-color)" : "transparent",
-              color: level === level ? "white" : "inherit",
+                questionData.question.difficulty === level.toLocaleLowerCase()
+                  ? "var(--primary-color)"
+                  : "transparent",
+              color:
+                questionData.question.difficulty === level.toLocaleLowerCase()
+                  ? "white"
+                  : "inherit",
             }}
-            onClick={() => handleLevel(questionData.level)}
+            onClick={() => handleLevel(level)}
             disableElevation
           >
             {level}
@@ -84,9 +101,13 @@ export default function BasicStepper({questionData, setQuestionData }) {
         ))}
       </Stack>
       <MarkdownEditor
-        placeholder="Type Preview"
-        onChange={(content) =>
-          setQuestionData((prev) => ({ ...prev, content }))
+        // placeholder="Type Preview"
+        value={questionData.question.title || ""}
+        onChange={(e) =>
+          setQuestionData((prev) => ({
+            ...prev,
+            question: { ...prev.question, title: e.target.value },
+          }))
         }
       />
     </Stack>

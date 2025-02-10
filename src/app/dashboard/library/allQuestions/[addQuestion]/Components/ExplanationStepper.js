@@ -6,7 +6,7 @@ export default function ExplanationStepper({ setQuestionData }) {
     <Stack>
       <MarkdownEditor
         onChange={(content) =>
-          setQuestionData((prev) => ({ ...prev, answer: content }))
+          setQuestionData((prev) => ({ ...prev, question: { ...prev.question, solution: content } }))
         }
       />
     </Stack>

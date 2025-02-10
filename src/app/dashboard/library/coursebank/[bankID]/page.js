@@ -195,7 +195,7 @@ export default function CourseBankId() {
                   }}
                   sx={{
                     gap: "10px",
-                    color: "red",
+                    color: "var(--delete-color)",
                     padding: "5px 12px",
                     fontSize: "13px",
                   }}
@@ -229,7 +229,7 @@ export default function CourseBankId() {
                 }}
                 sx={{
                   textTransform: "none",
-                  backgroundColor: "red",
+                  backgroundColor: "var(--delete-color)",
                   borderRadius: "5px",
                   width: "130px",
                 }}

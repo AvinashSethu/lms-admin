@@ -1,11 +1,9 @@
-import { Help } from "@mui/icons-material";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   Slide,
   Stack,
   Typography,
@@ -13,12 +11,12 @@ import {
 
 export default function DeleteDialogBox({ isOpen, actionButton, name }) {
   return (
-    <Dialog open={isOpen} TransitionComponent={Slide}>
+    <Dialog open={isOpen} TransitionComponent={Slide} PaperProps={{sx:{borderRadius:"15px",padding:"10px"}}} >
       <DialogTitle sx={{ width: "350px" }}>
         <Stack alignItems="center" gap="10px">
           <Stack
             sx={{
-              color: "#D64545",
+              color: "var(--delete-color)",
               backgroundColor: "#FBF3F3",
               padding: "15px",
               borderRadius: "50px",

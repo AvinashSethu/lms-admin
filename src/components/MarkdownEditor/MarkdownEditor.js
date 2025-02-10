@@ -29,8 +29,8 @@ c = \\pm\\sqrt{a^2 + b^2}
 
 const rehypePlugins = [rehypeSanitize];
 
-export default function MarkdownEditor() {
-  const [value, setValue] = React.useState(mdKaTeX);
+export default function MarkdownEditor({ onChange }) {
+  const [value, setValue] = React.useState("");
   const customCommands = [
     commands.bold,
     commands.italic,
@@ -54,7 +54,7 @@ export default function MarkdownEditor() {
       keyCommand: "image",
       buttonProps: { "aria-label": "Insert image" },
 
-      icon:<InsertPhoto sx={{fontSize:"16px"}} />,
+      icon: <InsertPhoto sx={{ fontSize: "16px" }} />,
       execute: async (state, api) => {
         // OPEN my component.
         // example
@@ -66,9 +66,23 @@ export default function MarkdownEditor() {
       },
     },
   ];
-  
+
   return (
-    <div className="container">
+    <div className="container" style={{ position: "relative", width: "560px",height: "400px" }}>  
+      {/* {!value && (
+        <div
+          style={{
+            position: "absolute",
+            top: "40px",
+            left: "12px",
+            color: "var(--text3)",
+            fontSize: "14px",
+            zIndex: 10,
+          }}
+        >
+          Type preview...
+        </div>
+      )} */}
       <MDEditor
         value={value}
         onChange={(val) => setValue(val)}
@@ -121,6 +135,7 @@ export default function MarkdownEditor() {
           },
         }}
       />
+      
       {/* <MarkdownPreview
         source={value}
         style={{ padding: 16, margin: 20 }}

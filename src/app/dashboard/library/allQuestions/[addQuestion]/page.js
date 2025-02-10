@@ -15,20 +15,24 @@ import AdditionalStepper from "./Components/AdditionalStepper";
 import ExplanationStepper from "./Components/ExplanationStepper";
 import { apiFetch } from "@/src/lib/apiFetch";
 import QuestionCard from "@/src/components/CreateExam/Components/QuestionCard";
+import PreviewStepper from "./Components/PreviewStepper";
 
 export default function AddQuestion() {
   const steps = ["Basic Info", "Additional Info", "Explanation", "Preview"];
   const [activeStep, setActiveStep] = useState(0);
   const [questionData, setQuestionData] = useState({
-    type:"",
-    subject:"",
-    level:"",
-    content:"",
-    options:[],
-    answer:"",
+    subjectID: "",
+    question: {
+      title: "",
+      difficulty: "",
+      type: "",
+      options: [],
+      correctAnswers: {},
+      solution: "",
+    },
   });
 
-  const [submittedQuestion,setSubmittedQuestion] = useState(null);
+  const [submittedQuestion, setSubmittedQuestion] = useState(null);
 
   const handleNext = () => {
     if (activeStep < steps.length - 1) {
@@ -43,26 +47,29 @@ export default function AddQuestion() {
   };
 
   const handleSave = async () => {
-    try{
-      const data = await apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/add`,{
-        method:"POST",
-        headers:{"Content-Type": "application/json"},
-        body:JSON.stringify(questionData),
-      });
-      console.log(questionData);
+    try {
+      const data = await apiFetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/add`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(questionData),
+        }
+      );
+     
+      console.log(data);
       
-      if(data.success) {
-        setSubmittedQuestion(questionData);
-        
-      }
-      else{
+      console.log(questionData);
+
+      if (data.data.success) {
+        setQuestionData(questionData);
+      } else {
         console.error("Failed");
-        
       }
-    }catch(error){
-      console.error("Catch error");
+    } catch (error) {
+      // console.error("Catch error");
     }
-  }
+  };
   return (
     <Stack padding="20px" gap="20px">
       <Header title="Back" back />
@@ -127,9 +134,30 @@ export default function AddQuestion() {
             />
           </Stack>
 
-          {activeStep === 0 && <BasicStepper questionData={questionData} setQuestionData={setQuestionData} />}
-          {activeStep === 1 && <AdditionalStepper questionData={questionData} setQuestionData={setQuestionData} />}
-          {activeStep === 2 && <ExplanationStepper questionData={questionData} setQuestionData={setQuestionData} />}
+          {activeStep === 0 && (
+            <BasicStepper
+              questionData={questionData}
+              setQuestionData={setQuestionData}
+            />
+          )}
+          {activeStep === 1 && (
+            <AdditionalStepper
+              questionData={questionData}
+              setQuestionData={setQuestionData}
+            />
+          )}
+          {activeStep === 2 && (
+            <ExplanationStepper
+              questionData={questionData}
+              setQuestionData={setQuestionData}
+            />
+          )}
+          {activeStep === 3 && (
+            <PreviewStepper
+              questionData={questionData}
+              setQuestionData={setQuestionData}
+            />
+          )}
           <Stack flexDirection="row" sx={{ marginTop: "auto", gap: "20px" }}>
             {activeStep > 0 && (
               <Button
