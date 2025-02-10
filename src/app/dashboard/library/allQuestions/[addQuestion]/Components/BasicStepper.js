@@ -5,8 +5,8 @@ import { apiFetch } from "@/src/lib/apiFetch";
 import { Button, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 
-export default function BasicStepper({ setQuestionData }) {
-  const [level, setLevel] = useState("");
+export default function BasicStepper({questionData, setQuestionData }) {
+  // const [level, setLevel] = useState( questionData.level ||"");
   const [questionType, setQuestionType] = useState();
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
@@ -63,23 +63,23 @@ export default function BasicStepper({ setQuestionData }) {
         getValue={(subject) => subject.subjectID}
       />
       <Stack flexDirection="row" justifyContent="space-between">
-        {["Easy", "Medium", "Hard"].map((index) => (
+        {["Easy", "Medium", "Hard"].map((level) => (
           <Button
-            key={index}
-            variant={level === index ? "contained" : "outlined"}
+            key={level}
+            variant={questionData.level === level ? "contained" : "outlined"}
             sx={{
               width: "170px",
               textTransform: "none",
               border:
-                level === index ? "none" : "1px solid var(--border-color)",
+                level === level ? "none" : "1px solid var(--border-color)",
               backgroundColor:
-                level === index ? "var(--primary-color)" : "transparent",
-              color: level === index ? "white" : "inherit",
+                level === level ? "var(--primary-color)" : "transparent",
+              color: level === level ? "white" : "inherit",
             }}
-            onClick={() => handleLevel(index)}
+            onClick={() => handleLevel(questionData.level)}
             disableElevation
           >
-            {index}
+            {level}
           </Button>
         ))}
       </Stack>

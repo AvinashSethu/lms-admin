@@ -127,9 +127,9 @@ export default function AddQuestion() {
             />
           </Stack>
 
-          {activeStep === 0 && <BasicStepper setQuestionData={setQuestionData} />}
-          {activeStep === 1 && <AdditionalStepper setQuestionData={setQuestionData} />}
-          {activeStep === 2 && <ExplanationStepper setQuestionData={setQuestionData} />}
+          {activeStep === 0 && <BasicStepper questionData={questionData} setQuestionData={setQuestionData} />}
+          {activeStep === 1 && <AdditionalStepper questionData={questionData} setQuestionData={setQuestionData} />}
+          {activeStep === 2 && <ExplanationStepper questionData={questionData} setQuestionData={setQuestionData} />}
           <Stack flexDirection="row" sx={{ marginTop: "auto", gap: "20px" }}>
             {activeStep > 0 && (
               <Button
