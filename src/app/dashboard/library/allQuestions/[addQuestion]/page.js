@@ -1,7 +1,7 @@
+"use client";
+import { useState } from "react";
 import Header from "@/src/components/Header/Header";
-import MarkdownEditor from "@/src/components/MarkdownEditor/MarkdownEditor";
-import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
-import { East } from "@mui/icons-material";
+import { East, SaveAlt, West } from "@mui/icons-material";
 import {
   Button,
   Stack,
@@ -10,9 +10,59 @@ import {
   StepLabel,
   Stepper,
 } from "@mui/material";
+import BasicStepper from "./Components/BasicStepper";
+import AdditionalStepper from "./Components/AdditionalStepper";
+import ExplanationStepper from "./Components/ExplanationStepper";
+import { apiFetch } from "@/src/lib/apiFetch";
+import QuestionCard from "@/src/components/CreateExam/Components/QuestionCard";
 
 export default function AddQuestion() {
-  const steps = ["Basic Info", "Additional Info", "Explanation"];
+  const steps = ["Basic Info", "Additional Info", "Explanation", "Preview"];
+  const [activeStep, setActiveStep] = useState(0);
+  const [questionData, setQuestionData] = useState({
+    type:"",
+    subject:"",
+    level:"",
+    content:"",
+    options:[],
+    answer:"",
+  });
+
+  const [submittedQuestion,setSubmittedQuestion] = useState(null);
+
+  const handleNext = () => {
+    if (activeStep < steps.length - 1) {
+      setActiveStep((prevStep) => prevStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (activeStep > 0) {
+      setActiveStep((prevStep) => prevStep - 1);
+    }
+  };
+
+  const handleSave = async () => {
+    try{
+      const data = await apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/add`,{
+        method:"POST",
+        headers:{"Content-Type": "application/json"},
+        body:JSON.stringify(questionData),
+      });
+      console.log(questionData);
+      
+      if(data.success) {
+        setSubmittedQuestion(questionData);
+        
+      }
+      else{
+        console.error("Failed");
+        
+      }
+    }catch(error){
+      console.error("Catch error");
+    }
+  }
   return (
     <Stack padding="20px" gap="20px">
       <Header title="Back" back />
@@ -23,24 +73,24 @@ export default function AddQuestion() {
             border: "1px solid var(--border-color)",
             borderRadius: "10px",
             backgroundColor: "var(--white)",
-            minHeight: "100vh",
-            width: "600px",
+            minHeight: "60vh",
+            width: "650px",
             padding: "20px",
             gap: "20px",
           }}
         >
           <Stack sx={{ width: "100%" }}>
             <Stepper
-              activeStep={1}
+              activeStep={activeStep}
               alternativeLabel
               connector={
                 <StepConnector
                   sx={{
                     "& .MuiStepConnector-line": {
                       borderColor: "var(--primary-color)",
-                      borderWidth: 8,
+                      borderWidth: 7,
                       borderRadius: "50px",
-                      // maxWidth: "100px",
+                      margin: "0px 10px",
                     },
                   }}
                 />
@@ -48,78 +98,86 @@ export default function AddQuestion() {
             >
               {steps.map((label) => (
                 <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
+                  <StepLabel
+                    sx={{
+                      "& .MuiStepIcon-root": {
+                        color: "var(--text4)",
+                        width: "30px",
+                        height: "30px",
+                      },
+                      "& .Mui-active .MuiStepIcon-root": {
+                        color: "var(--primary-color)",
+                      },
+                      "& .Mui-completed .MuiStepIcon-root": {
+                        color: "var(--primary-color)",
+                      },
+                    }}
+                  >
+                    {label}
+                  </StepLabel>
                 </Step>
               ))}
             </Stepper>
+
+            <hr
+              style={{
+                border: "1px solid var(--border-color)",
+                marginTop: "25px",
+              }}
+            />
           </Stack>
-          <hr style={{ border: "1px solid var(--border-color)" }} />
-          <StyledSelect title="Question type" />
-          <StyledSelect title="Subject" />
-          <Stack
-            flexDirection="row"
-            width="100%"
-            gap="20px"
-            justifyContent="space-between"
-          >
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "var(--border-color)",
-                textTransform: "none",
-                color: "var(--text3)",
-                fontFamily: "Lato",
-                fontSize: "14px",
-                fontWeight: "700",
-                width: "170px",
-              }}
-            >
-              Easy
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "var(--border-color)",
-                textTransform: "none",
-                color: "var(--text3)",
-                fontFamily: "Lato",
-                fontSize: "14px",
-                fontWeight: "700",
-                width: "170px",
-              }}
-            >
-              Medium
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "var(--border-color)",
-                textTransform: "none",
-                color: "var(--text3)",
-                fontFamily: "Lato",
-                fontSize: "14px",
-                fontWeight: "700",
-                width: "170px",
-              }}
-            >
-              Hard
-            </Button>
+
+          {activeStep === 0 && <BasicStepper questionData={questionData} setQuestionData={setQuestionData} />}
+          {activeStep === 1 && <AdditionalStepper questionData={questionData} setQuestionData={setQuestionData} />}
+          {activeStep === 2 && <ExplanationStepper questionData={questionData} setQuestionData={setQuestionData} />}
+          <Stack flexDirection="row" sx={{ marginTop: "auto", gap: "20px" }}>
+            {activeStep > 0 && (
+              <Button
+                variant="text"
+                startIcon={<West />}
+                onClick={handleBack}
+                sx={{
+                  textTransform: "none",
+                  width: "100px",
+                  color: "var(--primary-color)",
+                }}
+              >
+                Previous
+              </Button>
+            )}
+
+            {activeStep < steps.length - 1 ? (
+              <Button
+                variant="text"
+                endIcon={<East />}
+                sx={{
+                  textTransform: "none",
+                  width: "100px",
+                  color: "var(--primary-color)",
+                }}
+                onClick={handleNext}
+              >
+                Next
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                endIcon={<SaveAlt />}
+                onClick={handleSave}
+                sx={{
+                  textTransform: "none",
+                  width: "100px",
+                  backgroundColor: "var(--primary-color)",
+                }}
+                disableElevation
+              >
+                Save
+              </Button>
+            )}
           </Stack>
-          <MarkdownEditor />
-          <Button
-            variant="text"
-            endIcon={<East />}
-            sx={{
-              marginTop: "auto",
-              textTransform: "none",
-              width: "100px",
-              color: "var(--primary-color)",
-            }}
-          >
-            Next
-          </Button>
         </Stack>
       </Stack>
+      {submittedQuestion && <QuestionCard data={submittedQuestion} />}
     </Stack>
   );
 }

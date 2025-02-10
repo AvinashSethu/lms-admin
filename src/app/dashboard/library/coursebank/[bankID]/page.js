@@ -29,6 +29,9 @@ export default function CourseBankId() {
   const [isDialogFileOpen, setIsDialogFileOPen] = useState(false);
   const [isDialogVideoOpen, setIsDialogVideoOPen] = useState(false);
   const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedResourceID, setSelectedResourceID] = useState(null);
+  const [selectedResourceName, setSelectedResourceName] = useState(null);
 
   useEffect(() => {
     fetchCourse();
@@ -85,7 +88,9 @@ export default function CourseBankId() {
     setIsDialogVideoOPen(false);
   };
 
-  const dialogOpenDelete = () => {
+  const dialogOpenDelete = (resourceID, resourceName) => {
+    setSelectedResourceID(resourceID);
+    setSelectedResourceName(resourceName);
     setIsDialogDeleteOpen(true);
   };
   const dialogCloseDelete = () => {
@@ -185,16 +190,16 @@ export default function CourseBankId() {
                 <Divider key="2" />,
                 <MenuItem
                   key="two"
-                  // onClick={() => {
-                  //   handleDelete(item.resourceID, bankID);
-                  // }}
-                  onClick={dialogOpenDelete}
+                  onClick={() => {
+                    dialogOpenDelete(item.resourceID, item.name);
+                  }}
                   sx={{
                     gap: "10px",
                     color: "red",
                     padding: "5px 12px",
                     fontSize: "13px",
                   }}
+                  name={item.name}
                   disableRipple
                 >
                   <Delete fontSize="small" sx={{ fontSize: "16px" }} /> Delete
@@ -204,14 +209,52 @@ export default function CourseBankId() {
             />
           ))
         ) : (
-          //  [
-          //     ...Array(3).map((_, index) => (
-          //       <SecondaryCardSkeleton key={index} />
-          //     )),
-          //   ]
-          <NoDataFound info="No Files or Videos created" />
+          <NoDataFound info="No Resources are created yet" />
         )}
-        <DeleteDialogBox isOpen={isDialogDeleteOpen} onClose={dialogCloseDelete} />
+        <DeleteDialogBox
+          isOpen={isDialogDeleteOpen}
+          onClose={dialogCloseDelete}
+          name={selectedResourceName}
+          actionButton={
+            <Stack
+              flexDirection="row"
+              justifyContent="center"
+              sx={{ gap: "20px", width: "100%" }}
+            >
+              <Button
+                variant="contained"
+                onClick={() => {
+                  handleDelete(selectedResourceID, bankID);
+                  dialogCloseDelete();
+                }}
+                sx={{
+                  textTransform: "none",
+                  backgroundColor: "red",
+                  borderRadius: "5px",
+                  width: "130px",
+                }}
+                disableElevation
+              >
+                Delete
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  textTransform: "none",
+                  borderRadius: "5px",
+                  backgroundColor: "white",
+                  color: "var(--text2)",
+                  border: "1px solid var(--border-color)",
+                  width: "130px",
+                }}
+                onClick={dialogCloseDelete}
+                disableElevation
+              >
+                Cancel
+              </Button>
+            </Stack>
+          }
+        />
       </Stack>
     </Stack>
   );

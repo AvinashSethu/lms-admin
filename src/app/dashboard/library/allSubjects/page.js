@@ -6,7 +6,7 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, Close, InsertDriveFile } from "@mui/icons-material";
+import { Add, Close, East, InsertDriveFile } from "@mui/icons-material";
 import { Button, DialogContent, IconButton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -82,10 +82,7 @@ export default function AllSubjects() {
       />
       <DialogBox
         isOpen={isDialogOpen}
-        onClose={dialogClose}
         title="Add Subject"
-        actionText="Add Subject"
-        onClick={OnSubjectCreate}
         icon={
           <IconButton
             onClick={dialogClose}
@@ -93,6 +90,16 @@ export default function AllSubjects() {
           >
             <Close sx={{ color: "var(--text2)" }} />
           </IconButton>
+        }
+        actionButton={
+          <Button
+            variant="text"
+            endIcon={<East />}
+            onClick={OnSubjectCreate}
+            sx={{ textTransform: "none", color: "var(--primary-color)" }}
+          >
+            Create
+          </Button>
         }
       >
         <DialogContent>
