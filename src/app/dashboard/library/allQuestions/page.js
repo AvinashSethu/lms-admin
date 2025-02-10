@@ -3,14 +3,28 @@ import QuestionCard from "@/src/components/CreateExam/Components/QuestionCard";
 import FilterSideNav from "@/src/components/FilterSideNav/FilterSideNav";
 import Header from "@/src/components/Header/Header";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
+import { apiFetch } from "@/src/lib/apiFetch";
 import { Add, FilterAlt } from "@mui/icons-material";
 import { Button, Pagination, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AllQuestions() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [questionList, setQuestionList] = useState([]);
+
+  useEffect(() => {
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/get-all`).then(
+      (data) => {
+        if (data.success) {
+          setQuestionList(data.data);
+        } else {
+          setQuestionList([]);
+        }
+      }
+    );
+  }, []);
   const filterOpen = () => {
     setIsOpen(!isOpen);
   };
@@ -55,7 +69,7 @@ export default function AllQuestions() {
           sx={{
             backgroundColor: "var(--primary-color)",
             textTransform: "none",
-            borderRadius: "4px"
+            borderRadius: "4px",
           }}
           disableElevation
         >
@@ -69,14 +83,21 @@ export default function AllQuestions() {
           select_3="Sort Marks"
         />
       </Stack>
-      <QuestionCard
-        questionNumber="Q1"
-        questionType="MCQ"
-        Subject="Numerical Ability"
-        question="What is the difference in the place value of 5 in the numeral 754853?"
-        preview="Preview"
-      />
-      
+      {questionList.length > 0 ? (
+  questionList.map((item, index) => (
+    <QuestionCard
+      key={index}
+      questionNumber={`Q${index + 1}`}
+      questionType={item.type || "MCQ"}
+      Subject={item.subjectTitle || "Unknown"}
+      question={item.title || "No question available"}
+      preview="Preview"
+    />
+  ))
+) : (
+  <Typography>No questions found.</Typography>
+)}
+
       <Stack
         flexDirection="row"
         justifyContent="center"
