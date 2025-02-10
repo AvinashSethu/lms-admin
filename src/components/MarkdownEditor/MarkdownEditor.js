@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import MDEditor, { commands } from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
 import katex from "katex";
@@ -51,8 +51,9 @@ export default function MarkdownEditor({ value,onChange}) {
     <div
       className="container"
       style={{ position: "relative", width: "560px", height: "400px" }}
+      data-color-mode="light"
     >
-      {/* {!value && (
+      {/* {!pla && (
         <div
           style={{
             position: "absolute",

@@ -61,19 +61,17 @@ export default function AddQuestion() {
 
       if (data.success) {
         setSubmittedQuestion(data);
-        setQuestionData(
-          { 
-            subjectID: "",
-            question: {
-              title: "",
-              difficulty: "",
-              type: "",
-              options: [{ title: "", isCorrect: false, weightage: 0 }],
-              correctAnswers: {},
-              solution: "",
-            },
-          }
-        )
+        setQuestionData({
+          subjectID: "",
+          question: {
+            title: "",
+            difficulty: "",
+            type: "",
+            options: [{ title: "", isCorrect: false, weightage: 0 }],
+            correctAnswers: {},
+            solution: "",
+          },
+        });
         console.log(data);
       } else {
         console.error("Failed");
@@ -109,12 +107,14 @@ export default function AddQuestion() {
                       borderWidth: 7,
                       borderRadius: "50px",
                       margin: "0px 10px",
-                      borderColor: "var(--text4)",
-                      "& .Mui-completed": {
-                      borderColor: "red !important", 
+                      borderColor: "var(--primary-color-acc-2)",
                     },
+                    "&.Mui-active .MuiStepConnector-line": {
+                      borderColor: "var(--primary-color) !important",
                     },
-                    
+                    "&.Mui-completed .MuiStepConnector-line": {
+                      borderColor: "var(--primary-color) !important",
+                    },
                   }}
                 />
               }
@@ -124,7 +124,7 @@ export default function AddQuestion() {
                   <StepLabel
                     sx={{
                       "& .MuiStepIcon-root": {
-                        color: "var(--text4)",
+                        color: "var(--primary-color-acc-1)",
                         width: "30px",
                         height: "30px",
                       },

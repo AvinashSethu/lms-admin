@@ -76,14 +76,12 @@ const NavComp = ({
   // const isChildActive = list?.some((item) => pathname === item.href);
   const isChildActive = list?.some((item) => pathname.startsWith(item.href));
 
-
   const toggleLibrary = () => {
     setIsNavOpen((prev) => {
       !prev && sideNavOpen && sideNavOpen();
       return !prev;
     });
   };
-  
 
   useEffect(() => {
     isSideNavOpen && setIsNavOpen(false);
@@ -99,13 +97,15 @@ const NavComp = ({
             padding: "10px 20px",
             cursor: "pointer",
             alignItems: !isSideNavOpen ? "" : "center",
-            backgroundColor:
-              isParentActive 
-                ? "var(--primary-color-acc-2)"
-                : "transparent",
+            backgroundColor: isParentActive
+              ? "var(--primary-color-acc-2)"
+              : "transparent",
             borderRadius: "20px",
             "&:hover": {
-              backgroundColor: "var(--primary-color-acc-2)",
+              backgroundColor:
+                list && isNavOpen
+                  ? "transparent"
+                  : "var(--primary-color-acc-2)",
             },
           }}
         >
@@ -167,14 +167,13 @@ const NavComp = ({
                         whiteSpace: "nowrap",
                         borderRadius: "20px",
                         height: "28px",
-                        paddingTop:"4px",
+                        paddingTop: "4px",
                         paddingLeft: "15px",
-                        backgroundColor:
-                          pathname.startsWith( item.href)
-                            ? "var(--primary-color-acc-2)"
-                            : "transparent",
+                        backgroundColor: pathname.startsWith(item.href)
+                          ? "var(--primary-color-acc-2)"
+                          : "transparent",
                         "&:hover": {
-                          backgroundColor: "var(--library-expand)",
+                          backgroundColor: "var(--primary-color-acc-2)",
                         },
                       }}
                     >

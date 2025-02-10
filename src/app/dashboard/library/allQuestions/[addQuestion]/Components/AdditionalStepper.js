@@ -60,33 +60,32 @@ export default function AdditionalStepper({ questionData, setQuestionData }) {
   return (
     <Stack gap="20px">
       {options.map((option, index) => (
-        <Stack
-          key={index}
-          alignItems="center"
-          justifyContent="center"
-          sx={{ width: "100%" }}
-        >
+        <Stack key={index} alignItems="center" justifyContent="center">
           <Stack
             flexDirection="row"
             alignItems="center"
-            justifyContent="space-between"
-            sx={{ width: "95%" }}
+            gap="25px"
+            sx={{ width: "100%" }}
           >
-            <Stack sx={{width:"100px"}}>{`Option ${index + 1}`}</Stack>
-            <Checkbox
-              checked={option.isCorrect}
-              onChange={(e) =>
-                handleOptionChange(index, "isCorrect", e.target.checked)
-              }
-              sx={{
-                color: "var(--sec-color)",
-                "&.Mui-checked": {
+            <Stack>{`Option ${index + 1}`}</Stack>
+            <Stack flexDirection="row" alignItems="center" gap="5px">
+              <Checkbox
+                checked={option.isCorrect}
+                onChange={(e) =>
+                  handleOptionChange(index, "isCorrect", e.target.checked)
+                }
+                sx={{
                   color: "var(--sec-color)",
-                },
-              }}
-            />
+                  padding: "0px",
+                  "&.Mui-checked": {
+                    color: "var(--sec-color)",
+                  },
+                }}
+                disableRipple
+              />
 
-            <Typography sx={{ width: "250px" }}>Correct answer</Typography>
+              <Typography>Correct answer</Typography>
+            </Stack>
             <Stack flexDirection="row" alignItems="center" gap="10px">
               <Typography>Weightage</Typography>
               <TextField
@@ -110,7 +109,10 @@ export default function AdditionalStepper({ questionData, setQuestionData }) {
                 }}
               />
             </Stack>
-            <IconButton onClick={() => removeOption(index)}>
+            <IconButton
+              onClick={() => removeOption(index)}
+              sx={{ marginLeft: "auto" }}
+            >
               <DeleteForever sx={{ color: "var(--sec-color)" }} />
             </IconButton>
           </Stack>

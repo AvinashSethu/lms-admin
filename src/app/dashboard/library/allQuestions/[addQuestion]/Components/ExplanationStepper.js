@@ -1,4 +1,4 @@
-import MarkdownEditor from "@/src/components/MarkdownEditor/MarkdownEditor";
+  import MarkdownEditor from "@/src/components/MarkdownEditor/MarkdownEditor";
 import { Stack } from "@mui/material";
 
 export default function ExplanationStepper({ questionData, setQuestionData }) {
@@ -14,6 +14,7 @@ export default function ExplanationStepper({ questionData, setQuestionData }) {
             question: { ...prev.question, solution: content }, // ✅ Update only `solution`
           }))
         }
+        placeholder="Write explanation here..."
       />
     </Stack>
   );

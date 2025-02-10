@@ -5,7 +5,7 @@ import { getCodeString } from "rehype-rewrite";
 
 export default function MDPreview({ value }) {
   return (
-    <div>
+    <div data-color-mode="light">
       <MarkdownPreview
         source={value}
         components={{

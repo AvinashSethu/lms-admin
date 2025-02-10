@@ -6,8 +6,8 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, Close, Folder } from "@mui/icons-material";
-import { Button, DialogContent, IconButton, Stack } from "@mui/material";
+import { Add, Close, Delete, Folder } from "@mui/icons-material";
+import { Button, DialogContent, IconButton, MenuItem, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -124,7 +124,7 @@ export default function Coursebank() {
                     {item.title}
                   </span>
                 }
-                options={menuOptions}
+                options={[<MenuItem key="one" sx={{fontSize:"14px"}} >Delete</MenuItem>]} 
                 cardWidth="350px"
               />
             ))

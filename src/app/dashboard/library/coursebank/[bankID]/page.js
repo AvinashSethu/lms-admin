@@ -12,6 +12,7 @@ import {
   Add,
   Delete,
   DriveFileRenameOutlineRounded,
+  FileDownloadRounded,
   InsertDriveFile,
   PlayArrowRounded,
   PlayCircle,
@@ -170,7 +171,7 @@ export default function CourseBankId() {
               }
               title={item.name}
               options={[
-                <MenuItem
+                item.type === "VIDEO" ? <MenuItem
                   key="one"
                   sx={{ gap: "10px", padding: "5px 12px", fontSize: "13px" }}
                 >
@@ -179,6 +180,15 @@ export default function CourseBankId() {
                     sx={{ fontSize: "16px" }}
                   />
                   Play
+                </MenuItem> : <MenuItem
+                  key="one"
+                  sx={{ gap: "10px", padding: "5px 12px", fontSize: "13px" }}
+                >
+                  <FileDownloadRounded
+                    fontSize="small"
+                    sx={{ fontSize: "16px" }}
+                  />
+                  Download
                 </MenuItem>,
                 <MenuItem
                   key="one"
