@@ -1,5 +1,5 @@
 import { Visibility } from "@mui/icons-material";
-import { Button, Checkbox, Chip, Fab, Stack, Typography } from "@mui/material";
+import { Button, Checkbox, Chip, Stack, Typography } from "@mui/material";
 
 export default function QuestionCard({
   questionNumber,

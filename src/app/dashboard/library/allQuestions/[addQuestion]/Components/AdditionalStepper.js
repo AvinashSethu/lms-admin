@@ -5,6 +5,7 @@ import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { Add, DeleteForever } from "@mui/icons-material";
 import {
   Button,
+  Checkbox,
   IconButton,
   Stack,
   Switch,
@@ -57,55 +58,87 @@ export default function AdditionalStepper({ questionData, setQuestionData }) {
   };
 
   return (
-    <Stack gap="20px" >
-      {(options ?? []).map((option, index) => (
-        <Stack key={index} alignItems="center" justifyContent="center" sx={{ width: "100%",borderTop:"1px solid var(--border-color)" }}>
+    <Stack gap="20px">
+      {options.map((option, index) => (
+        <Stack
+          key={index}
+          alignItems="center"
+          justifyContent="center"
+          sx={{ width: "100%" }}
+        >
           <Stack
             flexDirection="row"
             alignItems="center"
             justifyContent="space-between"
-            
+            sx={{ width: "95%" }}
           >
-            <TextField
-              size="small"
-              sx={{
-                "& fieldset": { border: "none" },
-              }}
-              label={`Option ${index + 1}`}
-              value={option.title}
-              onChange={(e) =>
-                handleOptionChange(index, "title", e.target.value)
-              }
-            />
-            <StyledSwitchButton
+            <Stack sx={{width:"100px"}}>{`Option ${index + 1}`}</Stack>
+            <Checkbox
               checked={option.isCorrect}
               onChange={(e) =>
                 handleOptionChange(index, "isCorrect", e.target.checked)
               }
+              sx={{
+                color: "var(--sec-color)",
+                "&.Mui-checked": {
+                  color: "var(--sec-color)",
+                },
+              }}
             />
-            <Typography sx={{ width: "250px" }}>Correct answer</Typography>
 
+            <Typography sx={{ width: "250px" }}>Correct answer</Typography>
+            <Stack flexDirection="row" alignItems="center" gap="10px">
+              <Typography>Weightage</Typography>
+              <TextField
+                size="small"
+                value={option.weightage}
+                onChange={(e) =>
+                  handleOptionChange(index, "weightage", Number(e.target.value))
+                }
+                sx={{
+                  width: "60px",
+                  "& .MuiInputBase-root": { height: "30px" },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: "var(--sec-color)",
+                      borderWidth: "1px",
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "var(--sec-color)",
+                    },
+                  },
+                }}
+              />
+            </Stack>
             <IconButton onClick={() => removeOption(index)}>
               <DeleteForever sx={{ color: "var(--sec-color)" }} />
             </IconButton>
           </Stack>
-          <MarkdownEditor />
+          <MarkdownEditor
+            questionData={questionData}
+            setQuestionData={setQuestionData}
+            value={option.title}
+            onChange={(content) => handleOptionChange(index, "title", content)}
+            placeholder="Type option"
+          />
         </Stack>
       ))}
-      <Button
-        variant="contained"
-        endIcon={<Add />}
-        onClick={addOption}
-        sx={{
-          width: "150px",
-          backgroundColor: "var(--sec-color)",
-          textTransform: "none",
-          fontSize: "16px",
-        }}
-        disableElevation
-      >
-        Add option
-      </Button>
+      <Stack width="100%" alignItems="center">
+        <Button
+          variant="contained"
+          endIcon={<Add />}
+          onClick={addOption}
+          sx={{
+            width: "150px",
+            backgroundColor: "var(--sec-color)",
+            textTransform: "none",
+            fontSize: "16px",
+          }}
+          disableElevation
+        >
+          Add option
+        </Button>
+      </Stack>
     </Stack>
   );
 }

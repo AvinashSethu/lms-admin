@@ -26,7 +26,7 @@ export default function AddQuestion() {
       title: "",
       difficulty: "",
       type: "",
-      options: [],
+      options: [{ title: "", isCorrect: false, weightage: 0 }],
       correctAnswers: {},
       solution: "",
     },
@@ -46,6 +46,8 @@ export default function AddQuestion() {
     }
   };
 
+  console.log(questionData);
+
   const handleSave = async () => {
     try {
       const data = await apiFetch(
@@ -56,13 +58,23 @@ export default function AddQuestion() {
           body: JSON.stringify(questionData),
         }
       );
-     
-      console.log(data);
-      
-      console.log(questionData);
 
-      if (data.data.success) {
-        setQuestionData(questionData);
+      if (data) {
+        setSubmittedQuestion(data);
+        setQuestionData(
+          { 
+            subjectID: "",
+            question: {
+              title: "",
+              difficulty: "",
+              type: "",
+              options: [{ title: "", isCorrect: false, weightage: 0 }],
+              correctAnswers: {},
+              solution: "",
+            },
+          }
+        )
+        console.log(data);
       } else {
         console.error("Failed");
       }
@@ -94,11 +106,15 @@ export default function AddQuestion() {
                 <StepConnector
                   sx={{
                     "& .MuiStepConnector-line": {
-                      borderColor: "var(--primary-color)",
                       borderWidth: 7,
                       borderRadius: "50px",
                       margin: "0px 10px",
+                      borderColor: "var(--text4)",
+                      "& .Mui-completed": {
+                      borderColor: "red !important", 
                     },
+                    },
+                    
                   }}
                 />
               }
@@ -205,7 +221,7 @@ export default function AddQuestion() {
           </Stack>
         </Stack>
       </Stack>
-      {submittedQuestion && <QuestionCard data={submittedQuestion} />}
+      {/* {submittedQuestion && <QuestionCard data={questionData} />} */}
     </Stack>
   );
 }
