@@ -2,31 +2,44 @@ import { dynamoDB } from "../awsAgent";
 import { randomUUID } from "crypto";
 
 export async function addQuestion({ question, subjectID }) {
-
   // Create keys using the specified format.
   const pKey = `QUESTION#${randomUUID()}`;
   const sKey = `QUESTIONS@${subjectID}`;
   const timestamp = Date.now();
 
-  const params = {
+  // Prepare the DynamoDB params object for get subject using only the pKey.
+  const getSubjectParams = {
     TableName: `${process.env.AWS_DB_NAME}content`,
-    Item: {
-      pKey, // e.g., "QUESTION#<UUID>"
-      sKey, // e.g., "QUESTIONS@<subjectID>"
-      title: question.title,
-      difficulty: question.difficulty,
-      type: question.type,
-      options: question.options, // Array of option objects (including weightage for MSQ/FIB)
-      correctAnswers: question.correctAnswers,
-      solution: question.solution,
-      createdAt: timestamp,
-      updatedAt: timestamp,
-      //user: question.user, // Metadata about the question creator
-      ...(question.type === "FIB" && { noOfBlanks: question.noOfBlanks }),
-    },
+    Key: { pKey: `SUBJECT#${subjectID}`, sKey: `SUBJECTS` },
   };
 
   try {
+    // Check if the subject exists.
+    const subject = await dynamoDB.get(getSubjectParams).promise();
+    if (!subject.Item) {
+      return {
+        success: false,
+        message: "Subject not found",
+      };
+    }
+    const params = {
+      TableName: `${process.env.AWS_DB_NAME}content`,
+      Item: {
+        pKey, // e.g., "QUESTION#<UUID>"
+        sKey, // e.g., "QUESTIONS@<subjectID>"
+        title: question.title,
+        subjectTitle: subject.Item.title,
+        difficulty: question.difficulty,
+        type: question.type,
+        options: question.options, // Array of option objects (including weightage for MSQ/FIB)
+        correctAnswers: question.correctAnswers,
+        solution: question.solution,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+        //user: question.user, // Metadata about the question creator
+        ...(question.type === "FIB" && { noOfBlanks: question.noOfBlanks }),
+      },
+    };
     await dynamoDB.put(params).promise();
     return {
       success: true,
