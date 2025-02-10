@@ -2,35 +2,15 @@
 import React from "react";
 import MDEditor, { commands } from "@uiw/react-md-editor";
 import rehypeSanitize from "rehype-sanitize";
-import MarkdownPreview from "@uiw/react-markdown-preview";
 import katex from "katex";
 import { getCodeString } from "rehype-rewrite";
 import "katex/dist/katex.css";
 import { InsertPhoto, Redo } from "@mui/icons-material";
 
-const mdKaTeX = `This is to display the 
-\$$c = \\pm\\sqrt{a^2 + b^2}$$\
- in one line
-
-\\\`KaTeX
-c = \\pm\\sqrt{a^2 + b^2}
-\\\`
-
-
-\\\`css
-.w-md-editor-text-input,
-.w-md-editor-text-pre > code,
-.w-md-editor-text-pre {
-  font-size: 2rem !important;
-  line-height: 2.5rem !important;
-}
-\\\`a
-`;
-
 const rehypePlugins = [rehypeSanitize];
 
-export default function MarkdownEditor({ onChange }) {
-  const [value, setValue] = React.useState("");
+export default function MarkdownEditor({ value,onChange}) {
+  // const [value, setValue] = React.useState("");
   const customCommands = [
     commands.bold,
     commands.italic,
@@ -68,7 +48,10 @@ export default function MarkdownEditor({ onChange }) {
   ];
 
   return (
-    <div className="container" style={{ position: "relative", width: "560px",height: "400px" }}>  
+    <div
+      className="container"
+      style={{ position: "relative", width: "560px", height: "400px" }}
+    >
       {/* {!value && (
         <div
           style={{
@@ -85,7 +68,7 @@ export default function MarkdownEditor({ onChange }) {
       )} */}
       <MDEditor
         value={value}
-        onChange={(val) => setValue(val)}
+        onChange={onChange}
         commands={customCommands}
         style={{
           width: "560px",
@@ -135,52 +118,8 @@ export default function MarkdownEditor({ onChange }) {
           },
         }}
       />
-      
-      {/* <MarkdownPreview
-        source={value}
-        style={{ padding: 16, margin: 20 }}
-        components={{
-          code: ({ children = [], className, ...props }) => {
-            if (
-              typeof children === "string" &&
-              /^\$\$(.*)\$\$/.test(children)
-            ) {
-              const html = katex.renderToString(
-                children.replace(/^\$\$(.*)\$\$/, "$1"),
-                {
-                  throwOnError: false,
-                }
-              );
-              return (
-                <code
-                  dangerouslySetInnerHTML={{ __html: html }}
-                  style={{ background: "transparent" }}
-                />
-              );
-            }
-            const code =
-              props.node && props.node.children
-                ? getCodeString(props.node.children)
-                : children;
-            if (
-              typeof code === "string" &&
-              typeof className === "string" &&
-              /^language-katex/.test(className.toLocaleLowerCase())
-            ) {
-              const html = katex.renderToString(code, {
-                throwOnError: false,
-              });
-              return (
-                <code
-                  style={{ fontSize: "150%" }}
-                  dangerouslySetInnerHTML={{ __html: html }}
-                />
-              );
-            }
-            return <code className={String(className)}>{children}</code>;
-          },
-        }}
-      /> */}
+
+  
     </div>
   );
 }

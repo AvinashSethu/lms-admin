@@ -8,7 +8,7 @@ import { Button, Pagination, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function AllQuestions() {
+export default function AllQuestions({questionData, setQuestionData}) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const filterOpen = () => {
@@ -76,27 +76,7 @@ export default function AllQuestions() {
         question="What is the difference in the place value of 5 in the numeral 754853?"
         preview="Preview"
       />
-      <QuestionCard
-        questionNumber="Q1"
-        questionType="MCQ"
-        Subject="Numerical Ability"
-        question="What is the difference in the place value of 5 in the numeral 754853?"
-        preview="Preview"
-      />
-      <QuestionCard
-        questionNumber="Q1"
-        questionType="MCQ"
-        Subject="Numerical Ability"
-        question="What is the difference in the place value of 5 in the numeral 754853?"
-        preview="Preview"
-      />
-      <QuestionCard
-        questionNumber="Q1"
-        questionType="MCQ"
-        Subject="Numerical Ability"
-        question="What is the difference in the place value of 5 in the numeral 754853?"
-        preview="Preview"
-      />
+      
       <Stack
         flexDirection="row"
         justifyContent="center"

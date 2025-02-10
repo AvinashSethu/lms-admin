@@ -41,8 +41,6 @@ export default function BasicStepper({ questionData, setQuestionData }) {
     ]);
   }, []);
 
-  // console.log(questionData);
-
   return (
     <Stack gap="25px">
       <StyledSelect
@@ -102,13 +100,17 @@ export default function BasicStepper({ questionData, setQuestionData }) {
       </Stack>
       <MarkdownEditor
         // placeholder="Type Preview"
-        value={questionData.question.title || ""}
-        onChange={(e) =>
-          setQuestionData((prev) => ({
-            ...prev,
-            question: { ...prev.question, title: e.target.value },
-          }))
-        }
+        // value={questionData.question.title || ""}
+        // onChange={(e) =>
+        //   setQuestionData((prev) => ({
+        //     ...prev,
+        //     question: { ...prev.question, title: e.target.value },
+        //   }))
+        // }
+        questionData={questionData}
+        setQuestionData={setQuestionData}
+        value={questionData.question.title}
+        onChange={(content) => setQuestionData((prev) => ({...prev, question: { ...prev.question, title: content }}))}
       />
     </Stack>
   );
