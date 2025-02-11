@@ -1,4 +1,4 @@
-import getAllQuestions from "@/src/util/questions/getQuestions";
+import getQuestions from "@/src/util/questions/getQuestions";
 
 export async function GET(request) {
   const url = new URL(request.url);
@@ -13,7 +13,7 @@ export async function GET(request) {
   console.log("subjectID", subjectID);
 
   try {
-    const result = await getAllQuestions({
+    const result = await getQuestions({
       type,
       difficulty,
       subjectID,
