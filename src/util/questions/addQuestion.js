@@ -28,6 +28,7 @@ export async function addQuestion({ question, subjectID }) {
         pKey, // e.g., "QUESTION#<UUID>"
         sKey, // e.g., "QUESTIONS@<subjectID>"
         title: question.title,
+        titleLower: question.title.toLowerCase(),
         subjectTitle: subject.Item.title,
         difficulty: question.difficulty,
         type: question.type,
