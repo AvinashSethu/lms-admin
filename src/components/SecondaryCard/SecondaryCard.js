@@ -1,10 +1,9 @@
 "use client";
-import { MoreVert, East, Delete } from "@mui/icons-material";
+import { MoreVert } from "@mui/icons-material";
 import {
   Card,
   IconButton,
   Menu,
-  MenuItem,
   Stack,
   Typography,
 } from "@mui/material";
@@ -28,6 +27,7 @@ export default function SecondaryCard({
   const menuClose = () => {
     setIsMenuOpen(null);
   };
+
   return (
     <Card
       sx={{
@@ -121,18 +121,6 @@ export default function SecondaryCard({
                 elevation={0}
               >
                 {options.map((option, index) => (
-                  // <MenuItem
-                  //   key={index}
-                  //   onClick={menuClose}
-                  //   sx={{
-                  //     color: "var(text4)",
-                  //     fontSize: "14px",
-                  //     fontFamily: "Lato",
-                  //   }}
-                  // >
-                    
-                  //   {option}
-                  // </MenuItem>
                   <Stack key={index} onClick={menuClose}>
                     {option}
                   </Stack>

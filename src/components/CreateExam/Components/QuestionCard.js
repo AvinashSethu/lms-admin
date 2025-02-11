@@ -1,5 +1,14 @@
+'use client';
 import { MoreVert, Visibility } from "@mui/icons-material";
-import { Checkbox, Chip, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Checkbox,
+  Chip,
+  IconButton,
+  Menu,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
 
 export default function QuestionCard({
   questionNumber,
@@ -8,9 +17,19 @@ export default function QuestionCard({
   question,
   preview,
   check,
+  options = [],
 }) {
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuOpen = (event) => {
+    setIsMenuOpen(event.currentTarget);
+  };
+  const menuClose = () => {
+    setIsMenuOpen(null);
+  };
+
   return (
-    <Stack sx={{ width: "100%" }} >
+    <Stack sx={{ width: "100%" }}>
       <Stack>
         <Stack
           flexDirection="row"
@@ -71,7 +90,7 @@ export default function QuestionCard({
             </Stack>
             <Typography>{question}</Typography>
           </Stack>
-          <Stack gap="10px">
+          <Stack gap="10px" flexDirection="row" marginLeft="auto"  alignItems="center">
             <Chip
               icon={<Visibility sx={{ fontSize: "small" }} />}
               label={preview}
@@ -84,9 +103,33 @@ export default function QuestionCard({
                 color: "var(--text3)",
               }}
             />
-            <IconButton sx={{ padding: "0px" }} disableRipple>
-              <MoreVert />
+            <IconButton sx={{ padding: "0px" }} onClick={menuOpen} disableRipple>
+              <MoreVert sx={{color:"var(--text3)"}} />
             </IconButton>
+            <Menu
+            anchorEl={isMenuOpen}
+            open={Boolean(isMenuOpen)}
+            onClose={menuClose}
+              disableScrollLock={true}
+              sx={{ "& .MuiList-root": { padding: "3px" } }}
+              slotProps={{
+                paper: {
+                  style: {
+                    border: "1px solid",
+                    borderColor: "var(--border-color)",
+                    borderRadius: "8px",
+                    padding: "0px",
+                  },
+                },
+              }}
+              elevation={0}
+            >
+              {options.map((option, index) => (
+                <Stack key={index} onClick={menuClose}>
+                  {option}
+                </Stack>
+              ))}
+            </Menu>
           </Stack>
         </Stack>
       </Stack>

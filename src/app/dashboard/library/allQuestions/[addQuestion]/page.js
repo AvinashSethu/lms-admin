@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "@/src/components/Header/Header";
 import { East, SaveAlt, West } from "@mui/icons-material";
 import {
@@ -32,10 +32,36 @@ export default function AddQuestion() {
       solution: "",
     },
   });
-
   const [submittedQuestion, setSubmittedQuestion] = useState(null);
+  const [required, setRequired] = useState({});
+  const [isValid, setIsValid] = useState(false);
+
+  useEffect(() => {
+    setIsValid(requiredFields());
+  }, [questionData, activeStep]);
+
+  const requiredFields = () => {
+    let required = {};
+    if (!questionData.question.title) {
+      required.title = "required";
+    }
+    if (!questionData.question.type) {
+      required.type = "required";
+    }
+    if (!questionData.subjectID) {
+      required.subjectID = "required";
+    }
+    if (!questionData.question.difficulty) {
+      required.difficulty = "required";
+    }
+    setRequired(required);
+    return Object.keys(required).length === 0;
+  };
 
   const handleNext = () => {
+    if (!requiredFields()) {
+      return;
+    }
     if (activeStep < steps.length - 1) {
       setActiveStep((prevStep) => prevStep + 1);
     }
@@ -98,13 +124,26 @@ export default function AddQuestion() {
         weightage: option.isCorrect ? 100 : 0,
       }));
     }
-    if(questionData.question.type === "MSQ" || questionData.question.type === "FIB") {
-      const totalWeightage = updateOptions.filter((option) => option.isCorrect).reduce((sum,option) => sum + option.weightage, 0);
-      if(totalWeightage > 100){
+    if (questionData.question.type === "MSQ") {
+      const totalWeightage = updateOptions
+        .filter((option) => option.isCorrect)
+        .reduce((sum, option) => sum + option.weightage, 0);
+      if (totalWeightage > 100) {
         alert("Total weightage of correct answers should not exceed 100");
         return;
       }
     }
+
+    if (questionData.question.type === "FIB") {
+      updateOptions = updateOptions.map((option) => ({
+        title: option.title || "",
+      }));
+
+      if (updateOptions.length === 0) {
+        updateOptions.push({ title: "", isCorrect: true, weightage: 100 });
+      }
+    }
+
     setQuestionData((prev) => ({
       ...prev,
       question: { ...prev.question, options: updateOptions },
@@ -193,6 +232,7 @@ export default function AddQuestion() {
               questionData={questionData}
               setQuestionData={setQuestionData}
               updateOptions={updateOptions}
+              questionType={questionData.question.type}
             />
           )}
           {activeStep === 2 && (
@@ -233,6 +273,7 @@ export default function AddQuestion() {
                   color: "var(--primary-color)",
                 }}
                 onClick={handleNext}
+                disabled={!isValid}
               >
                 Next
               </Button>

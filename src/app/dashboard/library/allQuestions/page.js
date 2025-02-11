@@ -1,13 +1,13 @@
 "use client";
 import QuestionCard from "@/src/components/CreateExam/Components/QuestionCard";
+import DeleteDialogBox from "@/src/components/DeleteDialogBox/DeleteDialogBox";
 import FilterSideNav from "@/src/components/FilterSideNav/FilterSideNav";
 import Header from "@/src/components/Header/Header";
 import QuestionCardSkeleton from "@/src/components/QuestionCardSkeleton/QuestionCardSkeleton";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
-import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, ExpandMore, FilterAlt } from "@mui/icons-material";
-import { Button, Pagination, Stack, Typography } from "@mui/material";
+import { Add, Delete, ExpandMore, FilterAlt } from "@mui/icons-material";
+import { Button, MenuItem, Pagination, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,9 +15,21 @@ export default function AllQuestions() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [questionList, setQuestionList] = useState([]);
+  const [isDialogDelete, setIsDialogDelete] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+
+  const dialogDeleteOpen = (id) => {
+    // console.log(id);
+
+    setSelectedQuestion({ id });
+    setIsDialogDelete(true);
+  };
+  const dialogDeleteClose = () => {
+    setIsDialogDelete(false);
+  };
 
   useEffect(() => {
-    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/get-all`).then(
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/get`).then(
       (data) => {
         if (data.success) {
           setQuestionList(data.data);
@@ -39,6 +51,28 @@ export default function AllQuestions() {
       return;
     }
     setIsOpen(open);
+  };
+
+  const handleDelete = async (id, subjectID) => {
+    try {
+      const data = await apiFetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/delete`,
+        {
+          method: "POST",
+          body: JSON.stringify({ id, subjectID }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      console.log(id);
+      if (data) {
+        console.log(data);
+        setQuestionList([]);
+      } else {
+        console.error("Error deleting question:");
+      }
+    } catch (error) {
+      console.error("Error deleting question:", error);
+    }
   };
 
   return (
@@ -107,12 +141,72 @@ export default function AllQuestions() {
               Subject={item.subjectTitle || "Unknown"}
               question={item.title || "No question available"}
               preview="Preview"
+              options={[
+                <MenuItem
+                  key={index}
+                  sx={{
+                    fontFamily: "Lato",
+                    fontSize: "12px",
+                    padding: "5px",
+                    gap: "5px",
+                    color: "var(--delete-color)",
+                  }}
+                  onClick={() => dialogDeleteOpen(item.id)}
+                >
+                  <Delete
+                    sx={{ color: "var(--delete-color)", fontSize: "16px" }}
+                  />
+                  Delete
+                </MenuItem>,
+              ]}
             />
           ))
         : [...Array(4)].map((item, index) => (
             <QuestionCardSkeleton key={index} questionCard />
           ))}
-
+      <DeleteDialogBox
+        isOpen={isDialogDelete}
+        onClose={dialogDeleteClose}
+        actionButton={
+          <Stack
+            flexDirection="row"
+            justifyContent="center"
+            sx={{ gap: "20px", width: "100%" }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => {
+                handleDelete(selectedQuestion.id, selectedQuestion.subjectID);
+                dialogDeleteClose();
+              }}
+              sx={{
+                textTransform: "none",
+                backgroundColor: "var(--delete-color)",
+                borderRadius: "5px",
+                width: "130px",
+              }}
+              disableElevation
+            >
+              Delete
+            </Button>
+            <Button
+              variant="contained"
+              onClick={dialogDeleteClose}
+              sx={{
+                textTransform: "none",
+                borderRadius: "5px",
+                backgroundColor: "white",
+                color: "var(--text2)",
+                border: "1px solid var(--border-color)",
+                width: "130px",
+              }}
+              disableElevation
+            >
+              Cancel
+            </Button>
+          </Stack>
+        }
+      ></DeleteDialogBox>
       <Stack
         flexDirection="row"
         justifyContent="center"

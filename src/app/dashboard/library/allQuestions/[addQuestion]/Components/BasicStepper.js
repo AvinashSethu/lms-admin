@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 export default function BasicStepper({ questionData, setQuestionData }) {
   const [questionType, setQuestionType] = useState([]);
   const [allSubjects, setAllSubjects] = useState([]);
-  const [required,setRequired] = useState({});
 
   const handleLevel = (selectedLevel) => {
     setQuestionData((prev) => ({
@@ -42,25 +41,6 @@ export default function BasicStepper({ questionData, setQuestionData }) {
     ]);
   }, []);
 
-  const requiredFields = () => {
-    let required = {};
-    if (!questionData.question.title) {
-      required.title = "required";
-    }
-    if (!questionData.question.type) {
-      required.type = "required";
-    }
-    if (!questionData.subjectID) {
-      required.subjectID = "required";
-    }
-    if (!questionData.question.difficulty) {
-      required.difficulty = "required";
-    }
-    setRequired(required);
-    return Object.keys(required).length === 0;
-  };
-
-
   return (
     <Stack gap="25px">
       <StyledSelect
@@ -75,9 +55,8 @@ export default function BasicStepper({ questionData, setQuestionData }) {
             question: { ...prev.question, type: e.target.value },
           }));
         }}
-        />
-        {required.type && <span style={{color: "red"}}>{required.type}</span>} 
-      
+      />
+
       <StyledSelect
         title="Subject"
         value={questionData.subjectID}

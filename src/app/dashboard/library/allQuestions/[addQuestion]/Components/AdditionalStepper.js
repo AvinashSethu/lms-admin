@@ -10,8 +10,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 
-export default function AdditionalStepper({ questionData, setQuestionData, updateOptions }) {
+export default function AdditionalStepper({
+  questionData,
+  setQuestionData,
+  updateOptions,
+  questionType,
+}) {
   const [options, setOptions] = useState(questionData?.question?.options || []);
 
   useEffect(() => {
@@ -22,16 +28,16 @@ export default function AdditionalStepper({ questionData, setQuestionData, updat
     let updatedOptions = options.map((opt, i) =>
       i === index ? { ...opt, [field]: value } : opt
     );
-    if(questionData.question.type === "MCQ" && field === "isCorrect") {
+    if (questionData.question.type === "MCQ" && field === "isCorrect") {
       updatedOptions = updatedOptions.map((opt, i) => ({
-       ...opt,
-        isCorrect: i === index ,
-       weightage: i === index ? 100 : 0,
+        ...opt,
+        isCorrect: i === index,
+        weightage: i === index ? 100 : 0,
       }));
     }
 
     setOptions(updatedOptions);
-    updateOptions(updatedOptions)
+    updateOptions(updatedOptions);
     updateQuestionData(updatedOptions);
   };
 
@@ -67,73 +73,135 @@ export default function AdditionalStepper({ questionData, setQuestionData, updat
   };
 
   return (
-    <Stack gap="20px">
-      {options.map((option, index) => (
-        <Stack key={index} alignItems="center" justifyContent="center">
-          <Stack
-            flexDirection="row"
-            alignItems="center"
-            gap="25px"
-            sx={{ width: "100%" }}
-          >
-            <Stack>{`Option ${index + 1}`}</Stack>
-            <Stack flexDirection="row" alignItems="center" gap="5px">
-              <Checkbox
-                checked={option.isCorrect}
-                onChange={(e) =>
-                  handleOptionChange(index, "isCorrect", e.target.checked)
-                }
-                sx={{
-                  color: "var(--sec-color)",
-                  padding: "0px",
-                  "&.Mui-checked": {
-                    color: "var(--sec-color)",
-                  },
-                }}
-                disableRipple
-              />
-
-              <Typography>Correct answer</Typography>
-            </Stack>
-            <Stack flexDirection="row" alignItems="center" gap="10px">
-              <Typography>Weightage</Typography>
-              <TextField
-                size="small"
-                value={option.weightage}
-                onChange={(e) =>
-                  handleOptionChange(index, "weightage", Number(e.target.value))
-                }
-                sx={{
-                  width: "60px",
-                  "& .MuiInputBase-root": { height: "30px" },
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "var(--sec-color)",
-                      borderWidth: "1px",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "var(--sec-color)",
-                    },
-                  },
-                }}
-              />
-            </Stack>
-            <IconButton
-              onClick={() => removeOption(index)}
-              sx={{ marginLeft: "auto" }}
+    <Stack gap="20px" width="90%">
+      {questionType === "FIB"
+        ? options.map((option, index) => (
+            <Stack
+              key={index}
+              alignItems="center"
+              justifyContent="center"
+              sx={{
+                border: "1px solid var(--border-color)",
+                padding: "10px",
+                borderRadius: "5px",
+              }}
             >
-              <DeleteForever sx={{ color: "var(--sec-color)" }} />
-            </IconButton>
-          </Stack>
-          <MarkdownEditor
-            questionData={questionData}
-            setQuestionData={setQuestionData}
-            value={option.title}
-            onChange={(content) => handleOptionChange(index, "title", content)}
-            placeholder="Type option"
-          />
-        </Stack>
-      ))}
+              <Stack
+                flexDirection="row"
+                alignItems="center"
+                gap="25px"
+                sx={{ width: "100%" }}
+              >
+                <Stack>{`Blank ${index + 1}`}</Stack>
+
+                <Stack flexDirection="row" alignItems="center" gap="10px">
+                  <Typography>Weightage</Typography>
+                  <TextField
+                    size="small"
+                    value={option.weightage}
+                    onChange={(e) =>
+                      handleOptionChange(
+                        index,
+                        "weightage",
+                        Number(e.target.value)
+                      )
+                    }
+                    sx={{
+                      width: "60px",
+                      "& .MuiInputBase-root": { height: "30px" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          borderColor: "var(--sec-color)",
+                          borderWidth: "1px",
+                        },
+                        "&:hover fieldset": {
+                          borderColor: "var(--sec-color)",
+                        },
+                      },
+                    }}
+                  />
+                </Stack>
+                <IconButton
+                  onClick={() => removeOption(index)}
+                  sx={{ marginLeft: "auto" }}
+                >
+                  <DeleteForever sx={{ color: "var(--sec-color)" }} />
+                </IconButton>
+              </Stack>
+              <StyledTextField placeholder="Type here..." />
+            </Stack>
+          ))
+        : options.map((option, index) => (
+            <Stack key={index} alignItems="center" justifyContent="center">
+              <Stack
+                flexDirection="row"
+                alignItems="center"
+                gap="25px"
+                sx={{ width: "100%" }}
+              >
+                <Stack>{`Option ${index + 1}`}</Stack>
+                <Stack flexDirection="row" alignItems="center" gap="5px">
+                  <Checkbox
+                    checked={option.isCorrect}
+                    onChange={(e) =>
+                      handleOptionChange(index, "isCorrect", e.target.checked)
+                    }
+                    sx={{
+                      color: "var(--sec-color)",
+                      padding: "0px",
+                      "&.Mui-checked": {
+                        color: "var(--sec-color)",
+                      },
+                    }}
+                    disableRipple
+                  />
+                  <Typography>Correct answer</Typography>
+                </Stack>
+                <Stack flexDirection="row" alignItems="center" gap="10px">
+                  <Typography>Weightage</Typography>
+                  <TextField
+                    size="small"
+                    value={option.weightage}
+                    onChange={(e) =>
+                      handleOptionChange(
+                        index,
+                        "weightage",
+                        Number(e.target.value)
+                      )
+                    }
+                    sx={{
+                      width: "60px",
+                      "& .MuiInputBase-root": { height: "30px" },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          borderColor: "var(--sec-color)",
+                          borderWidth: "1px",
+                        },
+                        "&:hover fieldset": {
+                          borderColor: "var(--sec-color)",
+                        },
+                      },
+                    }}
+                  />
+                </Stack>
+                <IconButton
+                  onClick={() => removeOption(index)}
+                  sx={{ marginLeft: "auto" }}
+                >
+                  <DeleteForever sx={{ color: "var(--sec-color)" }} />
+                </IconButton>
+              </Stack>
+              <MarkdownEditor
+                questionData={questionData}
+                setQuestionData={setQuestionData}
+                value={option.title}
+                onChange={(content) =>
+                  handleOptionChange(index, "title", content)
+                }
+                placeholder="Type option"
+              />
+            </Stack>
+          ))}
       <Stack width="100%" alignItems="center">
         <Button
           variant="contained"
@@ -147,7 +215,7 @@ export default function AdditionalStepper({ questionData, setQuestionData, updat
           }}
           disableElevation
         >
-          Add option
+          {questionType === "FIB" ? "Add Blank" : " Add option"}
         </Button>
       </Stack>
     </Stack>
