@@ -18,10 +18,8 @@ export default function AllQuestions() {
   const [isDialogDelete, setIsDialogDelete] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-  const dialogDeleteOpen = (id) => {
-    // console.log(id);
-
-    setSelectedQuestion({ id });
+  const dialogDeleteOpen = (id,subjectID) => {
+    setSelectedQuestion({ id,subjectID });
     setIsDialogDelete(true);
   };
   const dialogDeleteClose = () => {
@@ -63,10 +61,11 @@ export default function AllQuestions() {
           headers: { "Content-Type": "application/json" },
         }
       );
-      console.log(id);
       if (data) {
-        console.log(data);
-        setQuestionList([]);
+        // setQuestionList([]);
+        setQuestionList(data.data);
+        console.log(id,subjectID);
+        
       } else {
         console.error("Error deleting question:");
       }
@@ -151,7 +150,7 @@ export default function AllQuestions() {
                     gap: "5px",
                     color: "var(--delete-color)",
                   }}
-                  onClick={() => dialogDeleteOpen(item.id)}
+                  onClick={() => dialogDeleteOpen(item.id,item.subjectID)}
                 >
                   <Delete
                     sx={{ color: "var(--delete-color)", fontSize: "16px" }}
