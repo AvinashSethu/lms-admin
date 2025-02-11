@@ -2,9 +2,11 @@
 import QuestionCard from "@/src/components/CreateExam/Components/QuestionCard";
 import FilterSideNav from "@/src/components/FilterSideNav/FilterSideNav";
 import Header from "@/src/components/Header/Header";
+import QuestionCardSkeleton from "@/src/components/QuestionCardSkeleton/QuestionCardSkeleton";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
+import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, FilterAlt } from "@mui/icons-material";
+import { Add, ExpandMore, FilterAlt } from "@mui/icons-material";
 import { Button, Pagination, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -25,6 +27,7 @@ export default function AllQuestions() {
       }
     );
   }, []);
+
   const filterOpen = () => {
     setIsOpen(!isOpen);
   };
@@ -44,7 +47,19 @@ export default function AllQuestions() {
         title="Questions"
         button={[
           <Button
-            key="Filter"
+            key="Import"
+            variant="contained"
+            endIcon={<ExpandMore />}
+            sx={{
+              backgroundColor: "var(--primary-color)",
+              textTransform: "none",
+            }}
+            disableElevation
+          >
+            Import
+          </Button>,
+          <Button
+            key="Question"
             variant="contained"
             startIcon={<Add />}
             onClick={() => {
@@ -83,20 +98,20 @@ export default function AllQuestions() {
           select_3="Sort Marks"
         />
       </Stack>
-      {questionList.length > 0 ? (
-  questionList.map((item, index) => (
-    <QuestionCard
-      key={index}
-      questionNumber={`Q${index + 1}`}
-      questionType={item.type || "MCQ"}
-      Subject={item.subjectTitle || "Unknown"}
-      question={item.title || "No question available"}
-      preview="Preview"
-    />
-  ))
-) : (
-  <Typography>No questions found.</Typography>
-)}
+      {questionList.length > 0
+        ? questionList.map((item, index) => (
+            <QuestionCard
+              key={index}
+              questionNumber={`Q${index + 1}`}
+              questionType={item.type || "MCQ"}
+              Subject={item.subjectTitle || "Unknown"}
+              question={item.title || "No question available"}
+              preview="Preview"
+            />
+          ))
+        : [...Array(4)].map((item, index) => (
+            <QuestionCardSkeleton key={index} questionCard />
+          ))}
 
       <Stack
         flexDirection="row"

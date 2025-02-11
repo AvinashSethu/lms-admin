@@ -1,10 +1,10 @@
 import { Card, Stack, Skeleton } from "@mui/material";
 
-export default function SecondaryCardSkeleton() {
+export default function SecondaryCardSkeleton({ questionCard }) {
   return (
     <Card
       sx={{
-        width: "350px",
+        width: questionCard ? "100%" : "350px",
         height: "80px",
         padding: "10px",
         borderRadius: "10px",
@@ -20,6 +20,7 @@ export default function SecondaryCardSkeleton() {
             width: "60px",
             height: "60px",
             borderRadius: "10px",
+            bgcolor: "var(--sec-color-acc-1)",
           }}
         />
         <Skeleton variant="text" width={60} />

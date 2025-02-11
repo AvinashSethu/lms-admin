@@ -163,7 +163,7 @@ const NavComp = ({
                         fontFamily: "Lato",
                         fontSize: "14px",
                         fontWeight: "700",
-                        color: "var(--text4)",
+                        color: "var(--primary-color)",
                         whiteSpace: "nowrap",
                         borderRadius: "20px",
                         height: "28px",

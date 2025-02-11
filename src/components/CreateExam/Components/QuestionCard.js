@@ -1,5 +1,5 @@
-import { Visibility } from "@mui/icons-material";
-import { Button, Checkbox, Chip, Stack, Typography } from "@mui/material";
+import { MoreVert, Visibility } from "@mui/icons-material";
+import { Checkbox, Chip, IconButton, Stack, Typography } from "@mui/material";
 
 export default function QuestionCard({
   questionNumber,
@@ -7,68 +7,71 @@ export default function QuestionCard({
   Subject,
   question,
   preview,
-  check
+  check,
 }) {
   return (
-    <Stack sx={{ width: "100%" }}>
-      <Stack
-        flexDirection="row"
-        alignItems="center"
-        sx={{
-          padding: "15px",
-          border: "1px solid var(--border-color)",
-          borderRadius: "10px",
-          height: "100px",
-          width: "100%",
-          gap: "15px",
-          backgroundColor:"var(--white)"
-        }}
-      >
-        {check && <Checkbox
+    <Stack sx={{ width: "100%" }} >
+      <Stack>
+        <Stack
+          flexDirection="row"
+          alignItems="center"
           sx={{
-            color: "var(--sec-color)",
-            "&.Mui-checked": {
-              color: "var(--sec-color)",
-            },
-            "&.MuiCheckbox-root": {
-              padding: "0px",
-            },
+            padding: "15px",
+            border: "1px solid var(--border-color)",
+            borderRadius: "10px",
+            height: "100px",
+            width: "100%",
+            gap: "15px",
+            backgroundColor: "var(--white)",
           }}
-        />}
-        <Stack width="100%" gap="8px">
-          <Stack flexDirection="row" justifyContent="space-between">
-            <Stack flexDirection="row" alignItems="center" gap="10px">
-              <Typography>{questionNumber}</Typography>
-              <Button
-                variant="contained"
-                sx={{
-                  height: "20px",
-                  backgroundColor: "var(--sec-color-acc-1)",
+        >
+          {check && (
+            <Checkbox
+              sx={{
+                color: "var(--sec-color)",
+                "&.Mui-checked": {
                   color: "var(--sec-color)",
-                  fontSize: "10px",
-                  fontFamily: "Lato",
-                  fontWeight: "700",
-                }}
-                disableElevation
-              >
-                {questionType}
-              </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  height: "20px",
-                  backgroundColor: "var(--primary-color-acc-2)",
-                  color: "var(--primary-color)",
-                  fontSize: "10px",
-                  fontFamily: "Lato",
-                  fontWeight: "700",
-                }}
-                disableElevation
-              >
-                {Subject}
-              </Button>
+                },
+                "&.MuiCheckbox-root": {
+                  padding: "0px",
+                },
+              }}
+            />
+          )}
+          <Stack width="100%" gap="8px">
+            <Stack flexDirection="row" justifyContent="space-between">
+              <Stack flexDirection="row" alignItems="center" gap="10px">
+                <Typography>{questionNumber}</Typography>
+                <Chip
+                  label={questionType}
+                  sx={{
+                    fontSize: "12px",
+                    fontFamily: "Lato",
+                    fontWeight: "700",
+                    width: "70px",
+                    height: "22px",
+                    backgroundColor: "var(--sec-color-acc-1)",
+                    color: "var(--sec-color)",
+                    borderRadius: "4px",
+                  }}
+                />
+                <Chip
+                  label={Subject}
+                  sx={{
+                    fontSize: "12px",
+                    fontFamily: "Lato",
+                    fontWeight: "700",
+                    height: "22px",
+                    backgroundColor: "var(--primary-color-acc-2)",
+                    color: "var(--primary-color)",
+                    borderRadius: "4px",
+                  }}
+                />
+              </Stack>
             </Stack>
-
+            <Typography>{question}</Typography>
+          </Stack>
+          <Stack gap="10px">
             <Chip
               icon={<Visibility sx={{ fontSize: "small" }} />}
               label={preview}
@@ -81,8 +84,10 @@ export default function QuestionCard({
                 color: "var(--text3)",
               }}
             />
+            <IconButton sx={{ padding: "0px" }} disableRipple>
+              <MoreVert />
+            </IconButton>
           </Stack>
-          <Typography>{question}</Typography>
         </Stack>
       </Stack>
     </Stack>

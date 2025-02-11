@@ -14,10 +14,11 @@ import BasicStepper from "./Components/BasicStepper";
 import AdditionalStepper from "./Components/AdditionalStepper";
 import ExplanationStepper from "./Components/ExplanationStepper";
 import { apiFetch } from "@/src/lib/apiFetch";
-import QuestionCard from "@/src/components/CreateExam/Components/QuestionCard";
 import PreviewStepper from "./Components/PreviewStepper";
+import { useRouter } from "next/navigation";
 
 export default function AddQuestion() {
+  const router = useRouter();
   const steps = ["Basic Info", "Additional Info", "Explanation", "Preview"];
   const [activeStep, setActiveStep] = useState(0);
   const [questionData, setQuestionData] = useState({
@@ -61,6 +62,7 @@ export default function AddQuestion() {
 
       if (data.success) {
         setSubmittedQuestion(data);
+        router.push("/dashboard/library/allQuestions");
         setQuestionData({
           subjectID: "",
           question: {
@@ -80,6 +82,35 @@ export default function AddQuestion() {
       console.error("Catch error");
     }
   };
+
+  const updateOptions = (newOptions) => {
+    let updateOptions = [...newOptions];
+    if (questionData.question.type === "MCQ") {
+      const correctCount = updateOptions.filter(
+        (option) => option.isCorrect
+      ).length;
+      if (correctCount > 1) {
+        alert("Multiple correct answers are not allowed in MCQ");
+        return;
+      }
+      updateOptions = updateOptions.map((option, index) => ({
+        ...option,
+        weightage: option.isCorrect ? 100 : 0,
+      }));
+    }
+    if(questionData.question.type === "MSQ" || questionData.question.type === "FIB") {
+      const totalWeightage = updateOptions.filter((option) => option.isCorrect).reduce((sum,option) => sum + option.weightage, 0);
+      if(totalWeightage > 100){
+        alert("Total weightage of correct answers should not exceed 100");
+        return;
+      }
+    }
+    setQuestionData((prev) => ({
+      ...prev,
+      question: { ...prev.question, options: updateOptions },
+    }));
+  };
+
   return (
     <Stack padding="20px" gap="20px">
       <Header title="Back" back />
@@ -154,12 +185,14 @@ export default function AddQuestion() {
             <BasicStepper
               questionData={questionData}
               setQuestionData={setQuestionData}
+              updateOptions={updateOptions}
             />
           )}
           {activeStep === 1 && (
             <AdditionalStepper
               questionData={questionData}
               setQuestionData={setQuestionData}
+              updateOptions={updateOptions}
             />
           )}
           {activeStep === 2 && (
@@ -221,7 +254,6 @@ export default function AddQuestion() {
           </Stack>
         </Stack>
       </Stack>
-      {/* {submittedQuestion && <QuestionCard data={questionData} />} */}
     </Stack>
   );
 }

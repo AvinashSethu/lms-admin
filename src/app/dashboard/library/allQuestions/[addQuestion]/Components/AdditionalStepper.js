@@ -1,20 +1,17 @@
 "use client";
 import { useState, useEffect } from "react";
 import MarkdownEditor from "@/src/components/MarkdownEditor/MarkdownEditor";
-import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { Add, DeleteForever } from "@mui/icons-material";
 import {
   Button,
   Checkbox,
   IconButton,
   Stack,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material";
-import StyledSwitchButton from "@/src/components/StyledSwitch/StyledSwitch";
 
-export default function AdditionalStepper({ questionData, setQuestionData }) {
+export default function AdditionalStepper({ questionData, setQuestionData, updateOptions }) {
   const [options, setOptions] = useState(questionData?.question?.options || []);
 
   useEffect(() => {
@@ -22,10 +19,19 @@ export default function AdditionalStepper({ questionData, setQuestionData }) {
   }, [questionData]);
 
   const handleOptionChange = (index, field, value) => {
-    const updatedOptions = options.map((opt, i) =>
+    let updatedOptions = options.map((opt, i) =>
       i === index ? { ...opt, [field]: value } : opt
     );
+    if(questionData.question.type === "MCQ" && field === "isCorrect") {
+      updatedOptions = updatedOptions.map((opt, i) => ({
+       ...opt,
+        isCorrect: i === index ,
+       weightage: i === index ? 100 : 0,
+      }));
+    }
+
     setOptions(updatedOptions);
+    updateOptions(updatedOptions)
     updateQuestionData(updatedOptions);
   };
 
@@ -47,13 +53,16 @@ export default function AdditionalStepper({ questionData, setQuestionData }) {
 
   const addOption = () => {
     const newOption = { title: "", isCorrect: false, weightage: 0 };
+    const updatedOptions = [...options, newOption];
     setOptions([...options, newOption]);
+    updateOptions(updatedOptions);
     updateQuestionData([...options, newOption]);
   };
 
   const removeOption = (index) => {
     const newOptions = options.filter((_, i) => i !== index);
     setOptions(newOptions);
+    updateOptions(newOptions);
     updateQuestionData(newOptions);
   };
 
