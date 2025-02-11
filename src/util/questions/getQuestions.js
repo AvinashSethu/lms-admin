@@ -119,6 +119,7 @@ export default async function getQuestions({
   // Prepare the DynamoDB scan parameters with the built filter expression.
   const params = {
     TableName: `${process.env.AWS_DB_NAME}content`,
+    // IndexName: "QuestionCreatedAtIndex",
     FilterExpression: filterExp,
     ExpressionAttributeValues: expAttrVals,
     Limit: limit,
@@ -144,6 +145,7 @@ export default async function getQuestions({
       message: "Questions fetched successfully",
       data: sortedItems.map((item) => ({
         id: item.pKey.split("#")[1],
+        subjectID: item.sKey.split("@")[1],
         title: item.title,
         type: item.type,
         options: item.options,

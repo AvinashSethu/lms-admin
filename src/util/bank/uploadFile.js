@@ -5,7 +5,10 @@ import { randomUUID } from "crypto";
 
 export async function createFile({ title, bankID, fileName, fileType }) {
   // 🛠 Generate unique file name
-  const fileExtension = fileName.split(".")[1];
+  // get the extension of the file from the fileName and it should be the last element of the split array
+  const fileExtension = fileName.split(".")?.pop();
+  console.log(fileExtension);
+  // const fileExtension = fileName.split(".")[1];
   const awsFileName = `${
     process.env.AWS_BANK_PATH
   }${randomUUID()}-${title.replace(/\s+/g, "_")}.${fileExtension}`;
