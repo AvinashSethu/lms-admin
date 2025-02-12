@@ -1,11 +1,11 @@
 import { dynamoDB } from "../awsAgent";
 
-export default async function getCourse({ courseID }) {
+export default async function getCourse({ courseID, goalID }) {
   const params = {
     TableName: `${process.env.AWS_DB_NAME}master`,
     Key: {
       pKey: `COURSE#${courseID}`,
-      sKey: `COURSES`,
+      sKey: `COURSES@${goalID}`,
     },
   };
   try {
@@ -14,8 +14,15 @@ export default async function getCourse({ courseID }) {
       throw new Error("Course not found");
     }
     return {
-      course: Item,
+      success: true,
       message: "Course fetched successfully",
+      data: {
+        ...Item,
+        id: Item.pKey.split("#")[1],
+        goalID: Item.sKey.split("@")[1],
+        pKey: undefined,
+        sKey: undefined,
+      },
     };
   } catch (error) {
     console.error("DynamoDB Error:", error);
