@@ -13,7 +13,7 @@ import {
 import videoThumbnail from "@/public/Images/videoThumbnail.svg";
 import { useEffect, useState } from "react";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
@@ -22,6 +22,12 @@ import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 
 export default function Syllabus({ goal, fetchGoal }) {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id;
+  
+  const courseid = params;
+  console.log(id);
+  
   const { showSnackbar } = useSnackbar();
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const [videoDialog, setVideoDialog] = useState(false);
@@ -236,7 +242,7 @@ export default function Syllabus({ goal, fetchGoal }) {
             sx={{ textTransform: "none", color: "var(--primary-color)" }}
             onClick={() => {
               videoDialogClose();
-              router.push("/dashboard/goals/1/courses/1");
+              router.push(`/dashboard/goals/${id}/courses/${courseid}`);
             }}
           >
             Add Video
