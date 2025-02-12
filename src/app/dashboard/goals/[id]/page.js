@@ -17,6 +17,7 @@ export default function Goals() {
   function fetchGoal() {
     apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/${id}`).then(
       (json) => {
+        console.log(json.data.coursesList);
         if (json.success) {
           setGoal(json.data);
           

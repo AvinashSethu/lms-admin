@@ -48,8 +48,28 @@ export default function Syllabus({ goal, fetchGoal }) {
       });
   };
 
+  const fetchCourses = () => {
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/get`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ courseID: courses.courseID, goalID: goal.goalID }),
+    }).then((data) => {
+      console.log(data);
+      if (data.success) {
+        setCourses(data.data);
+        fetchGoal();
+      } else {
+        setCourses([]);
+      }
+    });
+  };
+
   useEffect(() => {
     fetchAllSubjects();
+    fetchGoal();
+    fetchCourses();
   }, []);
 
   const onAddSubjectSyllabus = () => {
@@ -70,7 +90,7 @@ export default function Syllabus({ goal, fetchGoal }) {
     }).then((json) => {
       if (json.success) {
         showSnackbar(json.message, "success", "", "3000");
-        fetchGoal();
+        fetchCourses();
         setIsDialogOPen(false);
       } else {
         showSnackbar(json.message, "error", "", "3000");
@@ -79,10 +99,10 @@ export default function Syllabus({ goal, fetchGoal }) {
   };
 
   const onCourseCreate = async () => {
-    // if (!title) {
-    //   showSnackbar("Fill all data", "error", "", "3000");
-    //   return;
-    // }
+    if (!title) {
+      showSnackbar("Fill all data", "error", "", "3000");
+      return;
+    }
     await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/create`,
       {
@@ -97,36 +117,15 @@ export default function Syllabus({ goal, fetchGoal }) {
       }
     ).then((data) => {
       if (data.success) {
-        const courseID = data.data.courseID;
-        router.push(`/dashboard/goals/${id}/courses/${courseID}`);
+        showSnackbar(data.message, "success", "", "3000");
+        setVideoDialog(false);
+        setTitle("");
+        fetchGoal();
       } else {
-        showSnackbar("mmm", "error", "", "3000");
+        showSnackbar("Failed to create course", "error", "", "3000");
       }
     });
   };
-
-  // const getCourse = async ({courseID,goalID}) => {
-  //   await apiFetch(
-  //     `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/get`,
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ courseID:courseID, goalID:goalID }),
-  //     }
-  //   ).then((data) => {
-  //     if(data.success) {
-  //       setCourses(data.data);
-  //       console.log(data.data);
-        
-  //     }
-  //   })
-  // };
-
-  // useEffect(() => {
-  //   getCourse();
-  // }, []);
 
   const dialogOpen = () => {
     setIsDialogOPen(true);
@@ -286,9 +285,7 @@ export default function Syllabus({ goal, fetchGoal }) {
             variant="text"
             endIcon={<East />}
             sx={{ textTransform: "none", color: "var(--primary-color)" }}
-            onClick={() => {
-              onCourseCreate();
-            }}
+            onClick={onCourseCreate}
           >
             Add Video
           </Button>
@@ -304,14 +301,23 @@ export default function Syllabus({ goal, fetchGoal }) {
           />
         </DialogContent>
       </DialogBox>
-      <CourseCard
-        title="Linear Algebra"
-        thumbnail={videoThumbnail.src}
-        Language="English"
-        actionButton="Edit"
-        lesson="16 Lessons"
-        hours="48 Hours"
-      />
+      {courses.length > 0 ? (
+        courses.map((course, index) => (
+          <CourseCard
+            key={index}
+            title={course.title}
+            thumbnail={videoThumbnail.src}
+            Language="English"
+            actionButton="Edit"
+            lesson="16 Lessons"
+            hours="48 Hours"
+          />
+        ))
+      ) : (
+        <Typography sx={{ color: "var(--text4)" }}>
+          No courses available
+        </Typography>
+      )}
     </Stack>
   );
 }

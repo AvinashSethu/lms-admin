@@ -20,7 +20,7 @@ export default function CourseCard({
   hours,
   actionButton,
   progress,
-  selected
+  selected,
 }) {
   const router = useRouter();
   return (
@@ -43,17 +43,19 @@ export default function CourseCard({
             width={180}
             height={102}
           />
-          {progress && <CircularProgress
-            variant="determinate"
-            value={75}
-            size={20}
-            sx={{
-              color: "var(--sec-color)",
-              position: "absolute",
-              top: "8px",
-              left: "150px",
-            }}
-          />}
+          {progress && (
+            <CircularProgress
+              variant="determinate"
+              value={75}
+              size={20}
+              sx={{
+                color: "var(--sec-color)",
+                position: "absolute",
+                top: "8px",
+                left: "150px",
+              }}
+            />
+          )}
         </Box>
         <Typography
           sx={{ fontFamily: "Lato", fontSize: "14px", fontWeight: "700" }}
@@ -86,15 +88,23 @@ export default function CourseCard({
         </Stack>
         <Button
           variant="text"
-          endIcon={selected ? <Checkbox sx={{
-            color: "var(--primary-color)",
-            "&.Mui-checked": {
-              color: "var(--primary-color)",
-            },
-            "&.MuiCheckbox-root": {
-              padding: "0px",
-            },
-          }} /> : <TrendingFlat />}
+          endIcon={
+            selected ? (
+              <Checkbox
+                sx={{
+                  color: "var(--primary-color)",
+                  "&.Mui-checked": {
+                    color: "var(--primary-color)",
+                  },
+                  "&.MuiCheckbox-root": {
+                    padding: "0px",
+                  },
+                }}
+              />
+            ) : (
+              <TrendingFlat />
+            )
+          }
           // onClick={() => {
           //   router.push("/dashboard/goals/1/courses/1");
           // }}

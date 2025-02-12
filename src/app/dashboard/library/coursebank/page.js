@@ -7,7 +7,13 @@ import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/Second
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Add, Close, Delete, East, Folder } from "@mui/icons-material";
-import { Button, DialogContent, IconButton, MenuItem, Stack } from "@mui/material";
+import {
+  Button,
+  DialogContent,
+  IconButton,
+  MenuItem,
+  Stack,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -17,7 +23,7 @@ export default function Coursebank() {
   const [title, setTitle] = useState("");
   const [courseList, setCourseList] = useState([]);
   const [isDialogOpen, setIsDialogOPen] = useState(false);
-  
+
   function OnCourseCreate() {
     if (!title) {
       showSnackbar("Fill all data", "error", "", "3000");
@@ -82,7 +88,16 @@ export default function Coursebank() {
         isOpen={isDialogOpen}
         onClose={dialogClose}
         title="Add Course bank"
-        actionButton={<Button variant="text" onClick={OnCourseCreate} endIcon={<East />} sx={{textTransform:"none",color:"var(--primary-color)"}}>Add Course bank</Button>}
+        actionButton={
+          <Button
+            variant="text"
+            onClick={OnCourseCreate}
+            endIcon={<East />}
+            sx={{ textTransform: "none", color: "var(--primary-color)" }}
+          >
+            Add Course bank
+          </Button>
+        }
         icon={
           <IconButton
             onClick={dialogClose}
@@ -122,7 +137,11 @@ export default function Coursebank() {
                     {item.title}
                   </span>
                 }
-                options={[<MenuItem key="one" sx={{fontSize:"14px"}} >Delete</MenuItem>]} 
+                options={[
+                  <MenuItem key="one" sx={{ fontSize: "14px" }}>
+                    Delete
+                  </MenuItem>,
+                ]}
                 cardWidth="350px"
               />
             ))
