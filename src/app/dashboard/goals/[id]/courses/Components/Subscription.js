@@ -1,12 +1,14 @@
 "use client";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
+import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
-import { Add, PlaylistAddCheck } from "@mui/icons-material";
+import { Add, Close, East, PlaylistAddCheck } from "@mui/icons-material";
 import {
   Button,
   DialogContent,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -15,7 +17,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-// Reusable SelectField Component
 const SelectField = ({ label, name, value, onChange, options }) => {
   return (
     <FormControl sx={{ width: "100%" }} size="small">
@@ -48,11 +49,7 @@ const SelectField = ({ label, name, value, onChange, options }) => {
 export default function Subscription() {
   const menuOptions = ["Remove"];
   const [isDialogOpen, setIsDialogOPen] = useState(false);
-  const dialogOpen = () => setIsDialogOPen(true);
-  const dialogClose = () => setIsDialogOPen(false);
   const [isDiscountOpen, setIsDiscountOpen] = useState(false);
-  const discountOpen = () => setIsDiscountOpen(true);
-  const discountClose = () => setIsDiscountOpen(false);
   const [selectValues, setSelectValues] = useState({
     subscriptionType: "",
     subscriptionDuration: "",
@@ -60,6 +57,13 @@ export default function Subscription() {
     discountMode: "",
     discountValidity: "",
   });
+
+  const dialogOpen = () => setIsDialogOPen(true);
+  const dialogClose = () => setIsDialogOPen(false);
+  
+  const discountOpen = () => setIsDiscountOpen(true);
+  const discountClose = () => setIsDiscountOpen(false);
+  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -69,7 +73,6 @@ export default function Subscription() {
     }));
   };
 
-  // Options for Select fields
   const subscriptionTypeOptions = [
     { value: "all", label: "Free-all" },
     { value: "pro", label: "free-pro" },
@@ -128,9 +131,24 @@ export default function Subscription() {
 
       <DialogBox
         isOpen={isDialogOpen}
-        onClose={dialogClose}
         title="Create Subscription"
-        actionText="Create"
+        actionButton={
+          <Button
+            variant="text"
+            sx={{ textTransform: "none", color: "var(--primary-color)" }}
+            endIcon={<East />}
+          >
+            Create
+          </Button>
+        }
+        icon={
+          <IconButton
+            onClick={dialogClose}
+            sx={{ borderRadius: "5px", padding: "4px" }}
+          >
+            <Close />
+          </IconButton>
+        }
       >
         <DialogContent>
           <Stack gap="20px">
@@ -141,6 +159,7 @@ export default function Subscription() {
               onChange={handleChange}
               options={subscriptionTypeOptions}
             />
+            {/* <StyledSelect title="Select type"  /> */}
             <SelectField
               label="Select Duration"
               name="subscriptionDuration"
@@ -148,7 +167,11 @@ export default function Subscription() {
               onChange={handleChange}
               options={subscriptionDurationOptions}
             />
-            <Stack flexDirection="row" justifyContent="space-between" gap="10px">
+            <Stack
+              flexDirection="row"
+              justifyContent="space-between"
+              gap="10px"
+            >
               <SelectField
                 label="No of type"
                 name="subscriptionCount"
@@ -156,7 +179,10 @@ export default function Subscription() {
                 onChange={handleChange}
                 options={subscriptionCountOptions}
               />
-              <StyledTextField placeholder="Enter Price" sx={{ width: "260px" }} />
+              <StyledTextField
+                placeholder="Enter Price"
+                sx={{ width: "260px" }}
+              />
             </Stack>
           </Stack>
         </DialogContent>
@@ -164,14 +190,22 @@ export default function Subscription() {
 
       <Stack flexDirection="row" flexWrap="wrap" rowGap="10px" columnGap="40px">
         <SecondaryCard
-          icon={<PlaylistAddCheck sx={{ color: "var(--sec-color)", fontSize: "30px" }} />}
+          icon={
+            <PlaylistAddCheck
+              sx={{ color: "var(--sec-color)", fontSize: "30px" }}
+            />
+          }
           title="Monthly Subscription (1 month)"
           options={menuOptions}
           cardWidth="500px"
           subTitle="₹299"
         />
         <SecondaryCard
-          icon={<PlaylistAddCheck sx={{ color: "var(--sec-color)", fontSize: "30px" }} />}
+          icon={
+            <PlaylistAddCheck
+              sx={{ color: "var(--sec-color)", fontSize: "30px" }}
+            />
+          }
           title="Free"
           options={menuOptions}
           cardWidth="500px"
@@ -179,7 +213,11 @@ export default function Subscription() {
         />
       </Stack>
 
-      <Stack flexDirection="row" justifyContent="space-between" marginBottom="15px">
+      <Stack
+        flexDirection="row"
+        justifyContent="space-between"
+        marginBottom="15px"
+      >
         <Typography
           sx={{
             fontFamily: "Lato",
@@ -206,9 +244,24 @@ export default function Subscription() {
 
       <DialogBox
         isOpen={isDiscountOpen}
-        onClose={discountClose}
         title="Add discount"
-        actionText="Create"
+        actionButton={
+          <Button
+            variant="text"
+            sx={{ textTransform: "none", color: "var(--primary-color)" }}
+            endIcon={<East />}
+          >
+            Create
+          </Button>
+        }
+        icon={
+          <IconButton
+            onClick={discountClose}
+            sx={{ borderRadius: "5px", padding: "4px" }}
+          >
+            <Close />
+          </IconButton>
+        }
       >
         <DialogContent>
           <Stack gap="20px">
@@ -231,9 +284,19 @@ export default function Subscription() {
         </DialogContent>
       </DialogBox>
 
-      <Stack flexDirection="row" flexWrap="wrap" rowGap="10px" columnGap="40px" alignItems="center">
+      <Stack
+        flexDirection="row"
+        flexWrap="wrap"
+        rowGap="10px"
+        columnGap="40px"
+        alignItems="center"
+      >
         <SecondaryCard
-          icon={<PlaylistAddCheck sx={{ color: "var(--sec-color)", fontSize: "30px" }} />}
+          icon={
+            <PlaylistAddCheck
+              sx={{ color: "var(--sec-color)", fontSize: "30px" }}
+            />
+          }
           title="Monthly Subscription (1 month)"
           options={menuOptions}
           cardWidth="500px"

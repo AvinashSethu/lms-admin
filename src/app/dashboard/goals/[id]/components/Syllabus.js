@@ -18,15 +18,15 @@ import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
+import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 
 export default function Syllabus({ goal, fetchGoal }) {
   const router = useRouter();
-  const menuOptions = ["Remove"];
   const { showSnackbar } = useSnackbar();
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const [videoDialog, setVideoDialog] = useState(false);
   const [allSubjects, setAllSubjects] = useState([]);
-  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState(null);
 
   const fetchAllSubjects = () => {
     apiFetch(
@@ -35,6 +35,7 @@ export default function Syllabus({ goal, fetchGoal }) {
       .then((data) => {
         if (data.success) {
           setAllSubjects(data.data.subjects);
+          console.log(data.data.subjects[0].subjectID);
         } else {
           setAllSubjects([]);
         }
@@ -53,10 +54,6 @@ export default function Syllabus({ goal, fetchGoal }) {
       showSnackbar("Select subject", "error", "", "3000");
       return;
     }
-    console.log({
-      goalID: goal.goalID,
-      subjectID: selectedSubject.subjectID,
-    });
 
     apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/add-subject`, {
       method: "POST",
@@ -68,7 +65,6 @@ export default function Syllabus({ goal, fetchGoal }) {
         subjectID: selectedSubject.subjectID,
       }),
     }).then((json) => {
-      console.log(json);
       if (json.success) {
         showSnackbar(json.message, "success", "", "3000");
         fetchGoal();
@@ -131,8 +127,6 @@ export default function Syllabus({ goal, fetchGoal }) {
         <DialogBox
           isOpen={isDialogOpen}
           title="Add Subject"
-          // actionText="Add subject"
-          // onClick={onAddSubjectSyllabus}
           icon={
             <IconButton
               sx={{ borderRadius: "10px", padding: "6px" }}
@@ -141,15 +135,24 @@ export default function Syllabus({ goal, fetchGoal }) {
               <Close />
             </IconButton>
           }
-          actionButton={<Button variant="text" endIcon={<East />} onClick={onAddSubjectSyllabus} sx={{ textTransform: "none", color: "var(--primary-color)" }}>Add Subject</Button>}
+          actionButton={
+            <Button
+              variant="text"
+              endIcon={<East />}
+              onClick={onAddSubjectSyllabus}
+              sx={{ textTransform: "none", color: "var(--primary-color)" }}
+            >
+              Add Subject
+            </Button>
+          }
         >
           <DialogContent>
             <StyledSelect
               title="Select Subject"
-              value={selectedSubject || ""}
+              value={selectedSubject ? selectedSubject.subjectID : ""}
               onChange={(e) => {
-                console.log(e.target.value);
                 setSelectedSubject(e.target.value);
+                // console.log(allSubjects[1].subjectID);
               }}
               options={allSubjects}
               getOptionLabel={(subject) => subject.title}
@@ -166,7 +169,6 @@ export default function Syllabus({ goal, fetchGoal }) {
                 key={index}
                 icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
                 title={item.title}
-                // options={menuOptions}
                 cardWidth="350px"
                 options={[
                   <MenuItem
@@ -242,7 +244,7 @@ export default function Syllabus({ goal, fetchGoal }) {
         }
       >
         <DialogContent>
-          <StyledSelect title="Select Video" value="course" />
+          <StyledTextField placeholder="Enter video Title" />
         </DialogContent>
       </DialogBox>
       <CourseCard

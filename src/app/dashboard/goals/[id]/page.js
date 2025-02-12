@@ -19,7 +19,6 @@ export default function Goals() {
       (json) => {
         if (json.success) {
           setGoal(json.data);
-          console.log(json.data);
           
         } else {
           showSnackbar("No Goal Found","error","","3000");
@@ -28,10 +27,11 @@ export default function Goals() {
       }
     );
   }
-
+  
   useEffect(() => {
     fetchGoal();
   }, []);
+  console.log(goal.title);
 
   const tabs = [
     { label: "Syllabus" },
