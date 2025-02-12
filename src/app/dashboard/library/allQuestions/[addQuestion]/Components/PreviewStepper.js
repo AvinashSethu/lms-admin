@@ -39,10 +39,6 @@ export default function PreviewStepper({ questionData }) {
           <MDPreview value={title} />
         </Stack>
         <Stack flexDirection="row" gap="20px">
-          <Typography sx={{ fontWeight: "700" }}>Subject ID : </Typography>
-          <Typography>{subjectID}</Typography>
-        </Stack>
-        <Stack flexDirection="row" gap="20px">
           <Typography sx={{ fontWeight: "700" }}>Difficulty : </Typography>
           <Typography>{difficulty}</Typography>
         </Stack>
@@ -69,8 +65,8 @@ export default function PreviewStepper({ questionData }) {
                         : "var(--border-color)"
                     }`,
                     borderRadius: "5px",
-                    width: "280px",
-                    height: "60px",
+                    minWidth: "280px",
+                    minHeight: "60px",
                     padding: "15px",
                     alignItems: "center",
                   }}
@@ -86,6 +82,7 @@ export default function PreviewStepper({ questionData }) {
                           color: "var(--primary-color)",
                         },
                       }}
+                      disabled
                       disableripple
                     />
                   </RadioGroup>

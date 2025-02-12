@@ -36,16 +36,53 @@ export default function AdditionalStepper({
       }));
     }
 
+    if (questionData.question.type === "MSQ" && field === "isCorrect") {
+      const hasCorrect = updatedOptions.some((opt) => opt.isCorrect);
+      if (!hasCorrect) {
+        alert("At least one be correctttt");
+        return;
+      }
+    }
+
+    // if (questionData.question.type === "FIB") {
+    //   updatedOptions = updatedOptions.map((opt) => ({
+    //     title: opt.title || "",
+    //     weightage: opt.weightage || 0,
+    //   }));
+    // }
+    if (questionData.question.type === "FIB" && field === "weightage") {
+      updatedOptions[index].weightage = value;
+    }
+
     setOptions(updatedOptions);
     updateOptions(updatedOptions);
     updateQuestionData(updatedOptions);
   };
 
   const updateQuestionData = (updatedOptions) => {
-    const correctAnswers = updatedOptions.reduce((acc, opt, index) => {
-      acc[`option${index}`] = opt.isCorrect;
+    // const correctAnswers = updatedOptions.reduce((acc, opt, index) => {
+    //   acc[`option${index}`] = opt.isCorrect;
+    //   if (opt.weightage > 0) { 
+    //     acc[`option${index}`] = true;
+    //   }
+    //   return acc;
+    // }, 
+    // {});
+    let correctAnswers = {};
+  
+  if (questionType === "FIB") {
+    correctAnswers = updatedOptions
+      .filter((opt) => opt.weightage > 0)
+      .map((opt) => opt.title); // Store correct answers as titles
+  } else {
+    correctAnswers = updatedOptions.reduce((acc, opt, index) => {
+      if (opt.isCorrect) {
+        acc[`option${index}`] = true;
+      }
       return acc;
     }, {});
+  }
+
 
     setQuestionData((prev) => ({
       ...prev,
@@ -58,8 +95,12 @@ export default function AdditionalStepper({
   };
 
   const addOption = () => {
-    const newOption = { title: "", isCorrect: false, weightage: 0 };
+    const newOption = { title: "", isCorrect: false, weightage: 100 };
     const updatedOptions = [...options, newOption];
+    if (questionType === "FIB" && updatedOptions.length > 5) {
+      alert("Maximum of 5 blanks allowed for FIB");
+      return;
+    }
     setOptions([...options, newOption]);
     updateOptions(updatedOptions);
     updateQuestionData([...options, newOption]);
@@ -67,6 +108,10 @@ export default function AdditionalStepper({
 
   const removeOption = (index) => {
     const newOptions = options.filter((_, i) => i !== index);
+    if (questionType === "FIB" && newOptions.length === 0) {
+      alert("At least one blank is required for FIB");
+      return;
+    }
     setOptions(newOptions);
     updateOptions(newOptions);
     updateQuestionData(newOptions);
@@ -108,16 +153,6 @@ export default function AdditionalStepper({
                     }
                     sx={{
                       width: "60px",
-                      "& .MuiInputBase-root": { height: "30px" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": {
-                          borderColor: "var(--sec-color)",
-                          borderWidth: "1px",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "var(--sec-color)",
-                        },
-                      },
                     }}
                   />
                 </Stack>
@@ -128,7 +163,13 @@ export default function AdditionalStepper({
                   <DeleteForever sx={{ color: "var(--sec-color)" }} />
                 </IconButton>
               </Stack>
-              <StyledTextField placeholder="Type here..." />
+              <StyledTextField
+                placeholder="Type here..."
+                value={option.title}
+                onChange={(e) =>
+                  handleOptionChange(index, "title", e.target.value)
+                }
+              />
             </Stack>
           ))
         : options.map((option, index) => (
@@ -162,25 +203,28 @@ export default function AdditionalStepper({
                   <TextField
                     size="small"
                     value={option.weightage}
-                    onChange={(e) =>
-                      handleOptionChange(
-                        index,
-                        "weightage",
-                        Number(e.target.value)
-                      )
-                    }
+                    onChange={(e) => {
+                      const newWeightage = Number(e.target.value);
+
+                      if (questionType === "MSQ") {
+                        const totalWeight = options
+                          .map((opt, i) =>
+                            i === index ? newWeightage : opt.weightage
+                          )
+                          .reduce((sum, weight) => sum + weight, 0);
+
+                        if (totalWeight > 100) {
+                          alert(
+                            "Total weightage for correct answers in MSQ cannot exceed 100"
+                          );
+                          return;
+                        }
+                      }
+
+                      handleOptionChange(index, "weightage", newWeightage);
+                    }}
                     sx={{
                       width: "60px",
-                      "& .MuiInputBase-root": { height: "30px" },
-                      "& .MuiOutlinedInput-root": {
-                        "&.Mui-focused fieldset": {
-                          borderColor: "var(--sec-color)",
-                          borderWidth: "1px",
-                        },
-                        "&:hover fieldset": {
-                          borderColor: "var(--sec-color)",
-                        },
-                      },
                     }}
                   />
                 </Stack>

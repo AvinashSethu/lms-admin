@@ -18,8 +18,8 @@ export default function AllQuestions() {
   const [isDialogDelete, setIsDialogDelete] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-  const dialogDeleteOpen = (id,subjectID) => {
-    setSelectedQuestion({ id,subjectID });
+  const dialogDeleteOpen = (id, subjectID) => {
+    setSelectedQuestion({ id, subjectID });
     setIsDialogDelete(true);
   };
   const dialogDeleteClose = () => {
@@ -62,10 +62,8 @@ export default function AllQuestions() {
         }
       );
       if (data) {
-        // setQuestionList([]);
-        setQuestionList(data.data);
-        console.log(id,subjectID);
-        
+        console.log(id, subjectID);
+        setQuestionList((prev) => prev.filter((ques) => ques.id !== id));
       } else {
         console.error("Error deleting question:");
       }
@@ -150,7 +148,7 @@ export default function AllQuestions() {
                     gap: "5px",
                     color: "var(--delete-color)",
                   }}
-                  onClick={() => dialogDeleteOpen(item.id,item.subjectID)}
+                  onClick={() => dialogDeleteOpen(item.id, item.subjectID)}
                 >
                   <Delete
                     sx={{ color: "var(--delete-color)", fontSize: "16px" }}

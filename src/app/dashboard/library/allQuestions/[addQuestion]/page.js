@@ -54,6 +54,28 @@ export default function AddQuestion() {
     if (!questionData.question.difficulty) {
       required.difficulty = "required";
     }
+
+    if (activeStep === 1) {
+      if (
+        questionData.question.type === "MCQ" ||
+        questionData.question.type === "MSQ"
+      ) {
+        const hasCorrectOption = questionData.question.options.some(
+          (opt) => opt.isCorrect
+        );
+        if (!hasCorrectOption) {
+          required.correctAnswer = "At least one correct answer is required";
+        }
+        if (questionData.question.type === "FIB") {
+          const hasText = questionData.question.options.some(
+            (opt) => opt.options.trim().length > 0
+          );
+          if (!hasText) {
+            required.fibAnswer = "At least one answer must be provided";
+          }
+        }
+      }
+    }
     setRequired(required);
     return Object.keys(required).length === 0;
   };
@@ -72,8 +94,6 @@ export default function AddQuestion() {
       setActiveStep((prevStep) => prevStep - 1);
     }
   };
-
-  console.log(questionData);
 
   const handleSave = async () => {
     try {
@@ -100,7 +120,6 @@ export default function AddQuestion() {
             solution: "",
           },
         });
-        console.log(data);
       } else {
         console.error("Failed");
       }
@@ -110,43 +129,51 @@ export default function AddQuestion() {
   };
 
   const updateOptions = (newOptions) => {
-    let updateOptions = [...newOptions];
+    let updatedOptions = [...newOptions];
     if (questionData.question.type === "MCQ") {
-      const correctCount = updateOptions.filter(
+      const correctCount = updatedOptions.filter(
         (option) => option.isCorrect
       ).length;
       if (correctCount > 1) {
         alert("Multiple correct answers are not allowed in MCQ");
         return;
       }
-      updateOptions = updateOptions.map((option, index) => ({
+      updatedOptions = updatedOptions.map((option) => ({
         ...option,
         weightage: option.isCorrect ? 100 : 0,
       }));
     }
+
     if (questionData.question.type === "MSQ") {
-      const totalWeightage = updateOptions
+      const totalWeightage = updatedOptions
         .filter((option) => option.isCorrect)
         .reduce((sum, option) => sum + option.weightage, 0);
       if (totalWeightage > 100) {
         alert("Total weightage of correct answers should not exceed 100");
         return;
       }
+      const hasCorrectOption = updatedOptions.some((opt) => opt.isCorrect);
+      if(!hasCorrectOption) {
+        alert("atleast one must correct");
+        return;
+      }
+
     }
 
     if (questionData.question.type === "FIB") {
-      updateOptions = updateOptions.map((option) => ({
+      updatedOptions = updatedOptions.map((option) => ({
         title: option.title || "",
+        weightage: option.weightage || 100,
       }));
 
-      if (updateOptions.length === 0) {
-        updateOptions.push({ title: "", isCorrect: true, weightage: 100 });
+      if (updatedOptions.length === 0) {
+        updatedOptions.push({ title: "", weightage: 100 });
       }
     }
 
     setQuestionData((prev) => ({
       ...prev,
-      question: { ...prev.question, options: updateOptions },
+      question: { ...prev.question, options: updatedOptions },
     }));
   };
 
