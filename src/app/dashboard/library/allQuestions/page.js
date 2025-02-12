@@ -26,17 +26,47 @@ export default function AllQuestions() {
     setIsDialogDelete(false);
   };
 
-  useEffect(() => {
-    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/get`).then(
-      (data) => {
-        if (data.success) {
-          setQuestionList(data.data);
-        } else {
-          setQuestionList([]);
-        }
+  const fetchQuestions = async () => {
+    try {
+      const data = await apiFetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/get`
+      );
+      if (data.success) {
+        setQuestionList(data.data);
+      } else {
+        setQuestionList([]);
       }
-    );
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
+  useEffect(() => {
+    fetchQuestions();
   }, []);
+
+  const handleDelete = async (questionID, subjectID) => {
+    try {
+      const data = await apiFetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/delete`,
+        {
+          method: "POST",
+          body: JSON.stringify({ questionID, subjectID }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (data) {
+        setQuestionList((prev) =>
+          prev.filter((ques) => ques.questionID !== questionID)
+        );
+        fetchQuestions();
+      } else {
+        console.error("Error deleting question:");
+      }
+    } catch (error) {
+      console.error("Error deleting question:", error);
+    }
+  };
 
   const filterOpen = () => {
     setIsOpen(!isOpen);
@@ -49,27 +79,6 @@ export default function AllQuestions() {
       return;
     }
     setIsOpen(open);
-  };
-
-  const handleDelete = async (id, subjectID) => {
-    try {
-      const data = await apiFetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/questions/delete`,
-        {
-          method: "POST",
-          body: JSON.stringify({ id, subjectID }),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (data) {
-        console.log(id, subjectID);
-        setQuestionList((prev) => prev.filter((ques) => ques.id !== id));
-      } else {
-        console.error("Error deleting question:");
-      }
-    } catch (error) {
-      console.error("Error deleting question:", error);
-    }
   };
 
   return (

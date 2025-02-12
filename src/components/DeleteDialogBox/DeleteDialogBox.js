@@ -11,7 +11,7 @@ import {
 
 export default function DeleteDialogBox({ isOpen, actionButton, name }) {
   return (
-    <Dialog open={isOpen} TransitionComponent={Slide} PaperProps={{sx:{borderRadius:"15px",padding:"10px"}}} >
+    <Dialog open={isOpen} TransitionComponent={Slide} PaperProps={{sx:{borderRadius:"15px",padding:"10px"}}} disableScrollLock={true} >
       <DialogTitle sx={{ width: "350px" }}>
         <Stack alignItems="center" gap="10px">
           <Stack

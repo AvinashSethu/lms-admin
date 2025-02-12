@@ -137,7 +137,7 @@ export default function LectureCard({
             )}
           </IconButton>
           <IconButton disableRipple>
-            <Delete />
+            <Delete sx={{color:"var(--sec-color)"}} />
           </IconButton>
           <LongDialogBox
             isOpen={isDialogOpen}

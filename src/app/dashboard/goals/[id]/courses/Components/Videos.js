@@ -9,8 +9,8 @@ export default function Videos() {
   const moveCard = (fromIndex, toIndex) => {
     setCards((prevCards) => {
       const updatedCards = [...prevCards];
-      const [movedCard] = updatedCards.splice(fromIndex, 1); 
-      updatedCards.splice(toIndex, 0, movedCard); 
+      const [movedCard] = updatedCards.splice(fromIndex, 1);
+      updatedCards.splice(toIndex, 0, movedCard);
       return updatedCards;
     });
   };
@@ -43,6 +43,14 @@ export default function Videos() {
       preview: true,
     },
   ]);
+
+  const addCards = () => {
+    const newCard = {
+      
+    }
+    setCards([...cards,newCard]);
+  }
+
   return (
     <Stack marginTop="20px" gap="20px">
       <Stack
@@ -67,6 +75,7 @@ export default function Videos() {
         </Stack>
         <Button
           variant="contained"
+          onClick={addCards}
           sx={{
             backgroundColor: "var(--sec-color-acc-1)",
             color: "var(--sec-color)",

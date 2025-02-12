@@ -51,7 +51,11 @@ export default function GoalHead({ goal }) {
         <Typography
           sx={{ fontFamily: "Lato", fontSize: "14px", fontWeight: "700" }}
         >
-          {goal.title ? goal.title : <Skeleton variant="text" animation="wave" width="100px" />}
+          {goal.title ? (
+            goal.title
+          ) : (
+            <Skeleton variant="text" animation="wave" width="100px" />
+          )}
         </Typography>
       </Stack>
       <Button
