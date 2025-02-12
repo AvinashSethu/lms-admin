@@ -54,6 +54,7 @@ export default function CourseBankId() {
       console.error("Error fetching course data:", error);
     }
   };
+  
   const handleDelete = async (resourceID, bankID) => {
     try {
       const data = await apiFetch(

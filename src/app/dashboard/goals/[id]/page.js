@@ -31,7 +31,6 @@ export default function Goals() {
   useEffect(() => {
     fetchGoal();
   }, []);
-  console.log(goal.title);
 
   const tabs = [
     { label: "Syllabus" },

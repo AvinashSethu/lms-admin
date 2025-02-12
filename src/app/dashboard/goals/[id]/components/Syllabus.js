@@ -29,9 +29,8 @@ export default function Syllabus({ goal, fetchGoal }) {
   const [videoDialog, setVideoDialog] = useState(false);
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
-
-  console.log(params);
-  
+  const [title, setTitle] = useState("");
+  const [courses, setCourses] = useState([]);
 
   const fetchAllSubjects = () => {
     apiFetch(
@@ -40,7 +39,6 @@ export default function Syllabus({ goal, fetchGoal }) {
       .then((data) => {
         if (data.success) {
           setAllSubjects(data.data.subjects);
-          console.log(data.data.subjects[0].subjectID);
         } else {
           setAllSubjects([]);
         }
@@ -79,6 +77,56 @@ export default function Syllabus({ goal, fetchGoal }) {
       }
     });
   };
+
+  const onCourseCreate = async () => {
+    // if (!title) {
+    //   showSnackbar("Fill all data", "error", "", "3000");
+    //   return;
+    // }
+    await apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: title,
+          goalID: goal.goalID,
+        }),
+      }
+    ).then((data) => {
+      if (data.success) {
+        const courseID = data.data.courseID;
+        router.push(`/dashboard/goals/${id}/courses/${courseID}`);
+      } else {
+        showSnackbar("mmm", "error", "", "3000");
+      }
+    });
+  };
+
+  // const getCourse = async ({courseID,goalID}) => {
+  //   await apiFetch(
+  //     `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/get`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ courseID:courseID, goalID:goalID }),
+  //     }
+  //   ).then((data) => {
+  //     if(data.success) {
+  //       setCourses(data.data);
+  //       console.log(data.data);
+        
+  //     }
+  //   })
+  // };
+
+  // useEffect(() => {
+  //   getCourse();
+  // }, []);
 
   const dialogOpen = () => {
     setIsDialogOPen(true);
@@ -157,7 +205,6 @@ export default function Syllabus({ goal, fetchGoal }) {
               value={selectedSubject ? selectedSubject.subjectID : ""}
               onChange={(e) => {
                 setSelectedSubject(e.target.value);
-                // console.log(allSubjects[1].subjectID);
               }}
               options={allSubjects}
               getOptionLabel={(subject) => subject.title}
@@ -240,8 +287,7 @@ export default function Syllabus({ goal, fetchGoal }) {
             endIcon={<East />}
             sx={{ textTransform: "none", color: "var(--primary-color)" }}
             onClick={() => {
-              videoDialogClose();
-              router.push(`/dashboard/goals/${id}/courses/${courseid}`);
+              onCourseCreate();
             }}
           >
             Add Video
@@ -249,7 +295,13 @@ export default function Syllabus({ goal, fetchGoal }) {
         }
       >
         <DialogContent>
-          <StyledTextField placeholder="Enter video Title" />
+          <StyledTextField
+            placeholder="Enter video Title"
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          />
         </DialogContent>
       </DialogBox>
       <CourseCard

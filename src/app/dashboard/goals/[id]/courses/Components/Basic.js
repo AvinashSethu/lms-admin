@@ -1,7 +1,29 @@
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { Button, Stack, TextField, Typography } from "@mui/material";
+import { useState } from "react";
 
-export default function Basic() {
+export default function Basic({ course }) {
+  const [videoData, setVideoData] = useState({
+    title: "",
+    description: "",
+    thumbnail: "",
+    language: "",
+  });
+
+  useEffect(() => {
+    if (videoData) {
+      setVideoData({
+        title: videoData.title || "",
+        description: videoData.description || "",
+        thumbnail: videoData.thumbnail || "",
+        language: videoData.language?.join(", ") || "",
+      });
+    }
+  }, [videoData]);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.title]: e.target.value });
+  };
   return (
     <Stack marginTop="20px">
       <Stack gap="18px">
@@ -11,7 +33,11 @@ export default function Basic() {
           >
             Course Title*
           </Typography>
-          <StyledTextField placeholder="Enter the title of your course" />
+          <StyledTextField
+            placeholder="Enter the title of your course"
+            value={videoData.title}
+            onChange={handleChange}
+          />
         </Stack>
         <Stack gap="8px">
           <Typography
@@ -33,7 +59,7 @@ export default function Basic() {
           >
             Thumbnail
           </Typography>
-          <StyledTextField placeholder="Upload Thumbnail for course (1920 X 1080)"  />
+          <StyledTextField placeholder="Upload Thumbnail for course (1920 X 1080)" />
         </Stack>
         <Stack gap="8px">
           <Typography

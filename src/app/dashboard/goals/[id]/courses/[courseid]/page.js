@@ -4,39 +4,45 @@ import CustomTabs from "@/src/components/CustomTabs/CustomTabs";
 import Basic from "../Components/Basic";
 import Videos from "../Components/Videos";
 import Subscription from "../Components/Subscription";
-import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Header from "@/src/components/Header/Header";
 import { apiFetch } from "@/src/lib/apiFetch";
-import GoalHead from "../../components/GoalHead/GoalHead";
+import { useParams } from "next/navigation";
 
 export default function Courseid() {
-  const params = useParams();
-  const id = params.id;
-  // const courseid = params.courseid;
+  const [course, setCourse] = useState({});
+  const {id,courseID} = useParams();
 
   useEffect(() => {
-    console.log(params);
     fetchCourse();
-  }, []);
+  }, [courseID, id]);
 
-  function fetchCourse() {
-    apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/${id}/courses/${params.courseid}`
-    ).then((json) => {
-      if(json.success) {
+  const fetchCourse = async () => {
+    try {
+      const data = await apiFetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/get`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body:JSON.stringify ({ courseID, goalID:id }),
+        }
+      );
+      if(data.success) {
+        setCourse(data.data);
+        console.log(data.data);
       }
-    })
-  }
+    } catch (error) {}
+  };
 
   const tabs = [
-    { label: "Basic", content: <Basic /> },
+    { label: "Basic", content: <Basic course={course} /> },
     { label: "Resources", content: <Videos /> },
     { label: "Subscription", content: <Subscription /> },
   ];
 
   return (
     <Stack padding="20px" gap="20px">
-      {/* <GoalHead id={id} goal={goal} fetchGoal={fetchGoal} /> */}
+      <Header title={course.title? course.title : "title"} back />
       <Stack
         sx={{
           padding: "20px",

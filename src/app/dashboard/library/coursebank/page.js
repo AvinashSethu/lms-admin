@@ -6,19 +6,18 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, Close, Delete, Folder } from "@mui/icons-material";
+import { Add, Close, Delete, East, Folder } from "@mui/icons-material";
 import { Button, DialogContent, IconButton, MenuItem, Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Coursebank() {
   const router = useRouter();
-  const menuOptions = ["delete"];
   const { showSnackbar } = useSnackbar();
   const [title, setTitle] = useState("");
   const [courseList, setCourseList] = useState([]);
   const [isDialogOpen, setIsDialogOPen] = useState(false);
-
+  
   function OnCourseCreate() {
     if (!title) {
       showSnackbar("Fill all data", "error", "", "3000");
@@ -83,8 +82,7 @@ export default function Coursebank() {
         isOpen={isDialogOpen}
         onClose={dialogClose}
         title="Add Course bank"
-        actionText="Add Course bank"
-        onClick={OnCourseCreate}
+        actionButton={<Button variant="text" onClick={OnCourseCreate} endIcon={<East />} sx={{textTransform:"none",color:"var(--primary-color)"}}>Add Course bank</Button>}
         icon={
           <IconButton
             onClick={dialogClose}
