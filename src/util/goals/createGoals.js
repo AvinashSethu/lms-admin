@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import {dynamoDB} from "../awsAgent";
+import { dynamoDB } from "../awsAgent";
 
 export default async function createGoals({ title, icon }) {
   const params = {
