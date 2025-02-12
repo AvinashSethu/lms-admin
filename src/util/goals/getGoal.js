@@ -1,3 +1,4 @@
+import { Language } from "@mui/icons-material";
 import {dynamoDB} from "../awsAgent";
 
 export default async function getGoal({goalID}) {
