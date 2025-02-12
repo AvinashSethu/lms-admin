@@ -24,15 +24,14 @@ export default function Syllabus({ goal, fetchGoal }) {
   const router = useRouter();
   const params = useParams();
   const id = params.id;
-  
-  const courseid = params;
-  console.log(id);
-  
   const { showSnackbar } = useSnackbar();
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const [videoDialog, setVideoDialog] = useState(false);
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
+
+  console.log(params);
+  
 
   const fetchAllSubjects = () => {
     apiFetch(

@@ -12,19 +12,18 @@ import GoalHead from "../../components/GoalHead/GoalHead";
 export default function Courseid() {
   const params = useParams();
   const id = params.id;
-  const courseid = params.id;
+  // const courseid = params.courseid;
 
   useEffect(() => {
-    console.log(courseid);
+    console.log(params);
     fetchCourse();
   }, []);
 
   function fetchCourse() {
     apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/${id}/courses/${courseid}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/${id}/courses/${params.courseid}`
     ).then((json) => {
       if(json.success) {
-
       }
     })
   }
