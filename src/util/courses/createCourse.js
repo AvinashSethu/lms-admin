@@ -79,6 +79,10 @@ export default async function createCourse({ title, goalID }) {
     return {
       success: true,
       message: "Course created",
+      data: {
+        courseID: courseID.split("#")[1],
+        goalID,
+      },
     };
   } catch (error) {
     console.error("DynamoDB Error:", error);
