@@ -62,41 +62,6 @@ export async function updateBasicCourseInfo({
 }
 
 /**
- * Updates the course's collection.
- *
- * @param {Object} params
- * @param {string} params.courseID - The unique identifier of the course.
- * @param {string} params.goalID - The goal ID under which this course is grouped.
- * @param {Array} params.collection - The new collection array.
- * @returns {Promise<Object>} Response object indicating success or failure.
- */
-export async function updateCourseCollection({ courseID, goalID, collection }) {
-  const params = {
-    TableName: `${process.env.AWS_DB_NAME}master`,
-    Key: {
-      pKey: `COURSE#${courseID}`,
-      sKey: `COURSES@${goalID}`,
-    },
-    UpdateExpression: "SET collection = :c, updatedAt = :u",
-    ExpressionAttributeValues: {
-      ":c": collection,
-      ":u": Date.now(),
-    },
-  };
-
-  try {
-    await dynamoDB.update(params).promise();
-    return {
-      success: true,
-      message: "Course collection updated",
-    };
-  } catch (error) {
-    console.error("DynamoDB Error in updateCourseCollection:", error);
-    throw new Error("Internal server error");
-  }
-}
-
-/**
  * Updates the course's subscription information.
  *
  * @param {Object} params

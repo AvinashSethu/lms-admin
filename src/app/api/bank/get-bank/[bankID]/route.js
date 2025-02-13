@@ -1,7 +1,7 @@
 import getAllResources from "@/src/util/bank/getAllResources";
 
 export async function GET(request, { params }) {
-  const { bankID } = params;
+  const { bankID } = await params;
   if (!bankID) {
     return Response.json(
       { success: false, message: "bankID is required" },

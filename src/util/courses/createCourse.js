@@ -25,7 +25,7 @@ export default async function createCourse({ title, goalID }) {
       language: [],
       lessons: 0,
       duration: 0,
-      collection: [],
+      lessonIDs: [],
       subscription: {},
       createdAt: Date.now(),
       updatedAt: Date.now(),

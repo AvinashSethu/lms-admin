@@ -7,7 +7,6 @@ export async function createFile({ title, bankID, fileName, fileType }) {
   // 🛠 Generate unique file name
   // get the extension of the file from the fileName and it should be the last element of the split array
   const fileExtension = fileName.split(".")?.pop();
-  console.log(fileExtension);
   // const fileExtension = fileName.split(".")[1];
   const awsFileName = `${
     process.env.AWS_BANK_PATH
@@ -36,6 +35,7 @@ export async function createFile({ title, bankID, fileName, fileType }) {
         path: awsFileName,
         fileType,
         isUploaded: false,
+        linkedLessons: [],
       },
     };
 
@@ -56,7 +56,7 @@ export async function createFile({ title, bankID, fileName, fileType }) {
       success: true,
       message: "File created successfully",
       data: {
-        resourceID: resourceParams.Item.pKey, // Use fileName directly
+        resourceID: resourceParams.Item.pKey.split("#")[1], // Use fileName directly
         url,
         name: title,
         path: awsFileName,

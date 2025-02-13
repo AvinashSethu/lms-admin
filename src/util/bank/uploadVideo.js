@@ -30,6 +30,7 @@ export async function createVideo({ title, bankID }) {
         videoID,
         url: "",
         isUploaded: false,
+        linkedLessons: [],
       },
     };
     await dynamoDB.put(resourceParams).promise();
