@@ -79,6 +79,7 @@ export default function FileUpload({ isOpen, onClose, bankID, fetchCourse }) {
         onClose,
         setFile,
         fetchCourse,
+        setTitle
       });
     } catch (error) {
       setResponseMessage("Upload failed. Please try again.");

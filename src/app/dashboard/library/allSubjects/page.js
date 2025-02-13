@@ -6,8 +6,20 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, Close, East, InsertDriveFile } from "@mui/icons-material";
-import { Button, DialogContent, IconButton, Stack } from "@mui/material";
+import {
+  Add,
+  Close,
+  DeleteRounded,
+  East,
+  InsertDriveFile,
+} from "@mui/icons-material";
+import {
+  Button,
+  DialogContent,
+  IconButton,
+  MenuItem,
+  Stack,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 
 export default function AllSubjects() {
@@ -34,13 +46,16 @@ export default function AllSubjects() {
     ).then((data) => {
       if (data.success) {
         showSnackbar(data.message, "success", "", "3000");
+        setTitle("");
+        setIsDialogOPen(false);
+        fetchSubject();
       } else {
         showSnackbar(data.message, "error", "", "3000");
       }
     });
   }
 
-  useEffect(() => {
+  const fetchSubject = () => {
     apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects/get-all-subjects`
     ).then((data) => {
@@ -50,6 +65,10 @@ export default function AllSubjects() {
         setSubjectList([]);
       }
     });
+  };
+
+  useEffect(() => {
+    fetchSubject();
   }, []);
 
   const dialogOpen = () => {
@@ -118,9 +137,18 @@ export default function AllSubjects() {
               <SecondaryCard
                 icon={<InsertDriveFile sx={{ color: "var(--sec-color)" }} />}
                 title={item.title}
-                options={menuOptions}
                 cardWidth="350px"
                 key={index}
+                options={[
+                  <MenuItem
+                    key="index"
+                    sx={{ fontSize: "12px", color: "var(--delete-color)" ,gap:"2px"}}
+                    disableRipple
+                  >
+                    <DeleteRounded sx={{fontSize:"16px"}} />
+                    Delete
+                  </MenuItem>,
+                ]}
               />
             ))
           : [...Array(4)].map((_, index) => (

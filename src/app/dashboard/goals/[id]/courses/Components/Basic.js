@@ -1,6 +1,6 @@
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Basic({ course }) {
   const [videoData, setVideoData] = useState({
@@ -10,20 +10,20 @@ export default function Basic({ course }) {
     language: "",
   });
 
-  useEffect(() => {
-    if (videoData) {
-      setVideoData({
-        title: videoData.title || "",
-        description: videoData.description || "",
-        thumbnail: videoData.thumbnail || "",
-        language: videoData.language?.join(", ") || "",
-      });
-    }
-  }, [videoData]);
+  // useEffect(() => {
+  //   if (videoData) {
+  //     setVideoData({
+  //       title: videoData.title || "",
+  //       description: videoData.description || "",
+  //       thumbnail: videoData.thumbnail || "",
+  //       language: videoData.language?.join(", ") || "",
+  //     });
+  //   }
+  // }, [videoData]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.title]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.title]: e.target.value });
+  // };
   return (
     <Stack marginTop="20px">
       <Stack gap="18px">
@@ -36,7 +36,7 @@ export default function Basic({ course }) {
           <StyledTextField
             placeholder="Enter the title of your course"
             value={videoData.title}
-            onChange={handleChange}
+            // onChange={handleChange}
           />
         </Stack>
         <Stack gap="8px">

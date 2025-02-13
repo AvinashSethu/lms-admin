@@ -6,7 +6,14 @@ import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, Close, Delete, East, Folder } from "@mui/icons-material";
+import {
+  Add,
+  Close,
+  Delete,
+  DeleteRounded,
+  East,
+  Folder,
+} from "@mui/icons-material";
 import {
   Button,
   DialogContent,
@@ -38,13 +45,16 @@ export default function Coursebank() {
     }).then((data) => {
       if (data.success) {
         showSnackbar(data.message, "success", "", "3000");
+        setIsDialogOPen(false);
+        setTitle("");
+        fetchCourse();
       } else {
         showSnackbar(data.message, "error", "", "3000");
       }
     });
   }
 
-  useEffect(() => {
+  const fetchCourse = () => {
     apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/get-all-bank`).then(
       (data) => {
         if (data.success) {
@@ -54,6 +64,9 @@ export default function Coursebank() {
         }
       }
     );
+  };
+  useEffect(() => {
+    fetchCourse();
   }, []);
 
   const dialogOpen = () => {
@@ -138,7 +151,16 @@ export default function Coursebank() {
                   </span>
                 }
                 options={[
-                  <MenuItem key="one" sx={{ fontSize: "14px" }}>
+                  <MenuItem
+                    key="one"
+                    sx={{
+                      fontSize: "12px",
+                      color: "var(--delete-color)",
+                      gap: "2px",
+                    }}
+                    // onClick={dialogDelete}
+                  >
+                    <DeleteRounded sx={{ fontSize: "16px" }} />
                     Delete
                   </MenuItem>,
                 ]}

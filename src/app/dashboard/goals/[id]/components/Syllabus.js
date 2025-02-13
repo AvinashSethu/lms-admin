@@ -1,7 +1,14 @@
 "use client";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import CourseCard from "@/src/components/CourseCard/CourseCard";
-import { Add, Close, Delete, East, InsertDriveFile } from "@mui/icons-material";
+import {
+  Add,
+  Close,
+  Delete,
+  East,
+  InsertDriveFile,
+  TrendingFlat,
+} from "@mui/icons-material";
 import {
   Button,
   DialogContent,
@@ -19,6 +26,7 @@ import { apiFetch } from "@/src/lib/apiFetch";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
+import CourseCardSkeleton from "@/src/components/CourseCardSkeleton/CourseCardSkeleton";
 
 export default function Syllabus({ goal, fetchGoal }) {
   const router = useRouter();
@@ -30,7 +38,8 @@ export default function Syllabus({ goal, fetchGoal }) {
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [title, setTitle] = useState("");
-  const [courses, setCourses] = useState([]);
+  console.log(params);
+  
 
   const fetchAllSubjects = () => {
     apiFetch(
@@ -48,28 +57,9 @@ export default function Syllabus({ goal, fetchGoal }) {
       });
   };
 
-  const fetchCourses = () => {
-    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/get`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ courseID: courses.courseID, goalID: goal.goalID }),
-    }).then((data) => {
-      console.log(data);
-      if (data.success) {
-        setCourses(data.data);
-        fetchGoal();
-      } else {
-        setCourses([]);
-      }
-    });
-  };
-
   useEffect(() => {
     fetchAllSubjects();
     fetchGoal();
-    fetchCourses();
   }, []);
 
   const onAddSubjectSyllabus = () => {
@@ -298,26 +288,44 @@ export default function Syllabus({ goal, fetchGoal }) {
             onChange={(e) => {
               setTitle(e.target.value);
             }}
+
           />
         </DialogContent>
       </DialogBox>
-      {courses.length > 0 ? (
-        courses.map((course, index) => (
-          <CourseCard
-            key={index}
-            title={course.title}
-            thumbnail={videoThumbnail.src}
-            Language="English"
-            actionButton="Edit"
-            lesson="16 Lessons"
-            hours="48 Hours"
-          />
-        ))
-      ) : (
-        <Typography sx={{ color: "var(--text4)" }}>
-          No courses available
-        </Typography>
-      )}
+      <Stack flexDirection="row" flexWrap="wrap" rowGap="20px" columnGap="30px">
+        {goal.coursesList && goal.coursesList.length ? (
+          goal.coursesList.map((course, index) => (
+            <CourseCard
+              key={index}
+              title={course.title}
+              thumbnail={videoThumbnail.src || ""}
+              Language={course.Language}
+              actionButton={
+                <Button
+                  variant="text"
+                  endIcon={<TrendingFlat />}
+                  sx={{
+                    textTransform: "none",
+                    color: "var(--primary-color)",
+                    fontFamily: "Lato",
+                    fontSize: "12px",
+                    fontWeight: "400",
+                  }}
+                  onClick={() => {
+                    router.push(`/dashboard/goals/${id}/courses/${goal.coursesList.id}`);
+                  }}
+                >
+                  Edit
+                </Button>
+              }
+              lesson="16 Lessons"
+              hours="48 Hours"
+            />
+          ))
+        ) : [...Array(4)].map((_,index) => <CourseCardSkeleton key={index} />)
+          
+        }
+      </Stack>
     </Stack>
   );
 }

@@ -86,6 +86,9 @@ export default function CourseCard({
             {hours}
           </Typography>
         </Stack>
+        <Stack alignItems="center">
+        {actionButton}
+        </Stack>
         <Button
           variant="text"
           endIcon={

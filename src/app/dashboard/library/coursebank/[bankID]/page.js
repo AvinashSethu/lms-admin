@@ -30,7 +30,6 @@ export default function CourseBankId() {
   const [isDialogFileOpen, setIsDialogFileOPen] = useState(false);
   const [isDialogVideoOpen, setIsDialogVideoOPen] = useState(false);
   const [isDialogDeleteOpen, setIsDialogDeleteOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedResourceID, setSelectedResourceID] = useState(null);
   const [selectedResourceName, setSelectedResourceName] = useState(null);
 

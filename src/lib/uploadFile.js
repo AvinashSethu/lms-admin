@@ -25,7 +25,9 @@ export async function uploadToS3(
   setUploading,
   setProgressVariant,
   onClose,
+  setTitle,
   setFile,
+  
 fetchCourse}
 ) {
   setProgressVariant("determinate");
@@ -65,6 +67,7 @@ fetchCourse}
         setResponseMessage("No file selected");
         onClose();
         fetchCourse();
+        setTitle("");
         return;
       }
       await uploadChunk(value);

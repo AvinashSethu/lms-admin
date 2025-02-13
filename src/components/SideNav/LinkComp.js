@@ -163,7 +163,9 @@ const NavComp = ({
                         fontFamily: "Lato",
                         fontSize: "14px",
                         fontWeight: "700",
-                        color: "var(--primary-color)",
+                        color: pathname.startsWith(item.href)
+                          ? "var(--primary-color)"
+                          : "var(--text3)",
                         whiteSpace: "nowrap",
                         borderRadius: "20px",
                         height: "28px",
