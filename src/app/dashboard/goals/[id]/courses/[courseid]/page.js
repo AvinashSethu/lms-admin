@@ -1,5 +1,5 @@
 "use client";
-import { Stack } from "@mui/material";
+import { duration, Skeleton, Stack } from "@mui/material";
 import CustomTabs from "@/src/components/CustomTabs/CustomTabs";
 import Basic from "../Components/Basic";
 import Videos from "../Components/Videos";
@@ -10,8 +10,19 @@ import { apiFetch } from "@/src/lib/apiFetch";
 import { useParams } from "next/navigation";
 
 export default function Courseid() {
-  const [course, setCourse] = useState({});
-  const {id,courseID} = useParams();
+  const [course, setCourse] = useState({
+    title: "",
+    description: "",
+    thumbnail: "",
+    language: [],
+    duration: "",
+    collection: [],
+    goalID: "",
+    lessons: "",
+    subscription: {},
+  });
+  const [updateCourse, setUpdateCourse] = useState(null);
+  const { id, courseID } = useParams();
 
   useEffect(() => {
     fetchCourse();
@@ -24,10 +35,10 @@ export default function Courseid() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body:JSON.stringify ({ courseID, goalID:id }),
+          body: JSON.stringify({ courseID, goalID: id }),
         }
       );
-      if(data.success) {
+      if (data.success) {
         setCourse(data.data);
         console.log(data.data);
       }
@@ -35,14 +46,32 @@ export default function Courseid() {
   };
 
   const tabs = [
-    { label: "Basic", content: <Basic course={course} /> },
-    { label: "Resources", content: <Videos /> },
+    {
+      label: "Basic",
+      content: (
+        <Basic
+          course={course}
+          setCourse={setCourse}
+          fetchCourse={fetchCourse}
+        />
+      ),
+    },
+    { label: "Lessons", content: <Videos /> },
     { label: "Subscription", content: <Subscription /> },
   ];
 
   return (
     <Stack padding="20px" gap="20px">
-      <Header title={course.title? course.title : "title"} back />
+      <Header
+        title={
+          course.title ? (
+            course.title
+          ) : (
+            <Skeleton variant="text" sx={{ width: "100px" }} />
+          )
+        }
+        back
+      />
       <Stack
         sx={{
           padding: "20px",
@@ -52,7 +81,7 @@ export default function Courseid() {
           backgroundColor: "var(--white)",
         }}
       >
-        <CustomTabs tabs={tabs} />
+        <CustomTabs tabs={tabs} fetchCourse={fetchCourse} />
       </Stack>
     </Stack>
   );

@@ -17,7 +17,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import videoThumbnail from "@/public/Images/videoThumbnail.svg";
 import { useEffect, useState } from "react";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import { useParams, useRouter } from "next/navigation";
@@ -27,6 +26,7 @@ import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import CourseCardSkeleton from "@/src/components/CourseCardSkeleton/CourseCardSkeleton";
+import defaultThumbnail from "@/public/Images/defaultThumbnail.svg";
 
 export default function Syllabus({ goal, fetchGoal }) {
   const router = useRouter();
@@ -38,8 +38,6 @@ export default function Syllabus({ goal, fetchGoal }) {
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [title, setTitle] = useState("");
-  console.log(params);
-  
 
   const fetchAllSubjects = () => {
     apiFetch(
@@ -57,12 +55,29 @@ export default function Syllabus({ goal, fetchGoal }) {
       });
   };
 
+  const getCourse = (courseID) => {
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/get`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ courseID: courseID, goalID: goal.goalID }),
+    }).then((data) => {
+      if (data.success) {
+        console.log(data);
+        router.push(`/dashboard/goals/${goal.goalID}/courses/${courseID}`);
+      }
+    });
+  };
+
   useEffect(() => {
     fetchAllSubjects();
     fetchGoal();
   }, []);
 
   const onAddSubjectSyllabus = () => {
+    console.log(selectedSubject);
+    
     if (!selectedSubject) {
       showSnackbar("Select subject", "error", "", "3000");
       return;
@@ -75,12 +90,12 @@ export default function Syllabus({ goal, fetchGoal }) {
       },
       body: JSON.stringify({
         goalID: goal.goalID,
-        subjectID: selectedSubject.subjectID,
+        subjectID: selectedSubject,
       }),
     }).then((json) => {
       if (json.success) {
         showSnackbar(json.message, "success", "", "3000");
-        fetchCourses();
+        fetchAllSubjects();
         setIsDialogOPen(false);
       } else {
         showSnackbar(json.message, "error", "", "3000");
@@ -89,6 +104,8 @@ export default function Syllabus({ goal, fetchGoal }) {
   };
 
   const onCourseCreate = async () => {
+    console.log(goal.coursesList[0].id);
+
     if (!title) {
       showSnackbar("Fill all data", "error", "", "3000");
       return;
@@ -110,12 +127,17 @@ export default function Syllabus({ goal, fetchGoal }) {
         showSnackbar(data.message, "success", "", "3000");
         setVideoDialog(false);
         setTitle("");
+        // getCourse(id);
         fetchGoal();
       } else {
         showSnackbar("Failed to create course", "error", "", "3000");
       }
     });
   };
+
+  const handleSubject = (e) => {
+    setSelectedSubject(e.target.value);
+  }
 
   const dialogOpen = () => {
     setIsDialogOPen(true);
@@ -191,13 +213,11 @@ export default function Syllabus({ goal, fetchGoal }) {
           <DialogContent>
             <StyledSelect
               title="Select Subject"
-              value={selectedSubject ? selectedSubject.subjectID : ""}
-              onChange={(e) => {
-                setSelectedSubject(e.target.value);
-              }}
+              value={selectedSubject}
+              onChange={handleSubject}
               options={allSubjects}
-              getOptionLabel={(subject) => subject.title}
-              getOptionValue={(subject) => subject.subjectID}
+              getLabel={(subject) => subject.title}
+              getValue={(subject) => subject.subjectID}
             />
           </DialogContent>
         </DialogBox>
@@ -275,7 +295,9 @@ export default function Syllabus({ goal, fetchGoal }) {
             variant="text"
             endIcon={<East />}
             sx={{ textTransform: "none", color: "var(--primary-color)" }}
-            onClick={onCourseCreate}
+            onClick={() => {
+              onCourseCreate();
+            }}
           >
             Add Video
           </Button>
@@ -288,43 +310,40 @@ export default function Syllabus({ goal, fetchGoal }) {
             onChange={(e) => {
               setTitle(e.target.value);
             }}
-
           />
         </DialogContent>
       </DialogBox>
       <Stack flexDirection="row" flexWrap="wrap" rowGap="20px" columnGap="30px">
-        {goal.coursesList && goal.coursesList.length ? (
-          goal.coursesList.map((course, index) => (
-            <CourseCard
-              key={index}
-              title={course.title}
-              thumbnail={videoThumbnail.src || ""}
-              Language={course.Language}
-              actionButton={
-                <Button
-                  variant="text"
-                  endIcon={<TrendingFlat />}
-                  sx={{
-                    textTransform: "none",
-                    color: "var(--primary-color)",
-                    fontFamily: "Lato",
-                    fontSize: "12px",
-                    fontWeight: "400",
-                  }}
-                  onClick={() => {
-                    router.push(`/dashboard/goals/${id}/courses/${goal.coursesList.id}`);
-                  }}
-                >
-                  Edit
-                </Button>
-              }
-              lesson="16 Lessons"
-              hours="48 Hours"
-            />
-          ))
-        ) : [...Array(4)].map((_,index) => <CourseCardSkeleton key={index} />)
-          
-        }
+        {goal.coursesList && goal.coursesList.length
+          ? goal.coursesList.map((course, index) => (
+              <CourseCard
+                key={index}
+                title={course.title}
+                thumbnail={defaultThumbnail.src || course.thumbnail}
+                Language={course.Language}
+                actionButton={
+                  <Button
+                    variant="text"
+                    endIcon={<TrendingFlat />}
+                    sx={{
+                      textTransform: "none",
+                      color: "var(--primary-color)",
+                      fontFamily: "Lato",
+                      fontSize: "12px",
+                      fontWeight: "400",
+                    }}
+                    onClick={() => {
+                      getCourse(course.id);
+                    }}
+                  >
+                    Edit
+                  </Button>
+                }
+                lesson={`${course.lessons} Lessons`}
+                hours={`${course.duration} Hours`}
+              />
+            ))
+          : [...Array(4)].map((_, index) => <CourseCardSkeleton key={index} />)}
       </Stack>
     </Stack>
   );

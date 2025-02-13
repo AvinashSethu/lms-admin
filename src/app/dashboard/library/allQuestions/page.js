@@ -6,16 +6,33 @@ import Header from "@/src/components/Header/Header";
 import QuestionCardSkeleton from "@/src/components/QuestionCardSkeleton/QuestionCardSkeleton";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Add, Delete, ExpandMore, FilterAlt } from "@mui/icons-material";
-import { Button, MenuItem, Pagination, Stack, Typography } from "@mui/material";
+import {
+  Add,
+  Delete,
+  ExpandMore,
+  FilterAlt,
+  Visibility,
+} from "@mui/icons-material";
+import {
+  Button,
+  Chip,
+  DialogContent,
+  MenuItem,
+  Pagination,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import PreviewStepper from "./[addQuestion]/Components/PreviewStepper";
+import LongDialogBox from "@/src/components/LongDialogBox/LongDialogBox";
 
 export default function AllQuestions() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [questionList, setQuestionList] = useState([]);
   const [isDialogDelete, setIsDialogDelete] = useState(false);
+  const [isPreviewDialog, setIsPreviewDialog] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   const dialogDeleteOpen = (id, subjectID) => {
@@ -25,6 +42,13 @@ export default function AllQuestions() {
   const dialogDeleteClose = () => {
     setIsDialogDelete(false);
   };
+
+  const previewDialogOpen = () => {
+    setIsPreviewDialog(true);
+  }
+  const previewDialogClose = () => {
+    setIsPreviewDialog(false);
+  }
 
   const fetchQuestions = async () => {
     try {
@@ -146,7 +170,21 @@ export default function AllQuestions() {
               questionType={item.type || "MCQ"}
               Subject={item.subjectTitle || "Unknown"}
               question={item.title || "No question available"}
-              preview="Preview"
+              preview={
+                <Chip
+                  icon={<Visibility sx={{ fontSize: "small" }} />}
+                  label="Preview"
+                  onClick={previewDialogOpen}
+                  sx={{
+                    fontSize: "10px",
+                    fontFamily: "Lato",
+                    fontWeight: "700",
+                    height: "20px",
+                    backgroundColor: "var(--border-color)",
+                    color: "var(--text3)",
+                  }}
+                />
+              }
               options={[
                 <MenuItem
                   key={index}
@@ -230,6 +268,12 @@ export default function AllQuestions() {
         </Typography>
         <Pagination count={9} shape="rounded" variant="outlined" />
       </Stack>
+      <LongDialogBox isOpen={isPreviewDialog} onClose={previewDialogClose} title="Preview">
+        <DialogContent>
+          {/* <PreviewStepper fetchQuestions={fetchQuestions} question={question} /> */}
+        </DialogContent>
+      </LongDialogBox>
+      
     </Stack>
   );
 }

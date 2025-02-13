@@ -42,6 +42,7 @@ export default function CourseCard({
             alt="videoThumbnail"
             width={180}
             height={102}
+            style={{borderRadius:"10px"}}
           />
           {progress && (
             <CircularProgress

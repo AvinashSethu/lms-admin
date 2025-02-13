@@ -5,7 +5,6 @@ import FileUpload from "@/src/components/FileUpload/FileUpload";
 import Header from "@/src/components/Header/Header";
 import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
-import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import VideoUpload from "@/src/components/VideoUpload/VideoUpload";
 import { apiFetch } from "@/src/lib/apiFetch";
 import {

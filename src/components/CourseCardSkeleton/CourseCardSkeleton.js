@@ -31,6 +31,7 @@ export default function CourseCardSkeleton() {
           marginTop: "auto",
           width: "60px",
           bgcolor: "var(--primary-color-acc-2)",
+          borderRadius: "5px",
         }}
       />
     </Stack>

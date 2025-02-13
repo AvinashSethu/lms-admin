@@ -91,7 +91,7 @@ export default function QuestionCard({
             <Typography>{question}</Typography>
           </Stack>
           <Stack gap="10px" flexDirection="row" marginLeft="auto"  alignItems="center">
-            <Chip
+            {/* <Chip
               icon={<Visibility sx={{ fontSize: "small" }} />}
               label={preview}
               sx={{
@@ -102,7 +102,8 @@ export default function QuestionCard({
                 backgroundColor: "var(--border-color)",
                 color: "var(--text3)",
               }}
-            />
+            /> */}
+            {preview}
             <IconButton sx={{ padding: "0px" }} onClick={menuOpen} disableRipple>
               <MoreVert sx={{color:"var(--text3)"}} />
             </IconButton>

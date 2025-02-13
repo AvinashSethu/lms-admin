@@ -153,11 +153,10 @@ export default function AddQuestion() {
         return;
       }
       const hasCorrectOption = updatedOptions.some((opt) => opt.isCorrect);
-      if(!hasCorrectOption) {
+      if (!hasCorrectOption) {
         alert("atleast one must correct");
         return;
       }
-
     }
 
     if (questionData.question.type === "FIB") {
