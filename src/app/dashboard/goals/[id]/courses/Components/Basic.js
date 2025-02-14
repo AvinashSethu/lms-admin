@@ -1,3 +1,4 @@
+import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import MarkdownEditor from "@/src/components/MarkdownEditor/MarkdownEditor";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
@@ -8,37 +9,38 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
 
 export default function Basic({ course, setCourse }) {
-  const languageOptions = ["English", "Tamil"];
-
-  const handleSave = (course) => {
-    apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/update/basic-info`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          courseID: course.courseID,
-          goalID: course.goalID,
-          title: course.title,
-          description: course.description,
-          thumbnail: course.thumbnail,
-          language: course.language || [],
-        }),
-      }
-    ).then((data) => {
+  const { showSnackbar } = useSnackbar();
+  const handleSave = async () => {
+    try {
+      const data = await apiFetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/update/basic-info`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            courseID: course.id,
+            goalID: course.goalID,
+            title: course.title,
+            description: course.description,
+            thumbnail: course.thumbnail,
+            language: course.language,
+          }),
+        }
+      );
       if (data) {
-        console.log(course.title);
-        console.log(data.message);
-        // setCourse(data);
+        console.log(course);
+        setCourse(course);
+        showSnackbar(data.message, "success", "", "3000");
       } else {
         console.log(data.message);
       }
-    });
+    } catch (error) {
+      console.error(data.message);
+    }
   };
 
   return (
@@ -70,7 +72,12 @@ export default function Basic({ course, setCourse }) {
             >
               Course Description*
             </Typography>
-            <MarkdownEditor />
+            <MarkdownEditor
+              value={course.description}
+              onChange={(val) => {
+                setCourse((prev) => ({ ...prev, description: val }));
+              }}
+            />
           </Stack>
           <Stack width="100%" gap="30px">
             <Stack gap="8px">
@@ -91,7 +98,7 @@ export default function Basic({ course, setCourse }) {
               <Autocomplete
                 multiple
                 filterSelectedOptions
-                options={languageOptions}
+                options={["English","Tamil"]}
                 value={course.language || []}
                 renderInput={(params) => (
                   <TextField
@@ -99,6 +106,9 @@ export default function Basic({ course, setCourse }) {
                     label="Select the language of the video"
                   />
                 )}
+                onChange={(_, newValue) => {
+                  setCourse((prev) => ({ ...prev, language: newValue }));
+                }}
               />
             </Stack>
             <Stack gap="8px">
@@ -124,9 +134,7 @@ export default function Basic({ course, setCourse }) {
             backgroundColor: "var(--primary-color)",
             width: "110px",
           }}
-          onClick={() => {
-            handleSave(course);
-          }}
+          onClick={handleSave}
           disableElevation
         >
           Save

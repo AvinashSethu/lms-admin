@@ -11,14 +11,16 @@ import { useParams } from "next/navigation";
 
 export default function Courseid() {
   const [course, setCourse] = useState({
-    courseID: "",
+    id: "",
     goalID: "",
     title: "",
     description: "",
     thumbnail: "",
-    language: [],
+    language: ["English", "Tamil"],
+    lessonIDs: [],
+    subscription: {},
+    titleLower: "",
   });
-  const [updateCourse, setUpdateCourse] = useState(null);
   const { id, courseID } = useParams();
 
   useEffect(() => {

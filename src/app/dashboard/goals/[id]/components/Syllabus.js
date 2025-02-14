@@ -38,6 +38,7 @@ export default function Syllabus({ goal, fetchGoal }) {
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [title, setTitle] = useState("");
+ 
 
   const fetchAllSubjects = () => {
     apiFetch(
@@ -64,7 +65,7 @@ export default function Syllabus({ goal, fetchGoal }) {
       body: JSON.stringify({ courseID: courseID, goalID: goal.goalID }),
     }).then((data) => {
       if (data.success) {
-        console.log(data);
+        // console.log(data);
         router.push(`/dashboard/goals/${goal.goalID}/courses/${courseID}`);
       }
     });
@@ -76,8 +77,6 @@ export default function Syllabus({ goal, fetchGoal }) {
   }, []);
 
   const onAddSubjectSyllabus = () => {
-    console.log(selectedSubject);
-    
     if (!selectedSubject) {
       showSnackbar("Select subject", "error", "", "3000");
       return;
@@ -104,7 +103,6 @@ export default function Syllabus({ goal, fetchGoal }) {
   };
 
   const onCourseCreate = async () => {
-
     if (!title) {
       showSnackbar("Fill all data", "error", "", "3000");
       return;
@@ -136,7 +134,7 @@ export default function Syllabus({ goal, fetchGoal }) {
 
   const handleSubject = (e) => {
     setSelectedSubject(e.target.value);
-  }
+  };
 
   const dialogOpen = () => {
     setIsDialogOPen(true);
@@ -319,7 +317,7 @@ export default function Syllabus({ goal, fetchGoal }) {
                 key={index}
                 title={course.title}
                 thumbnail={defaultThumbnail.src || course.thumbnail}
-                Language={course.Language}
+                Language={course.language}
                 actionButton={
                   <Button
                     variant="text"
