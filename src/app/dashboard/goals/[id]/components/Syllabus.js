@@ -104,7 +104,6 @@ export default function Syllabus({ goal, fetchGoal }) {
   };
 
   const onCourseCreate = async () => {
-    console.log(goal.coursesList[0].id);
 
     if (!title) {
       showSnackbar("Fill all data", "error", "", "3000");

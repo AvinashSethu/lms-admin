@@ -108,6 +108,7 @@ export default function AddQuestion() {
 
       if (data.success) {
         setSubmittedQuestion(data);
+        console.log(questionData);
         router.push("/dashboard/library/allQuestions");
         setQuestionData({
           subjectID: "",
