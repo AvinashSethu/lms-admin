@@ -28,8 +28,6 @@ export default async function getLessons(courseID) {
     return { success: false, message: "Course not found" };
   }
 
-  //   const lessonOrder = courseData.Items[0].lessonOrder || [];
-
   const lessonParams = {
     TableName: TABLE,
     FilterExpression: "sKey = :sKey",

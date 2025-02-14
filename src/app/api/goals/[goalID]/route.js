@@ -1,7 +1,7 @@
 import getGoal from "@/src/util/goals/getGoal";
 
 export async function GET(request, { params }) {
-  const { goalID } = params;
+  const { goalID } = await params;
   try {
     const response = await getGoal({ goalID });
     if (!response.success) {

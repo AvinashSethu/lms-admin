@@ -5,7 +5,6 @@ export async function POST(request) {
   console.log(courseID);
   console.log(goalID);
   
-  
   if (!courseID) {
     return Response.json({ message: "Course ID is required" }, { status: 400 });
   }
