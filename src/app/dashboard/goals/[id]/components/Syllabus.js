@@ -38,7 +38,6 @@ export default function Syllabus({ goal, fetchGoal }) {
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [title, setTitle] = useState("");
- 
 
   const fetchAllSubjects = () => {
     apiFetch(
@@ -55,22 +54,7 @@ export default function Syllabus({ goal, fetchGoal }) {
         showSnackbar("Failed", "error", "", "3000");
       });
   };
-
-  const getCourse = (courseID) => {
-    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/get`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ courseID: courseID, goalID: goal.goalID }),
-    }).then((data) => {
-      if (data.success) {
-        // console.log(data);
-        router.push(`/dashboard/goals/${goal.goalID}/courses/${courseID}`);
-      }
-    });
-  };
-
+  
   useEffect(() => {
     fetchAllSubjects();
     fetchGoal();
@@ -330,7 +314,9 @@ export default function Syllabus({ goal, fetchGoal }) {
                       fontWeight: "400",
                     }}
                     onClick={() => {
-                      getCourse(course.id);
+                      router.push(
+                        `/dashboard/goals/${goal.goalID}/courses/${course.id}`
+                      );
                     }}
                   >
                     Edit

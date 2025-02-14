@@ -9,7 +9,7 @@ import Header from "@/src/components/Header/Header";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { useParams } from "next/navigation";
 
-export default function Courseid() {
+export default function CourseID() {
   const [course, setCourse] = useState({
     id: "",
     goalID: "",
@@ -28,6 +28,8 @@ export default function Courseid() {
   }, [courseID, id]);
 
   const fetchCourse = async () => {
+    console.log("fetching course", courseID, id);
+
     try {
       const data = await apiFetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/get`,
@@ -55,8 +57,10 @@ export default function Courseid() {
         />
       ),
     },
-    { label: "Lessons", content: <Videos course={course}
-    setCourse={setCourse} /> },
+    {
+      label: "Lessons",
+      content: <Videos course={course} setCourse={setCourse} />,
+    },
     { label: "Subscription", content: <Subscription /> },
   ];
 
