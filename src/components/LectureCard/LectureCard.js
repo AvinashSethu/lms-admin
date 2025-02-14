@@ -4,6 +4,7 @@ import { useDrag, useDrop } from "react-dnd";
 import { Delete, Menu, PlayCircleRounded, SaveAlt } from "@mui/icons-material";
 import { IconButton, Stack, Typography } from "@mui/material";
 import StyledSwitchButton from "../StyledSwitch/StyledSwitch";
+import StyledTextField from "../StyledTextField/StyledTextField";
 
 const ItemType = {
   CARD: "lectureCard",
@@ -19,6 +20,7 @@ export default function LectureCard({
   toggle,
   preview,
   moveCard,
+  value
 }) {
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType.CARD,
@@ -62,16 +64,7 @@ export default function LectureCard({
           </IconButton>
           <Stack
             sx={{
-              width: "280px",
-              height: "40px",
-              border: "1px solid var(--border-color)",
-              borderRadius: "4px",
-              justifyContent: "center",
-              paddingLeft: "10px",
-              fontFamily: "Lato",
-              fontSize: "14px",
-              color: "var(--text3)",
-              backgroundColor: "var(--white)",
+              minWidth: "280px",
             }}
           >
             {title}
@@ -103,7 +96,7 @@ export default function LectureCard({
           )}
           {link}
           <IconButton disableRipple>
-            <Delete sx={{ color: "var(--sec-color)" }} />
+            <Delete sx={{ color: "var(--delete-color)" }} />
           </IconButton>
         </Stack>
       </Stack>

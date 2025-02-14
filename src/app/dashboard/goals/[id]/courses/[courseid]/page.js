@@ -55,7 +55,8 @@ export default function Courseid() {
         />
       ),
     },
-    { label: "Lessons", content: <Videos /> },
+    { label: "Lessons", content: <Videos course={course}
+    setCourse={setCourse} /> },
     { label: "Subscription", content: <Subscription /> },
   ];
 

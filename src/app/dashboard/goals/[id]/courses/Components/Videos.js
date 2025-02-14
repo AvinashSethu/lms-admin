@@ -1,10 +1,12 @@
 "use client";
+import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import LectureCard from "@/src/components/LectureCard/LectureCard";
 import LongDialogBox from "@/src/components/LongDialogBox/LongDialogBox";
 import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
+import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Link, LinkOff, PlayCircleRounded } from "@mui/icons-material";
 import { Button, DialogContent, IconButton, Stack } from "@mui/material";
@@ -12,7 +14,9 @@ import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-export default function Videos() {
+export default function Videos({ course, setCourse }) {
+  const { showSnackbar } = useSnackbar();
+
   const [cards, setCards] = useState([
     {
       id: 1,
@@ -50,11 +54,11 @@ export default function Videos() {
   const [selectedBank, setSelectedBank] = useState("");
 
   const moveCard = (fromIndex, toIndex) => {
-    setCards((prevCards) => {
-      const updatedCards = [...prevCards];
-      const [movedCard] = updatedCards.splice(fromIndex, 1);
-      updatedCards.splice(toIndex, 0, movedCard);
-      return updatedCards;
+    setCourse((prev) => {
+      const updatedLessonIDs = [...prev.lessonIDs];
+      const [movedLesson] = updatedLessonIDs.splice(fromIndex, 1);
+      updatedLessonIDs.splice(toIndex, 0, movedLesson);
+      return { ...prev, lessonIDs: updatedLessonIDs };
     });
   };
 
@@ -66,6 +70,58 @@ export default function Videos() {
   const handleBankChange = (e) => {
     setSelectedBank(e.target.value);
   };
+
+  const onAddLesson = async () => {
+    await apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ courseID: course.id }),
+      }
+    ).then((data) => {
+      if (data.success) {
+        showSnackbar(data.message, "success", "", "3000");
+        console.log(data);
+        fetchLesson();
+      } else {
+        console.log(data);
+        showSnackbar(data.message, "error", "", "3000");
+      }
+    });
+  };
+
+  const fetchLesson = () => {
+    apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/get`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ courseID: course.id }),
+      }
+    ).then((data) => {
+      if (data.success) {
+        console.log(data);
+
+        setCourse((prev) => ({
+          ...prev,
+          lessonIDs: data.data.map((lesson) => ({
+            id: lesson.id || "",
+            title: lesson.title || "",
+            path:lesson.path || ""
+          })),
+        }));
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchLesson();
+  }, []);
 
   useEffect(() => {
     const fetchBanks = async () => {
@@ -116,7 +172,7 @@ export default function Videos() {
       >
         <Button
           variant="contained"
-          onClick={addCards}
+          onClick={onAddLesson}
           sx={{
             backgroundColor: "var(--sec-color-acc-1)",
             color: "var(--sec-color)",
@@ -131,31 +187,37 @@ export default function Videos() {
       </Stack>
       <Stack gap="10px">
         <DndProvider backend={HTML5Backend}>
-          {cards.map((card, index) => (
-            <LectureCard
-              key={card.id}
-              id={card.id}
-              index={index}
-              title={card.title}
-              link={
-                <IconButton disableRipple>
-                  {card.link ? (
-                    <Link
-                      sx={{ color: "var(--sec-color)" }}
-                      onClick={dialogOpen}
+          {course.lessonIDs && course.lessonIDs.length
+            ? course.lessonIDs.map((item, index) => (
+                <LectureCard
+                  key={item}
+                  id={item}
+                  index={index}
+                  title={
+                    <StyledTextField
+                      placeholder="Enter Lesson Title"
+                      value={item.title}
+                      
                     />
-                  ) : (
-                    <LinkOff sx={{ color: "var(--sec-color)" }} />
-                  )}
-                </IconButton>
-              }
-              play={card.play}
-              download={card.download}
-              toggle={card.toggle}
-              preview={card.preview}
-              moveCard={moveCard}
-            />
-          ))}
+                  }
+                  link={
+                    <IconButton disableRipple>
+                      {item.link ? (
+                        <Link
+                          sx={{ color: "var(--sec-color)" }}
+                          onClick={dialogOpen}
+                        />
+                      ) : (
+                        <LinkOff sx={{ color: "var(--sec-color)" }} />
+                      )}
+                    </IconButton>
+                  }
+                  preview
+                  toggle
+                  moveCard={moveCard}
+                />
+              ))
+            : ""}
         </DndProvider>
       </Stack>
       <LongDialogBox
