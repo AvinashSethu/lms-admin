@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import PreviewStepper from "./[addQuestion]/Components/PreviewStepper";
+import PreviewStepper from "./addQuestion/Components/PreviewStepper";
 import LongDialogBox from "@/src/components/LongDialogBox/LongDialogBox";
 
 export default function AllQuestions() {

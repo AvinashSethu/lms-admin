@@ -4,7 +4,6 @@ import { useDrag, useDrop } from "react-dnd";
 import { Delete, Menu, PlayCircleRounded, SaveAlt } from "@mui/icons-material";
 import { IconButton, Stack, Typography } from "@mui/material";
 import StyledSwitchButton from "../StyledSwitch/StyledSwitch";
-import StyledTextField from "../StyledTextField/StyledTextField";
 
 const ItemType = {
   CARD: "lectureCard",

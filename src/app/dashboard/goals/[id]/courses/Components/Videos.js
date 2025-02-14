@@ -16,36 +16,6 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 export default function Videos({ course, setCourse }) {
   const { showSnackbar } = useSnackbar();
-
-  const [cards, setCards] = useState([
-    {
-      id: 1,
-      title: "Introduction",
-      link: true,
-      play: true,
-      download: false,
-      toggle: true,
-      preview: true,
-    },
-    {
-      id: 2,
-      title: "What is numerals",
-      link: true,
-      play: false,
-      download: true,
-      toggle: true,
-      preview: true,
-    },
-    {
-      id: 3,
-      title: "Numerical methods problems",
-      link: true,
-      play: false,
-      download: true,
-      toggle: true,
-      preview: true,
-    },
-  ]);
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const dialogOpen = () => setIsDialogOPen(true);
   const dialogClose = () => setIsDialogOPen(false);
@@ -62,13 +32,29 @@ export default function Videos({ course, setCourse }) {
     });
   };
 
-  const addCards = () => {
-    const newCard = {};
-    setCards([...cards, newCard]);
-  };
-
   const handleBankChange = (e) => {
     setSelectedBank(e.target.value);
+  };
+
+  const handleLessonUpdate = (e, id, courseID, params = {}) => {
+    console.log(id);
+    console.log(courseID);
+    console.log(params.title);
+
+    const data = apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/update`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          lessonID: id,
+          courseID: courseID,
+          ...params,
+        }),
+      }
+    );
   };
 
   const onAddLesson = async () => {
@@ -106,13 +92,13 @@ export default function Videos({ course, setCourse }) {
     ).then((data) => {
       if (data.success) {
         console.log(data);
-
         setCourse((prev) => ({
           ...prev,
           lessonIDs: data.data.map((lesson) => ({
             id: lesson.id || "",
             title: lesson.title || "",
-            path:lesson.path || ""
+            path: lesson.path || "",
+            courseID: lesson.courseID || "",
           })),
         }));
       }
@@ -197,7 +183,38 @@ export default function Videos({ course, setCourse }) {
                     <StyledTextField
                       placeholder="Enter Lesson Title"
                       value={item.title}
-                      
+                      // onChange={(e) => {
+                      //   handleLessonUpdate(
+                      //     e,
+                      //     item.id,
+                      //     item.courseID,
+                      //     {title:item.title}
+                      //   );
+                      // } }
+                      onBlur={(e) => {
+                        const newTitle = e.target.value;
+                        setCourse((prev) => ({
+                          ...prev,
+                          lessonIDs: prev.lessonIDs.map((lesson) =>
+                            lesson.id === item.id
+                              ? { ...lesson, title: newTitle }
+                              : lesson
+                          ),
+                        }));
+                        handleLessonUpdate(e, item.id, item.courseID, {
+                          title: newTitle,
+                        });
+                      }}
+                      onChange={(e) => {
+                        // const newTitle = e.target.value;
+                        // setCourse((prev) => ({
+                        //   ...prev,
+                        //   lessonIDs: prev.lessonIDs.map((lesson) =>
+                        //     lesson.id === item.id ? { ...lesson, title: newTitle } : lesson
+                        //   ),
+                        // }));
+                        // handleLessonUpdate(e, item.id, item.courseID, { title: newTitle });
+                      }}
                     />
                   }
                   link={
