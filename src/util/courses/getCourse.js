@@ -11,7 +11,10 @@ export default async function getCourse({ courseID, goalID }) {
   try {
     const { Item } = await dynamoDB.get(params).promise();
     if (!Item) {
-      throw new Error("Course not found");
+      return {
+        success: false,
+        message: "Course not found",
+      };
     }
     return {
       success: true,
