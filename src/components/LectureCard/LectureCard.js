@@ -1,30 +1,31 @@
 "use client";
 import React, { useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { Delete, Menu, PlayCircleRounded, SaveAlt } from "@mui/icons-material";
-import { IconButton, Stack, Typography } from "@mui/material";
-import StyledSwitchButton from "../StyledSwitch/StyledSwitch";
+import { Delete, Link, LinkOff, Menu } from "@mui/icons-material";
+import { IconButton, Stack } from "@mui/material";
+import LinkDialog from "@/src/app/dashboard/goals/[id]/courses/Components/LinkDialog";
+import StyledTextField from "../StyledTextField/StyledTextField";
 
 const ItemType = {
   CARD: "lectureCard",
 };
 
 export default function LectureCard({
-  id,
   index,
-  title,
-  link,
-  play,
-  download,
-  toggle,
-  preview,
   moveCard,
-  value,
-  isPreview,
+  course,
+  setCourse,
+  handleLessonUpdate,
+  lesson,
 }) {
+  const [isDialogOpen, setIsDialogOPen] = useState(false);
+  const dialogOpen = () => setIsDialogOPen(true);
+  const dialogClose = () => setIsDialogOPen(false);
+  console.log(lesson);
+
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType.CARD,
-    item: { id, index },
+    item: { lesson, index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -67,11 +68,32 @@ export default function LectureCard({
               minWidth: "280px",
             }}
           >
-            {title}
+            <StyledTextField
+              placeholder="Enter Lesson Title"
+              value={lesson.title}
+              onFocus={(e) => e.target.select()}
+              onBlur={(e) => {
+                const newTitle = e.target.value;
+                handleLessonUpdate(e, lesson.id, lesson.courseID, {
+                  title: newTitle,
+                });
+              }}
+              onChange={(e) => {
+                const newTitle = e.target.value;
+                setCourse((prev) => ({
+                  ...prev,
+                  lessonIDs: prev.lessonIDs.map((l) =>
+                    l.id === lesson.id
+                      ? { ...l, title: newTitle }
+                      : l
+                  ),
+                }));
+              }}
+            />
           </Stack>
         </Stack>
         <Stack flexDirection="row" alignItems="center">
-          {isPreview}
+          {/* {isPreview}
           {play && (
             <IconButton disableRipple>
               <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
@@ -81,13 +103,26 @@ export default function LectureCard({
             <IconButton disableRipple>
               <SaveAlt sx={{ color: "var(--sec-color)" }} />
             </IconButton>
-          )}
-          {link}
+          )} */}
+          <IconButton onClick={dialogOpen} disableRipple>
+            {course.isLinked ? (
+              <LinkOff sx={{ color: "var(--sec-color)" }} />
+            ) : (
+              <Link sx={{ color: "var(--sec-color)" }} />
+            )}
+          </IconButton>
           <IconButton disableRipple>
             <Delete sx={{ color: "var(--delete-color)" }} />
           </IconButton>
         </Stack>
       </Stack>
+      <LinkDialog
+        lesson={lesson}
+        isOpen={isDialogOpen}
+        onClose={dialogClose}
+        course={course}
+        handleLessonUpdate={handleLessonUpdate}
+      />
     </Stack>
   );
 }

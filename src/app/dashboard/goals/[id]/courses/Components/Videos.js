@@ -1,34 +1,21 @@
 "use client";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import LectureCard from "@/src/components/LectureCard/LectureCard";
-import LongDialogBox from "@/src/components/LongDialogBox/LongDialogBox";
-import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
-import SearchBox from "@/src/components/SearchBox/SearchBox";
-import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
-import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import StyledSwitchButton from "@/src/components/StyledSwitch/StyledSwitch";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Link, LinkOff, PlayCircleRounded } from "@mui/icons-material";
-import {
-  Button,
-  DialogContent,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Link, LinkOff } from "@mui/icons-material";
+import { Button, IconButton, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import LinkDialog from "./LinkDialog";
 
 export default function Videos({ course, setCourse }) {
   const { showSnackbar } = useSnackbar();
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const dialogOpen = () => setIsDialogOPen(true);
   const dialogClose = () => setIsDialogOPen(false);
-  const [allBanks, setAllBanks] = useState([]);
-  const [resourceList, setResourceList] = useState([]);
-  const [selectedBank, setSelectedBank] = useState("");
 
   const moveCard = (fromIndex, toIndex) => {
     setCourse((prev) => {
@@ -37,10 +24,6 @@ export default function Videos({ course, setCourse }) {
       updatedLessonIDs.splice(toIndex, 0, movedLesson);
       return { ...prev, lessonIDs: updatedLessonIDs };
     });
-  };
-
-  const handleBankChange = (e) => {
-    setSelectedBank(e.target.value);
   };
 
   const handleLink = () => {
@@ -83,8 +66,8 @@ export default function Videos({ course, setCourse }) {
   };
 
   const handleUnlik = () => {
-    const data = apiFetch(``)
-  }
+    const data = apiFetch(``);
+  };
 
   const onAddLesson = async () => {
     await apiFetch(
@@ -99,7 +82,7 @@ export default function Videos({ course, setCourse }) {
     ).then((data) => {
       if (data.success) {
         showSnackbar(data.message, "success", "", "3000");
-        console.log(data);
+        // console.log(data);
         fetchLesson();
       } else {
         console.log(data);
@@ -120,7 +103,7 @@ export default function Videos({ course, setCourse }) {
       }
     ).then((data) => {
       if (data.success) {
-        console.log(data);
+        // console.log(data);
         setCourse((prev) => ({
           ...prev,
           lessonIDs: data.data.map((lesson) => ({
@@ -137,46 +120,6 @@ export default function Videos({ course, setCourse }) {
   useEffect(() => {
     fetchLesson();
   }, []);
-
-  useEffect(() => {
-    const fetchBanks = async () => {
-      try {
-        const data = await apiFetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/get-all-bank`
-        );
-        if (data.success) {
-          setAllBanks(data.data.banks);
-        } else {
-          setAllBanks([]);
-        }
-      } catch (error) {
-        console.error(data.message);
-      }
-    };
-    fetchBanks();
-  }, []);
-
-  useEffect(() => {
-    if (selectedBank) {
-      fetchBank(selectedBank);
-    }
-  }, [selectedBank]);
-
-  const fetchBank = async (bankID) => {
-    try {
-      const data = await apiFetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/get-bank/${bankID}`
-      );
-      if (data.success) {
-        setResourceList(data.data.resources);
-      } else {
-        showSnackbar("No Bank Found", "error", "", "3000");
-        setResourceList([]);
-      }
-    } catch (error) {
-      console.error("Error fetching course data:", error);
-    }
-  };
 
   return (
     <Stack marginTop="20px" gap="20px">
@@ -206,142 +149,48 @@ export default function Videos({ course, setCourse }) {
             ? course.lessonIDs.map((item, index) => (
                 <LectureCard
                   key={item}
-                  id={item}
                   index={index}
-                  title={
-                    <StyledTextField
-                      placeholder="Enter Lesson Title"
-                      value={item.title}
-                      onFocus={(e) => e.target.select()}
-                      onBlur={(e) => {
-                        const newTitle = e.target.value;
-                        handleLessonUpdate(e, item.id, item.courseID, {
-                          title: newTitle,
-                        });
-                      }}
-                      onChange={(e) => {
-                        const newTitle = e.target.value;
-                        setCourse((prev) => ({
-                          ...prev,
-                          lessonIDs: prev.lessonIDs.map((lesson) =>
-                            lesson.id === item.id
-                              ? { ...lesson, title: newTitle }
-                              : lesson
-                          ),
-                        }));
-                      }}
-                    />
-                  }
-                  isPreview={
-                    <Stack flexDirection="row" alignItems="center">
-                      <Typography
-                        sx={{
-                          fontFamily: "Lato",
-                          fontSize: "12px",
-                          fontWeight: "700",
-                          color: "var(--text3)",
-                        }}
-                      >
-                        Preview
-                      </Typography>
-                      <StyledSwitchButton
-                        checked={!!item.isPreview}
-                        onClick={(e) => {
-                          const updatePreview = !item.isPreview;
-                          handleLessonUpdate(e, item.id, item.courseID, {
-                            isPreview: updatePreview,
-                          });
-                          setCourse((prev) => ({
-                            ...prev,
-                            lessonIDs: prev.lessonIDs.map((lesson) =>
-                              lesson.id === item.id
-                                ? { ...lesson, isPreview: updatePreview }
-                                : lesson
-                            ),
-                          }));
-                        }}
-                      />
-                    </Stack>
-                  }
-                  link={
-                    <IconButton onClick={() => handleLink(item)} disableRipple>
-                      {item.isLinked ? (
-                        <Link
-                          sx={{ color: "var(--sec-color)" }}
-                          // onClick={dialogOpen}
-                        />
-                      ) : (
-                        <LinkOff sx={{ color: "var(--sec-color)" }} />
-                      )}
-                    </IconButton>
-                  }
+                  // isPreview={
+                  //   <Stack flexDirection="row" alignItems="center">
+                  //     <Typography
+                  //       sx={{
+                  //         fontFamily: "Lato",
+                  //         fontSize: "12px",
+                  //         fontWeight: "700",
+                  //         color: "var(--text3)",
+                  //       }}
+                  //     >
+                  //       Preview
+                  //     </Typography>
+                  //     <StyledSwitchButton
+                  //       checked={!!item.isPreview}
+                  //       onClick={(e) => {
+                  //         const updatePreview = !item.isPreview;
+                  //         handleLessonUpdate(e, item.id, item.courseID, {
+                  //           isPreview: updatePreview,
+                  //         });
+                  //         setCourse((prev) => ({
+                  //           ...prev,
+                  //           lessonIDs: prev.lessonIDs.map((lesson) =>
+                  //             lesson.id === item.id
+                  //               ? { ...lesson, isPreview: updatePreview }
+                  //               : lesson
+                  //           ),
+                  //         }));
+                  //       }}
+                  //     />
+                  //   </Stack>
+                  // }
+                  lesson={item}
+                  course={course}
+                  setCourse={setCourse}
+                  handleLessonUpdate={handleLessonUpdate}
                   moveCard={moveCard}
                 />
               ))
             : ""}
         </DndProvider>
       </Stack>
-      <LongDialogBox
-        isOpen={isDialogOpen}
-        onClose={dialogClose}
-        title="Link resources"
-      >
-        <DialogContent>
-          <Stack gap="20px">
-            <Stack flexDirection="row" gap="10px">
-              <Stack width="30%">
-                <StyledSelect
-                  title="Select Course"
-                  value={selectedBank}
-                  options={allBanks}
-                  getLabel={(bank) => bank.title}
-                  getValue={(bank) => bank.bankID}
-                  onChange={handleBankChange}
-                />
-              </Stack>
-              <SearchBox />
-            </Stack>
-            <Stack
-              flexDirection="row"
-              columnGap="40px"
-              rowGap="15px"
-              flexWrap="wrap"
-            >
-              {resourceList.length > 0 ? (
-                resourceList.map((item, index) => (
-                  <SecondaryCard
-                    key={index}
-                    cardWidth="300px"
-                    title={item.name}
-                    icon={
-                      <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
-                    }
-                    button={
-                      <IconButton
-                        onClick={(e) =>
-                          handleLessonUpdate(e, course.id, course.id, {
-                            resourceID: item.resourceID,
-                          })
-                        }
-                        sx={{
-                          backgroundColor: "var(--sec-color-acc-1)",
-                          color: "var(--sec-color)",
-                          borderRadius: "6px",
-                          fontSize: "14px",
-                        }}
-                      >
-                        Add
-                      </IconButton>
-                    }
-                  />
-                ))
-              ) : (
-                <NoDataFound />
-              )}
-            </Stack>
-          </Stack>
-        </DialogContent>
-      </LongDialogBox>
     </Stack>
   );
 }
