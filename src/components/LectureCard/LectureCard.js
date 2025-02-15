@@ -19,7 +19,8 @@ export default function LectureCard({
   toggle,
   preview,
   moveCard,
-  value
+  value,
+  isPreview,
 }) {
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType.CARD,
@@ -70,19 +71,7 @@ export default function LectureCard({
           </Stack>
         </Stack>
         <Stack flexDirection="row" alignItems="center">
-          {preview && (
-            <Typography
-              sx={{
-                fontFamily: "Lato",
-                fontSize: "12px",
-                fontWeight: "700",
-                color: "var(--text3)",
-              }}
-            >
-              Preview
-            </Typography>
-          )}
-          {toggle && <StyledSwitchButton disableRipple />}
+          {isPreview}
           {play && (
             <IconButton disableRipple>
               <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />

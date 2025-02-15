@@ -302,7 +302,6 @@ export default function Syllabus({ goal, fetchGoal }) {
                 title={course.title}
                 thumbnail={defaultThumbnail.src || course.thumbnail}
                 Language={course.language}
-                lesson={course.lessonIDs}
                 actionButton={
                   <Button
                     variant="text"
@@ -323,7 +322,9 @@ export default function Syllabus({ goal, fetchGoal }) {
                     Edit
                   </Button>
                 }
-                lesson={`${course.lessons} Lessons`}
+                Lesson={<Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
+                 {` ${course.lessons} Lessons`}
+                </Typography>}
                 hours={`${course.duration} Hours`}
               />
             ))

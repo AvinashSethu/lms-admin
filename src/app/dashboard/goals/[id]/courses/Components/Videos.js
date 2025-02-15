@@ -6,10 +6,17 @@ import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import SearchBox from "@/src/components/SearchBox/SearchBox";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
+import StyledSwitchButton from "@/src/components/StyledSwitch/StyledSwitch";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Link, LinkOff, PlayCircleRounded } from "@mui/icons-material";
-import { Button, DialogContent, IconButton, Stack } from "@mui/material";
+import {
+  Button,
+  DialogContent,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -36,12 +43,15 @@ export default function Videos({ course, setCourse }) {
     setSelectedBank(e.target.value);
   };
 
-  const handleLessonUpdate = (e, id, courseID, params = {}) => {
+  const handleLink = () => {
+    setIsDialogOPen(true);
+  };
+
+  const handleLessonUpdate = async (e, id, courseID, params = {}) => {
     console.log(id);
     console.log(courseID);
-    console.log(params.title);
-
-    const data = apiFetch(
+    console.log(params);
+    const data = await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/update`,
       {
         method: "POST",
@@ -55,7 +65,26 @@ export default function Videos({ course, setCourse }) {
         }),
       }
     );
+    if (data) {
+      setCourse((prev) => ({
+        ...prev,
+        lessonIDs: prev.lessonIDs.map((lesson) =>
+          lesson.id === id ? { ...lesson, ...params } : lesson
+        ),
+      }));
+      showSnackbar(data.message, "success", "", "3000");
+      if (params.resourceID) {
+        setIsDialogOPen(false);
+      }
+    } else {
+      showSnackbar(data.message, "error", "", "3000");
+      console.log(data.message);
+    }
   };
+
+  const handleUnlik = () => {
+    const data = apiFetch(``)
+  }
 
   const onAddLesson = async () => {
     await apiFetch(
@@ -183,14 +212,6 @@ export default function Videos({ course, setCourse }) {
                     <StyledTextField
                       placeholder="Enter Lesson Title"
                       value={item.title}
-                      // onChange={(e) => {
-                      //   handleLessonUpdate(
-                      //     e,
-                      //     item.id,
-                      //     item.courseID,
-                      //     {title:item.title}
-                      //   );
-                      // } }
                       onFocus={(e) => e.target.select()}
                       onBlur={(e) => {
                         const newTitle = e.target.value;
@@ -199,14 +220,6 @@ export default function Videos({ course, setCourse }) {
                         });
                       }}
                       onChange={(e) => {
-                        // const newTitle = e.target.value;
-                        // setCourse((prev) => ({
-                        //   ...prev,
-                        //   lessonIDs: prev.lessonIDs.map((lesson) =>
-                        //     lesson.id === item.id ? { ...lesson, title: newTitle } : lesson
-                        //   ),
-                        // }));
-                        // handleLessonUpdate(e, item.id, item.courseID, { title: newTitle });
                         const newTitle = e.target.value;
                         setCourse((prev) => ({
                           ...prev,
@@ -219,20 +232,49 @@ export default function Videos({ course, setCourse }) {
                       }}
                     />
                   }
+                  isPreview={
+                    <Stack flexDirection="row" alignItems="center">
+                      <Typography
+                        sx={{
+                          fontFamily: "Lato",
+                          fontSize: "12px",
+                          fontWeight: "700",
+                          color: "var(--text3)",
+                        }}
+                      >
+                        Preview
+                      </Typography>
+                      <StyledSwitchButton
+                        checked={!!item.isPreview}
+                        onClick={(e) => {
+                          const updatePreview = !item.isPreview;
+                          handleLessonUpdate(e, item.id, item.courseID, {
+                            isPreview: updatePreview,
+                          });
+                          setCourse((prev) => ({
+                            ...prev,
+                            lessonIDs: prev.lessonIDs.map((lesson) =>
+                              lesson.id === item.id
+                                ? { ...lesson, isPreview: updatePreview }
+                                : lesson
+                            ),
+                          }));
+                        }}
+                      />
+                    </Stack>
+                  }
                   link={
-                    <IconButton disableRipple>
-                      {item.link ? (
+                    <IconButton onClick={() => handleLink(item)} disableRipple>
+                      {item.isLinked ? (
                         <Link
                           sx={{ color: "var(--sec-color)" }}
-                          onClick={dialogOpen}
+                          // onClick={dialogOpen}
                         />
                       ) : (
                         <LinkOff sx={{ color: "var(--sec-color)" }} />
                       )}
                     </IconButton>
                   }
-                  preview
-                  toggle
                   moveCard={moveCard}
                 />
               ))
@@ -276,6 +318,11 @@ export default function Videos({ course, setCourse }) {
                     }
                     button={
                       <IconButton
+                        onClick={(e) =>
+                          handleLessonUpdate(e, course.id, course.id, {
+                            resourceID: item.resourceID,
+                          })
+                        }
                         sx={{
                           backgroundColor: "var(--sec-color-acc-1)",
                           color: "var(--sec-color)",
