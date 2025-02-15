@@ -3,9 +3,9 @@ import { dynamoDB } from "../awsAgent";
 export async function updateLesson({
   lessonID,
   courseID,
-  isPreview, // optional: update preview flag
-  resourceID, // optional: update resource info if provided
-  title, // optional: update title if provided
+  isPreview,   // optional: update preview flag
+  resourceID,  // optional: update resource info if provided
+  title,       // optional: update title if provided
 }) {
   if (!lessonID || !courseID) {
     throw new Error("lessonID and courseID are required");
@@ -14,10 +14,10 @@ export async function updateLesson({
   const TABLE = `${process.env.AWS_DB_NAME}master`;
   const now = Date.now();
 
-  // Initialize update expression and attribute values for the lesson.
+  // Initialize update expression and attribute values.
   let updateExp = "SET updatedAt = :u";
   const expAttrVals = { ":u": now };
-  let expAttrNames = {};
+  const expAttrNames = {};
 
   // Update isPreview if provided.
   if (typeof isPreview !== "undefined") {
@@ -32,8 +32,8 @@ export async function updateLesson({
     expAttrVals[":tl"] = title.toLowerCase();
   }
 
-  // Variable to hold the resource item, if needed.
   let resourceItem;
+  // If resourceID is provided, update resource linking fields.
   if (resourceID !== undefined) {
     // Query for the resource item to fetch its details.
     const resourceQueryParams = {
@@ -52,25 +52,24 @@ export async function updateLesson({
       return { success: false, message: "Resource not found" };
     }
     resourceItem = resourceResult.Items[0];
-    // Append resource linking updates.
-    updateExp +=
-      ", resourceID = :rid, #p = :p, isLinked = :il, #t = :t, #n = :n, videoID = :vid";
+
+    // Append resource linking updates and alias reserved keywords.
+    updateExp += ", resourceID = :rid, #p = :p, isLinked = :il, #t = :rt, #n = :rn";
     expAttrVals[":rid"] = resourceID;
     expAttrVals[":p"] = resourceItem.path || "";
     expAttrVals[":il"] = true;
-    expAttrVals[":t"] = resourceItem.type || "";
-    expAttrVals[":n"] = resourceItem.name || "";
-    expAttrVals[":vid"] = resourceItem.videoID || "";
-    // if (resourceItem.type === "VIDEO") {
-    //   updateExp += ", videoID = :vid";
-    //   expAttrVals[":vid"] = resourceItem.videoID || "";
-    // }
+    expAttrVals[":rt"] = resourceItem.type;
+    expAttrVals[":rn"] = resourceItem.name;
+    if (resourceItem.type === "VIDEO") {
+      updateExp += ", videoID = :vid";
+      expAttrVals[":vid"] = resourceItem.videoID || "";
+    }
     expAttrNames["#p"] = "path";
     expAttrNames["#t"] = "type";
     expAttrNames["#n"] = "name";
   }
 
-  // Build the update parameters for the lesson.
+  // Build the lesson update parameters.
   const lessonUpdateParams = {
     TableName: TABLE,
     Key: {
@@ -81,7 +80,6 @@ export async function updateLesson({
     ExpressionAttributeValues: expAttrVals,
   };
 
-  // Add attribute names if needed.
   if (Object.keys(expAttrNames).length > 0) {
     lessonUpdateParams.ExpressionAttributeNames = expAttrNames;
   }
@@ -93,7 +91,7 @@ export async function updateLesson({
       TableName: `${process.env.AWS_DB_NAME}content`,
       Key: {
         pKey: `RESOURCE#${resourceID}`,
-        sKey: resourceItem.sKey, // Use the existing sKey from the resource item.
+        sKey: resourceItem.sKey, // use existing sKey from the resource item
       },
       UpdateExpression:
         "SET linkedLessons = list_append(if_not_exists(linkedLessons, :emptyList), :newLesson), updatedAt = :u",
@@ -108,7 +106,7 @@ export async function updateLesson({
   try {
     // Update the lesson.
     await dynamoDB.update(lessonUpdateParams).promise();
-    // If resource update is needed, perform it.
+    // If resource update is needed, update the resource's linkedLessons.
     if (resourceID !== undefined && resourceUpdateParams) {
       await dynamoDB.update(resourceUpdateParams).promise();
     }
