@@ -1,15 +1,11 @@
 "use client";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import LectureCard from "@/src/components/LectureCard/LectureCard";
-import StyledSwitchButton from "@/src/components/StyledSwitch/StyledSwitch";
-import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Link, LinkOff } from "@mui/icons-material";
 import { Button, IconButton, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import LinkDialog from "./LinkDialog";
 
 export default function Videos({ course, setCourse }) {
   const { showSnackbar } = useSnackbar();
@@ -49,13 +45,16 @@ export default function Videos({ course, setCourse }) {
       }
     );
     if (data) {
+      console.log(params,"paramssssss");
+      
       setCourse((prev) => ({
         ...prev,
         lessonIDs: prev.lessonIDs.map((lesson) =>
           lesson.id === id ? { ...lesson, ...params } : lesson
         ),
-      }));
+      } ));
       showSnackbar(data.message, "success", "", "3000");
+    setIsDialogOPen(false)
       if (params.resourceID) {
         setIsDialogOPen(false);
       }
@@ -150,37 +149,7 @@ export default function Videos({ course, setCourse }) {
                 <LectureCard
                   key={item}
                   index={index}
-                  // isPreview={
-                  //   <Stack flexDirection="row" alignItems="center">
-                  //     <Typography
-                  //       sx={{
-                  //         fontFamily: "Lato",
-                  //         fontSize: "12px",
-                  //         fontWeight: "700",
-                  //         color: "var(--text3)",
-                  //       }}
-                  //     >
-                  //       Preview
-                  //     </Typography>
-                  //     <StyledSwitchButton
-                  //       checked={!!item.isPreview}
-                  //       onClick={(e) => {
-                  //         const updatePreview = !item.isPreview;
-                  //         handleLessonUpdate(e, item.id, item.courseID, {
-                  //           isPreview: updatePreview,
-                  //         });
-                  //         setCourse((prev) => ({
-                  //           ...prev,
-                  //           lessonIDs: prev.lessonIDs.map((lesson) =>
-                  //             lesson.id === item.id
-                  //               ? { ...lesson, isPreview: updatePreview }
-                  //               : lesson
-                  //           ),
-                  //         }));
-                  //       }}
-                  //     />
-                  //   </Stack>
-                  // }
+                  
                   lesson={item}
                   course={course}
                   setCourse={setCourse}

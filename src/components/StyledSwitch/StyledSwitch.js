@@ -18,6 +18,4 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function StyledSwitchButton() {
-  return <StyledSwitch  disableRipple />;
-}
+export default StyledSwitch

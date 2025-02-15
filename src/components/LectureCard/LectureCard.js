@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { Delete, Link, LinkOff, Menu } from "@mui/icons-material";
-import { IconButton, Stack } from "@mui/material";
+import { IconButton, Stack, Typography } from "@mui/material";
 import LinkDialog from "@/src/app/dashboard/goals/[id]/courses/Components/LinkDialog";
 import StyledTextField from "../StyledTextField/StyledTextField";
+import StyledSwitchButton from "../StyledSwitch/StyledSwitch";
+import StyledSwitch from "../StyledSwitch/StyledSwitch";
 
 const ItemType = {
   CARD: "lectureCard",
@@ -22,6 +24,7 @@ export default function LectureCard({
   const dialogOpen = () => setIsDialogOPen(true);
   const dialogClose = () => setIsDialogOPen(false);
   console.log(lesson);
+  console.log(course);
 
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType.CARD,
@@ -83,9 +86,7 @@ export default function LectureCard({
                 setCourse((prev) => ({
                   ...prev,
                   lessonIDs: prev.lessonIDs.map((l) =>
-                    l.id === lesson.id
-                      ? { ...l, title: newTitle }
-                      : l
+                    l.id === lesson.id ? { ...l, title: newTitle } : l
                   ),
                 }));
               }}
@@ -93,7 +94,7 @@ export default function LectureCard({
           </Stack>
         </Stack>
         <Stack flexDirection="row" alignItems="center">
-          {/* {isPreview}
+          {/* 
           {play && (
             <IconButton disableRipple>
               <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
@@ -104,6 +105,53 @@ export default function LectureCard({
               <SaveAlt sx={{ color: "var(--sec-color)" }} />
             </IconButton>
           )} */}
+          <Stack flexDirection="row" alignItems="center">
+            <Typography
+              sx={{
+                fontFamily: "Lato",
+                fontSize: "12px",
+                fontWeight: "700",
+                color: "var(--text3)",
+              }}
+            >
+              Preview
+            </Typography>
+            {/* <StyledSwitchButton
+              checked={course.isPreview}
+              onFocus
+              onChange={(e) => {
+                const updatePreview = !course.isPreview;
+                handleLessonUpdate(e, lesson.id, lesson.courseID, {
+                  isPreview: updatePreview,
+                });
+                setCourse((prev) => ({
+                  ...prev,
+                  lessonIDs: prev.lessonIDs.map((l) =>
+                    l.id === lesson.id ? { ...l, isPreview: updatePreview } : l
+                  ),
+                }));
+              }}
+            />
+             */}
+            <StyledSwitch
+              
+              onChange={(e) => {
+                const updatePreview = !lesson.isPreview;
+                
+                console.log("Hello", e.target.checked);
+                handleLessonUpdate(e, lesson.id, lesson.courseID, {
+                  isPreview: updatePreview,
+                });
+
+                setCourse((prev) => ({
+                  ...prev,
+                  lessonIDs: prev.lessonIDs.map((l) =>
+                    l.id === lesson.id ? { ...l, isPreview: updatePreview } : l
+                  ),
+                }));
+              }}
+            />
+          </Stack>
           <IconButton onClick={dialogOpen} disableRipple>
             {course.isLinked ? (
               <LinkOff sx={{ color: "var(--sec-color)" }} />
