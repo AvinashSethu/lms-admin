@@ -43,6 +43,7 @@ export default async function createLesson({ courseID }) {
       isLinked: false,
       type: "",
       path: "",
+      name: "",
       videoID: "",
       createdAt: now,
       updatedAt: now,
