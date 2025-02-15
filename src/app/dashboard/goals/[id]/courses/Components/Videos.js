@@ -191,16 +191,9 @@ export default function Videos({ course, setCourse }) {
                       //     {title:item.title}
                       //   );
                       // } }
+                      onFocus={(e) => e.target.select()}
                       onBlur={(e) => {
                         const newTitle = e.target.value;
-                        setCourse((prev) => ({
-                          ...prev,
-                          lessonIDs: prev.lessonIDs.map((lesson) =>
-                            lesson.id === item.id
-                              ? { ...lesson, title: newTitle }
-                              : lesson
-                          ),
-                        }));
                         handleLessonUpdate(e, item.id, item.courseID, {
                           title: newTitle,
                         });
@@ -214,6 +207,15 @@ export default function Videos({ course, setCourse }) {
                         //   ),
                         // }));
                         // handleLessonUpdate(e, item.id, item.courseID, { title: newTitle });
+                        const newTitle = e.target.value;
+                        setCourse((prev) => ({
+                          ...prev,
+                          lessonIDs: prev.lessonIDs.map((lesson) =>
+                            lesson.id === item.id
+                              ? { ...lesson, title: newTitle }
+                              : lesson
+                          ),
+                        }));
                       }}
                     />
                   }

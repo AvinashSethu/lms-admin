@@ -302,6 +302,7 @@ export default function Syllabus({ goal, fetchGoal }) {
                 title={course.title}
                 thumbnail={defaultThumbnail.src || course.thumbnail}
                 Language={course.language}
+                lesson={course.lessonIDs}
                 actionButton={
                   <Button
                     variant="text"
