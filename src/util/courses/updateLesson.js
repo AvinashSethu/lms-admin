@@ -3,12 +3,15 @@ import { dynamoDB } from "../awsAgent";
 export async function updateLesson({
   lessonID,
   courseID,
-  isPreview,   // optional: update preview flag
-  resourceID,  // optional: update resource info if provided
-  title,       // optional: update title if provided
+  isPreview, // optional: update preview flag
+  resourceID, // optional: update resource info if provided
+  title, // optional: update title if provided
 }) {
   if (!lessonID || !courseID) {
-    throw new Error("lessonID and courseID are required");
+    return {
+      success: false,
+      message: "Missing lessonID or courseID",
+    };
   }
 
   const TABLE = `${process.env.AWS_DB_NAME}master`;
@@ -46,15 +49,18 @@ export async function updateLesson({
     };
 
     const resourceResult = await dynamoDB.query(resourceQueryParams).promise();
-    console.log("Resource result:", resourceResult);
-
     if (!resourceResult.Items || resourceResult.Items.length === 0) {
       return { success: false, message: "Resource not found" };
     }
     resourceItem = resourceResult.Items[0];
 
+    if (!resourceItem.linkedLessons.includes(lessonID)) {
+      return { success: false, message: "Resource already linked" };
+    }
+
     // Append resource linking updates and alias reserved keywords.
-    updateExp += ", resourceID = :rid, #p = :p, isLinked = :il, #t = :rt, #n = :rn";
+    updateExp +=
+      ", resourceID = :rid, #p = :p, isLinked = :il, #t = :rt, #n = :rn";
     expAttrVals[":rid"] = resourceID;
     expAttrVals[":p"] = resourceItem.path || "";
     expAttrVals[":il"] = true;
