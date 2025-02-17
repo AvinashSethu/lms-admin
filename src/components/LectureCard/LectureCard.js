@@ -9,13 +9,22 @@ import {
   PlayCircleRounded,
   SaveAlt,
 } from "@mui/icons-material";
-import { Button, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import LinkDialog from "@/src/app/dashboard/goals/[id]/courses/Components/LinkDialog";
 import StyledTextField from "../StyledTextField/StyledTextField";
 import StyledSwitch from "../StyledSwitch/StyledSwitch";
 import DeleteDialogBox from "../DeleteDialogBox/DeleteDialogBox";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { useRouter } from "next/navigation";
+import LongDialogBox from "../LongDialogBox/LongDialogBox";
 
 const ItemType = {
   CARD: "lectureCard",
@@ -39,6 +48,16 @@ export default function LectureCard({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const delteDialogOpen = () => setIsDeleteDialogOpen(true);
   const deleteDialogClose = () => setIsDeleteDialogOpen(false);
+  const [loading, setLoading] = useState(false);
+  const [videoURL, setVideoURL] = useState(null);
+  const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
+
+  const videoPlayerOpen = () => {
+    setIsVideoPlayerOpen(true);
+  }
+  const videoPlayerClose = () => {
+    setIsVideoPlayerOpen(false);
+  }
 
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType.CARD,
@@ -101,7 +120,8 @@ export default function LectureCard({
     if (data) {
       console.log("Videoo");
       // window.open(data.videoURL)
-      UploadVideo({ videoURL: data.videoURL });
+      // UploadVideo({ videoURL: data.videoURL });
+      setVideoURL(data.videoURL);
     }
   };
 
@@ -109,173 +129,201 @@ export default function LectureCard({
   const dragDropRef = dragRef(dropRef(ref));
 
   return (
-    <Stack
-      ref={dragDropRef}
-      sx={{
-        border: "1px solid var(--border-color)",
-        height: "60px",
-        borderRadius: "3px",
-        backgroundColor: isDragging
-          ? "var(--sec-color-acc-1)"
-          : "var(--sec-color-acc-2)",
-        padding: "10px",
-        opacity: isDragging ? 0.5 : 1,
-      }}
-    >
-      <Stack flexDirection="row" justifyContent="space-between">
-        <Stack flexDirection="row" gap="10px">
-          <IconButton disableRipple>
-            <Menu />
-          </IconButton>
-          <Stack
-            sx={{
-              minWidth: "280px",
-            }}
-          >
-            <StyledTextField
-              placeholder="Enter Lesson Title"
-              value={lesson.title}
-              onFocus={(e) => e.target.select()}
-              onBlur={(e) => {
-                const newTitle = e.target.value;
-                handleLessonUpdate(e, lesson.id, lesson.courseID, {
-                  title: newTitle,
-                });
+    <>
+      <Stack
+        ref={dragDropRef}
+        sx={{
+          border: "1px solid var(--border-color)",
+          height: "60px",
+          borderRadius: "3px",
+          backgroundColor: isDragging
+            ? "var(--sec-color-acc-1)"
+            : "var(--sec-color-acc-2)",
+          padding: "10px",
+          opacity: isDragging ? 0.5 : 1,
+        }}
+      >
+        <Stack flexDirection="row" justifyContent="space-between">
+          <Stack flexDirection="row" gap="10px">
+            <IconButton disableRipple>
+              <Menu />
+            </IconButton>
+            <Stack
+              sx={{
+                minWidth: "280px",
               }}
-              onChange={(e) => {
-                const newTitle = e.target.value;
-                setCourse((prev) => ({
-                  ...prev,
-                  lessonIDs: prev.lessonIDs.map((l) =>
-                    l.id === lesson.id ? { ...l, title: newTitle } : l
-                  ),
-                }));
-              }}
-            />
+            >
+              <StyledTextField
+                placeholder="Enter Lesson Title"
+                value={lesson.title}
+                onFocus={(e) => e.target.select()}
+                onBlur={(e) => {
+                  const newTitle = e.target.value;
+                  handleLessonUpdate(e, lesson.id, lesson.courseID, {
+                    title: newTitle,
+                  });
+                }}
+                onChange={(e) => {
+                  const newTitle = e.target.value;
+                  setCourse((prev) => ({
+                    ...prev,
+                    lessonIDs: prev.lessonIDs.map((l) =>
+                      l.id === lesson.id ? { ...l, title: newTitle } : l
+                    ),
+                  }));
+                }}
+              />
+            </Stack>
           </Stack>
-        </Stack>
-        <Stack flexDirection="row" alignItems="center">
           <Stack flexDirection="row" alignItems="center">
-            <Typography
-              sx={{
-                fontFamily: "Lato",
-                fontSize: "12px",
-                fontWeight: "700",
-                color: "var(--text3)",
+            <Stack flexDirection="row" alignItems="center">
+              <Typography
+                sx={{
+                  fontFamily: "Lato",
+                  fontSize: "12px",
+                  fontWeight: "700",
+                  color: "var(--text3)",
+                }}
+              >
+                Preview
+              </Typography>
+              <StyledSwitch
+                checked={lesson.isPreview}
+                onChange={(e) => {
+                  const updatePreview = !lesson.isPreview;
+                  handleLessonUpdate(e, lesson.id, lesson.courseID, {
+                    isPreview: updatePreview,
+                  });
+
+                  setCourse((prev) => ({
+                    ...prev,
+                    lessonIDs: prev.lessonIDs.map((l) =>
+                      l.id === lesson.id
+                        ? { ...l, isPreview: updatePreview }
+                        : l
+                    ),
+                  }));
+                }}
+              />
+            </Stack>
+            {lesson.isLinked &&
+              (lesson.type === "VIDEO" ? (
+                <IconButton
+                  onClick={() => {
+                    playVideo({ videoID: lesson.resourceID });
+                    videoPlayerOpen();
+                  }}
+                  disableRipple
+                >
+                  <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
+                </IconButton>
+              ) : (
+                <IconButton
+                  onClick={() => {
+                    downloadFile({ path: lesson.path });
+                  }}
+                  disableRipple
+                >
+                  <SaveAlt sx={{ color: "var(--sec-color)" }} />
+                </IconButton>
+              ))}
+
+            <IconButton
+              onClick={(e) => {
+                if (lesson.isLinked) {
+                  handleUnlink(
+                    e,
+                    lesson.id,
+                    lesson.courseID,
+                    lesson.resourceID
+                  );
+                } else {
+                  dialogOpen();
+                }
               }}
+              disableRipple
             >
-              Preview
-            </Typography>
-            <StyledSwitch
-              checked={lesson.isPreview}
-              onChange={(e) => {
-                const updatePreview = !lesson.isPreview;
-                handleLessonUpdate(e, lesson.id, lesson.courseID, {
-                  isPreview: updatePreview,
-                });
-
-                setCourse((prev) => ({
-                  ...prev,
-                  lessonIDs: prev.lessonIDs.map((l) =>
-                    l.id === lesson.id ? { ...l, isPreview: updatePreview } : l
-                  ),
-                }));
-              }}
-            />
+              {lesson.isLinked ? (
+                <LinkOff sx={{ color: "var(--sec-color)" }} />
+              ) : (
+                <Link sx={{ color: "var(--sec-color)" }} />
+              )}
+            </IconButton>
+            <IconButton onClick={delteDialogOpen} disableRipple>
+              <Delete sx={{ color: "var(--delete-color)" }} />
+            </IconButton>
           </Stack>
-          {lesson.isLinked &&
-            (lesson.type === "VIDEO" ? (
-              <IconButton
-                onClick={() => {
-                  playVideo({ videoID: lesson.resourceID });
-                }}
-                disableRipple
-              >
-                <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
-              </IconButton>
-            ) : (
-              <IconButton
-                onClick={() => {
-                  downloadFile({ path: lesson.path });
-                }}
-                disableRipple
-              >
-                <SaveAlt sx={{ color: "var(--sec-color)" }} />
-              </IconButton>
-            ))}
-
-          <IconButton
-            onClick={(e) => {
-              if (lesson.isLinked) {
-                handleUnlink(e, lesson.id, lesson.courseID, lesson.resourceID);
-              } else {
-                dialogOpen();
-              }
-            }}
-            disableRipple
-          >
-            {lesson.isLinked ? (
-              <LinkOff sx={{ color: "var(--sec-color)" }} />
-            ) : (
-              <Link sx={{ color: "var(--sec-color)" }} />
-            )}
-          </IconButton>
-          <IconButton onClick={delteDialogOpen} disableRipple>
-            <Delete sx={{ color: "var(--delete-color)" }} />
-          </IconButton>
         </Stack>
+
+        <LinkDialog
+          lesson={lesson}
+          isOpen={isDialogOpen}
+          onClose={dialogClose}
+          course={course}
+          setCourse={setCourse}
+          handleLessonUpdate={handleLessonUpdate}
+        />
+        <DeleteDialogBox
+          isOpen={isDeleteDialogOpen}
+          actionButton={
+            <Stack
+              flexDirection="row"
+              justifyContent="center"
+              sx={{ gap: "20px", width: "100%" }}
+            >
+              <Button
+                variant="contained"
+                onClick={() => {
+                  deleteLesson({
+                    lessonID: lesson.id,
+                    goalID: course.goalID,
+                    setLoading,
+                  });
+                  deleteDialogClose();
+                }}
+                sx={{
+                  textTransform: "none",
+                  backgroundColor: "var(--delete-color)",
+                  borderRadius: "5px",
+                  width: "130px",
+                }}
+                disableElevation
+              >
+                {loading ? (
+                  <CircularProgress
+                    size={24}
+                    sx={{ color: "var(--white)", fontSize: "10px" }}
+                  />
+                ) : (
+                  "Delete"
+                )}
+              </Button>
+              <Button
+                variant="contained"
+                onClick={deleteDialogClose}
+                sx={{
+                  textTransform: "none",
+                  borderRadius: "5px",
+                  backgroundColor: "white",
+                  color: "var(--text2)",
+                  border: "1px solid var(--border-color)",
+                  width: "130px",
+                }}
+                disableElevation
+              >
+                Cancel
+              </Button>
+            </Stack>
+          }
+          title="Lesson"
+        ></DeleteDialogBox>
       </Stack>
-      <LinkDialog
-        lesson={lesson}
-        isOpen={isDialogOpen}
-        onClose={dialogClose}
-        course={course}
-        setCourse={setCourse}
-        handleLessonUpdate={handleLessonUpdate}
-      />
-      <DeleteDialogBox
-        isOpen={isDeleteDialogOpen}
-        actionButton={
-          <Stack
-            flexDirection="row"
-            justifyContent="center"
-            sx={{ gap: "20px", width: "100%" }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => {
-                deleteLesson({ lessonID: lesson.id, goalID: course.goalID });
-                deleteDialogClose();
-              }}
-              sx={{
-                textTransform: "none",
-                backgroundColor: "var(--delete-color)",
-                borderRadius: "5px",
-                width: "130px",
-              }}
-              disableElevation
-            >
-              Delete
-            </Button>
-            <Button
-              variant="contained"
-              onClick={deleteDialogClose}
-              sx={{
-                textTransform: "none",
-                borderRadius: "5px",
-                backgroundColor: "white",
-                color: "var(--text2)",
-                border: "1px solid var(--border-color)",
-                width: "130px",
-              }}
-              disableElevation
-            >
-              Cancel
-            </Button>
-          </Stack>
-        }
-      ></DeleteDialogBox>
-    </Stack>
+      <LongDialogBox isOpen={isVideoPlayerOpen} onClose={videoPlayerClose}>
+        <DialogContent>
+        {videoURL && <UploadVideo videoURL={videoURL} />}
+        </DialogContent>
+      </LongDialogBox>
+    </>
   );
 }
 
@@ -283,23 +331,32 @@ export const UploadVideo = ({ videoURL }) => {
   return (
     <div
       style={{
-        width: "800px",
-        // display: "flex",
-        // justifyContent: "center",
-        // alignItems: "center",
-        margin: "auto",
+        display: "flex",
+        width: "100%",
+        height: "70vh",
+        justifyContent: "center",
+        alignItems: "center",
+        padding:"0px 0px 0px 0px"
       }}
     >
-      <div style={{ position: "relative", paddingTop: "56.25%" }}>
+      <div
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+        }}
+      >
         <iframe
           src={videoURL}
           loading="lazy"
           style={{
-            border: 0,
+            border:"1px solid var(--border-color)",
+            borderRadius: "10px",
             position: "absolute",
             top: 0,
-            height: "100%",
-            width: "100%",
+            minHeight: "100%",
+            minWidth: "100%",
+            // left: 0,
           }}
           allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
           allowFullScreen={true}

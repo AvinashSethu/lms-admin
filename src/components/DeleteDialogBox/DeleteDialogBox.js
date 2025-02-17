@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 
-export default function DeleteDialogBox({ isOpen, actionButton, name }) {
+export default function DeleteDialogBox({ isOpen, actionButton, name, title }) {
   return (
     <Dialog open={isOpen} TransitionComponent={Slide} PaperProps={{sx:{borderRadius:"15px",padding:"10px"}}} disableScrollLock={true} >
       <DialogTitle sx={{ width: "350px" }}>
@@ -24,7 +24,7 @@ export default function DeleteDialogBox({ isOpen, actionButton, name }) {
           >
             <RemoveCircleRoundedIcon/>
           </Stack>
-          <Typography sx={{ fontSize: "14px" }}>Delete Resource ?</Typography>
+          <Typography sx={{ fontSize: "14px" }}>Delete {title}</Typography>
         </Stack>
       </DialogTitle>
       <DialogContent>

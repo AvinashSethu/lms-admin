@@ -29,7 +29,7 @@ export default function LongDialogBox({ children, isOpen, onClose, title }) {
         }}
       >
         {title}
-        <Close onClick={onClose} sx={{ cursor: "pointer" }} />
+        <Close onClick={onClose} sx={{ cursor: "pointer",marginLeft:"auto" }} />
       </DialogTitle>
       <DialogContent sx={{ padding: "0px" }}>{children}</DialogContent>
     </Dialog>

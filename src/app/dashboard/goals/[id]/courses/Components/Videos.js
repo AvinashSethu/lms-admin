@@ -2,7 +2,7 @@
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import LectureCard from "@/src/components/LectureCard/LectureCard";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Button, Stack } from "@mui/material";
+import { Button, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -179,8 +179,9 @@ export default function Videos({ course, setCourse }) {
     });
   };
 
-  const deleteLesson = ({ lessonID, goalID }) => {
-    apiFetch(
+  const deleteLesson = async ({ lessonID, goalID, setLoading }) => {
+    setLoading(true);
+    await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/delete`,
       {
         method: "POST",
@@ -192,11 +193,13 @@ export default function Videos({ course, setCourse }) {
     ).then((data) => {
       if (data.success) {
         showSnackbar(data.message, "success", "", "3000");
+
         fetchLesson();
       } else {
         showSnackbar(data.message, "error", "", "3000");
       }
     });
+    setLoading(false);
   };
 
   return (
