@@ -14,6 +14,8 @@ import LinkDialog from "@/src/app/dashboard/goals/[id]/courses/Components/LinkDi
 import StyledTextField from "../StyledTextField/StyledTextField";
 import StyledSwitch from "../StyledSwitch/StyledSwitch";
 import DeleteDialogBox from "../DeleteDialogBox/DeleteDialogBox";
+import { apiFetch } from "@/src/lib/apiFetch";
+import { useRouter } from "next/navigation";
 
 const ItemType = {
   CARD: "lectureCard",
@@ -28,7 +30,9 @@ export default function LectureCard({
   handleUnlink,
   lesson,
   deleteLesson,
+  reorderLessons,
 }) {
+  const router = useRouter();
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const dialogOpen = () => setIsDialogOPen(true);
   const dialogClose = () => setIsDialogOPen(false);
@@ -38,7 +42,7 @@ export default function LectureCard({
 
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType.CARD,
-    item: { lesson, index },
+    item: { lesson, index, initialIndex: index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -52,7 +56,49 @@ export default function LectureCard({
         draggedItem.index = index;
       }
     },
+    drop: (draggedItem) => {
+      if (draggedItem.initialIndex !== index) {
+        reorderLessons({ updatedLessonIDs: course.lessonIDs });
+      }
+    },
   });
+
+  const downloadFile = async ({ path }) => {
+    try {
+      const data = await apiFetch(
+        `${
+          process.env.NEXT_PUBLIC_BASE_URL
+        }/api/bank/resource/get-file?path=${encodeURIComponent(path)}`
+      );
+      if (!data.success || !data.url) {
+        router.push("/404");
+        return;
+      }
+      const response = await fetch(data.url);
+      if (!response.ok) {
+        router.push("/404");
+        return;
+      }
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const fileDownload = document.createElement("a");
+      fileDownload.href = downloadUrl;
+      fileDownload.download = "download";
+      document.body.appendChild(fileDownload);
+      fileDownload.click();
+      document.body.removeChild(fileDownload);
+      window.URL.revokeObjectURL(downloadUrl);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      router.push("/404");
+    }
+  };
+
+  const playVideo = ({ videoID }) => {
+    const data = apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/get-file?resourceID=${videoID}`);
+    // console.log(data);
+    window.open(data)
+  };
 
   const ref = React.useRef(null);
   const dragDropRef = dragRef(dropRef(ref));
@@ -134,11 +180,21 @@ export default function LectureCard({
           </Stack>
           {lesson.isLinked &&
             (lesson.type === "VIDEO" ? (
-              <IconButton disableRipple>
+              <IconButton
+                onClick={() => {
+                  playVideo({ videoID: lesson.resourceID  });
+                }}
+                disableRipple
+              >
                 <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
               </IconButton>
             ) : (
-              <IconButton disableRipple>
+              <IconButton
+                onClick={() => {
+                  downloadFile({ path: lesson.path });
+                }}
+                disableRipple
+              >
                 <SaveAlt sx={{ color: "var(--sec-color)" }} />
               </IconButton>
             ))}

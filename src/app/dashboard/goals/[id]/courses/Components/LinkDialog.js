@@ -116,6 +116,7 @@ export default function LinkDialog({
                           ),
                         }));
                       }}
+                      onClose={onClose}
                       sx={{
                         backgroundColor: "var(--sec-color-acc-1)",
                         color: "var(--sec-color)",

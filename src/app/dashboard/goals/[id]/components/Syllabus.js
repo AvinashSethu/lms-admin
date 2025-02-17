@@ -54,7 +54,7 @@ export default function Syllabus({ goal, fetchGoal }) {
         showSnackbar("Failed", "error", "", "3000");
       });
   };
-  
+
   useEffect(() => {
     fetchAllSubjects();
     fetchGoal();
@@ -108,7 +108,6 @@ export default function Syllabus({ goal, fetchGoal }) {
         showSnackbar(data.message, "success", "", "3000");
         setVideoDialog(false);
         setTitle("");
-        // getCourse(id);
         fetchGoal();
       } else {
         showSnackbar("Failed to create course", "error", "", "3000");
@@ -322,9 +321,11 @@ export default function Syllabus({ goal, fetchGoal }) {
                     Edit
                   </Button>
                 }
-                Lesson={<Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
-                 {` ${course.lessons} Lessons`}
-                </Typography>}
+                Lesson={
+                  <Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
+                    {` ${course.lessons} Lessons`}
+                  </Typography>
+                }
                 hours={`${course.duration} Hours`}
               />
             ))
