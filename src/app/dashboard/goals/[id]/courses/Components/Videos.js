@@ -115,6 +115,7 @@ export default function Videos({ course, setCourse }) {
             isLinked: lesson.isLinked || "",
             isPreview: lesson.isPreview || "",
             resourceID: lesson.resourceID || "",
+            type: lesson.type || "",
           })),
         }));
       }
@@ -168,6 +169,8 @@ export default function Videos({ course, setCourse }) {
 
   const reorderLesson = (updatedLessonIDs) => {
     console.log(updatedLessonIDs.map((IDs) => IDs.id));
+    console.log(course.id, course.goalID);
+
     apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/reorder`,
       {
@@ -176,7 +179,7 @@ export default function Videos({ course, setCourse }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          courseID: course.courseID,
+          courseID: course.id,
           goalID: course.goalID,
           lessonIDs: updatedLessonIDs.map((IDs) => IDs.id),
         }),
