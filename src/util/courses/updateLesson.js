@@ -142,7 +142,7 @@ export async function unlinkResource({ lessonID, courseID, resourceID }) {
       sKey: `LESSONS@${courseID}`,
     },
     UpdateExpression:
-      "SET updatedAt = :u, resourceID = :empty, #p = :empty, videoID = :empty, isLinked = :false",
+      "SET updatedAt = :u, resourceID = :empty, #p = :empty, videoID = :empty, isLinked = :false, #t = :empty, #n = :empty",
     ExpressionAttributeValues: {
       ":u": now,
       ":empty": "",
@@ -150,6 +150,8 @@ export async function unlinkResource({ lessonID, courseID, resourceID }) {
     },
     ExpressionAttributeNames: {
       "#p": "path", // alias for reserved keyword "path"
+      "#t": "type", // alias for reserved keyword "type"
+      "#n": "name", // alias for reserved keyword "name"
     },
   };
 
