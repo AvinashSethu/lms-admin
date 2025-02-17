@@ -1,7 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { Delete, Link, LinkOff, Menu } from "@mui/icons-material";
+import {
+  Delete,
+  Link,
+  LinkOff,
+  Menu,
+  PlayCircleRounded,
+  SaveAlt,
+} from "@mui/icons-material";
 import { Button, IconButton, Stack, Typography } from "@mui/material";
 import LinkDialog from "@/src/app/dashboard/goals/[id]/courses/Components/LinkDialog";
 import StyledTextField from "../StyledTextField/StyledTextField";
@@ -28,8 +35,6 @@ export default function LectureCard({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const delteDialogOpen = () => setIsDeleteDialogOpen(true);
   const deleteDialogClose = () => setIsDeleteDialogOpen(false);
-  // console.log(lesson);
-  // console.log(course);
 
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType.CARD,
@@ -99,17 +104,6 @@ export default function LectureCard({
           </Stack>
         </Stack>
         <Stack flexDirection="row" alignItems="center">
-          {/* 
-          {play && (
-            <IconButton disableRipple>
-              <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
-            </IconButton>
-          )}
-          {download && (
-            <IconButton disableRipple>
-              <SaveAlt sx={{ color: "var(--sec-color)" }} />
-            </IconButton>
-          )} */}
           <Stack flexDirection="row" alignItems="center">
             <Typography
               sx={{
@@ -138,6 +132,17 @@ export default function LectureCard({
               }}
             />
           </Stack>
+          {lesson.isLinked &&
+            (lesson.type === "VIDEO" ? (
+              <IconButton disableRipple>
+                <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
+              </IconButton>
+            ) : (
+              <IconButton disableRipple>
+                <SaveAlt sx={{ color: "var(--sec-color)" }} />
+              </IconButton>
+            ))}
+
           <IconButton
             onClick={(e) => {
               if (lesson.isLinked) {
