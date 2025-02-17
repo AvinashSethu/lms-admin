@@ -14,14 +14,14 @@ export default function LinkDialog({
   onClose,
   handleLessonUpdate,
   course,
-  lesson
+  setCourse,
+  lesson,
 }) {
   const [allBanks, setAllBanks] = useState([]);
   const [resourceList, setResourceList] = useState([]);
   const [selectedBank, setSelectedBank] = useState("");
   const [selectedLesson, setSelectedLesson] = useState("");
   // console.log(course);
-  
 
   const handleLessonChange = (e) => {
     setSelectedLesson(e.target.value);
@@ -105,11 +105,17 @@ export default function LinkDialog({
                   }
                   button={
                     <IconButton
-                      onClick={(e) =>
+                      onClick={(e) => {
                         handleLessonUpdate(e, lesson.id, course.id, {
                           resourceID: item.resourceID,
-                        })
-                      }
+                        });
+                        setCourse((prev) => ({
+                          ...prev,
+                          lessonIDs: prev.lessonIDs.map((l) =>
+                            l.id === lesson.id ? { ...l, isLinked: false } : l
+                          ),
+                        }));
+                      }}
                       sx={{
                         backgroundColor: "var(--sec-color-acc-1)",
                         color: "var(--sec-color)",

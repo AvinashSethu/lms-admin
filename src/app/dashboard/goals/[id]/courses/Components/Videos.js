@@ -9,9 +9,9 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 export default function Videos({ course, setCourse }) {
   const { showSnackbar } = useSnackbar();
-  const [isDialogOpen, setIsDialogOPen] = useState(false);
-  const dialogOpen = () => setIsDialogOPen(true);
-  const dialogClose = () => setIsDialogOPen(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const dialogOpen = () => setIsDialogOpen(true);
+  const dialogClose = () => setIsDialogOpen(false);
 
   const moveCard = (fromIndex, toIndex) => {
     setCourse((prev) => {
@@ -23,13 +23,13 @@ export default function Videos({ course, setCourse }) {
   };
 
   const handleLink = () => {
-    setIsDialogOPen(true);
+    setIsDialogOpen(true);
   };
 
   const handleLessonUpdate = async (e, id, courseID, params = {}) => {
-    console.log(id);
-    console.log(courseID);
-    console.log(params);
+    // console.log(id);
+    // console.log(courseID);
+    // console.log(params);
     const data = await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/update`,
       {
@@ -45,18 +45,18 @@ export default function Videos({ course, setCourse }) {
       }
     );
     if (data) {
-      console.log(params,"paramssssss");
-      
+      console.log(params, "paramssssss");
+
       setCourse((prev) => ({
         ...prev,
-        lessonIDs: prev.lessonIDs.map((lesson) =>
-          lesson.id === id ? { ...lesson, ...params } : lesson
+        lessonIDs: prev.lessonIDs.map((l) =>
+          l.id === id ? { ...l, ...params,isLinked:params.resourceID ? true : false} : l
         ),
-      } ));
+      }));
       showSnackbar(data.message, "success", "", "3000");
-    setIsDialogOPen(false)
+      setIsDialogOpen(false);
       if (params.resourceID) {
-        setIsDialogOPen(false);
+        setIsDialogOpen(false);
       }
     } else {
       showSnackbar(data.message, "error", "", "3000");
@@ -64,9 +64,54 @@ export default function Videos({ course, setCourse }) {
     }
   };
 
-  const handleUnlik = () => {
-    const data = apiFetch(``);
+  // const handleUnlik = (e,lessonID,courseID,resourceID) => {
+  //   console.log(lessonID,courseID,resourceID);
+    
+  //   const data = apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/unlink`,{
+  //     method:"POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body:JSON.stringify({
+  //       lessonID:lessonID,
+  //       courseID:courseID,
+  //       resourceID:resourceID
+  //     })
+  //   });
+  // };
+
+  const handleUnlik = async (e, lessonID, courseID, resourceID) => {
+  
+    try {
+      const response = await apiFetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/unlink`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ lessonID, courseID, resourceID }),
+        }
+      );
+  
+      if (response.success) {
+        showSnackbar(response.message, "success", "", "3000");
+  
+        setCourse((prev) => ({
+          ...prev,
+          lessonIDs: prev.lessonIDs.map((lesson) =>
+            lesson.id === lessonID ? { ...lesson, isLinked: false, resourceID: null } : lesson
+          ),
+        }));
+      } else {
+        showSnackbar(response.message, "error", "", "3000");
+      }
+    } catch (error) {
+      console.error("Error unlinking lesson:", error);
+      showSnackbar("Failed to unlink resource", "error", "", "3000");
+    }
   };
+  
 
   const onAddLesson = async () => {
     await apiFetch(
@@ -149,11 +194,11 @@ export default function Videos({ course, setCourse }) {
                 <LectureCard
                   key={item}
                   index={index}
-                  
                   lesson={item}
                   course={course}
                   setCourse={setCourse}
                   handleLessonUpdate={handleLessonUpdate}
+                  handleUnlink={handleUnlik}
                   moveCard={moveCard}
                 />
               ))

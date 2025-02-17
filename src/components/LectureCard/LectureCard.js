@@ -18,13 +18,14 @@ export default function LectureCard({
   course,
   setCourse,
   handleLessonUpdate,
+  handleUnlink,
   lesson,
 }) {
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const dialogOpen = () => setIsDialogOPen(true);
   const dialogClose = () => setIsDialogOPen(false);
-  console.log(lesson);
-  console.log(course);
+  // console.log(lesson);
+  // console.log(course);
 
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType.CARD,
@@ -134,10 +135,9 @@ export default function LectureCard({
             />
              */}
             <StyledSwitch
-              
               onChange={(e) => {
                 const updatePreview = !lesson.isPreview;
-                
+
                 console.log("Hello", e.target.checked);
                 handleLessonUpdate(e, lesson.id, lesson.courseID, {
                   isPreview: updatePreview,
@@ -152,11 +152,35 @@ export default function LectureCard({
               }}
             />
           </Stack>
-          <IconButton onClick={dialogOpen} disableRipple>
-            {course.isLinked ? (
+          <IconButton
+            onClick={(e) => {
+              if (lesson.isLinked) {
+                handleUnlink(
+                  e,
+                  lesson.id,
+                  lesson.courseID,
+                  lesson.resourceID
+                ); 
+              } else {
+                dialogOpen(); 
+              }
+            }}
+            disableRipple
+          >
+            {lesson.isLinked ? (
               <LinkOff sx={{ color: "var(--sec-color)" }} />
             ) : (
-              <Link sx={{ color: "var(--sec-color)" }} />
+              <Link
+                // onClick={(e) => {
+                //   handleUnlink(
+                //     e,
+                //     lesson.id,
+                //     lesson.courseID,
+                //     course.resourceID
+                //   );
+                // }}
+                sx={{ color: "var(--sec-color)" }}
+              />
             )}
           </IconButton>
           <IconButton disableRipple>
@@ -169,6 +193,7 @@ export default function LectureCard({
         isOpen={isDialogOpen}
         onClose={dialogClose}
         course={course}
+        setCourse={setCourse}
         handleLessonUpdate={handleLessonUpdate}
       />
     </Stack>
