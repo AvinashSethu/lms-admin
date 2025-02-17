@@ -2,7 +2,7 @@
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import LectureCard from "@/src/components/LectureCard/LectureCard";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Button, IconButton, Stack, Typography } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -18,18 +18,12 @@ export default function Videos({ course, setCourse }) {
       const updatedLessonIDs = [...prev.lessonIDs];
       const [movedLesson] = updatedLessonIDs.splice(fromIndex, 1);
       updatedLessonIDs.splice(toIndex, 0, movedLesson);
+      reorderLesson(updatedLessonIDs);
       return { ...prev, lessonIDs: updatedLessonIDs };
     });
   };
 
-  const handleLink = () => {
-    setIsDialogOpen(true);
-  };
-
   const handleLessonUpdate = async (e, id, courseID, params = {}) => {
-    // console.log(id);
-    // console.log(courseID);
-    // console.log(params);
     const data = await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/update`,
       {
@@ -45,12 +39,12 @@ export default function Videos({ course, setCourse }) {
       }
     );
     if (data) {
-      console.log(params, "paramssssss");
-
       setCourse((prev) => ({
         ...prev,
         lessonIDs: prev.lessonIDs.map((l) =>
-          l.id === id ? { ...l, ...params,isLinked:params.resourceID ? true : false} : l
+          l.id === id
+            ? { ...l, ...params, isLinked: params.resourceID ? true : false }
+            : l
         ),
       }));
       showSnackbar(data.message, "success", "", "3000");
@@ -64,24 +58,9 @@ export default function Videos({ course, setCourse }) {
     }
   };
 
-  // const handleUnlik = (e,lessonID,courseID,resourceID) => {
-  //   console.log(lessonID,courseID,resourceID);
-    
-  //   const data = apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/unlink`,{
-  //     method:"POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body:JSON.stringify({
-  //       lessonID:lessonID,
-  //       courseID:courseID,
-  //       resourceID:resourceID
-  //     })
-  //   });
-  // };
-
   const handleUnlik = async (e, lessonID, courseID, resourceID) => {
-  
+    console.log(lessonID, courseID, resourceID);
+
     try {
       const response = await apiFetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/unlink`,
@@ -93,14 +72,16 @@ export default function Videos({ course, setCourse }) {
           body: JSON.stringify({ lessonID, courseID, resourceID }),
         }
       );
-  
+
       if (response.success) {
         showSnackbar(response.message, "success", "", "3000");
-  
+
         setCourse((prev) => ({
           ...prev,
           lessonIDs: prev.lessonIDs.map((lesson) =>
-            lesson.id === lessonID ? { ...lesson, isLinked: false, resourceID: null } : lesson
+            lesson.id === lessonID
+              ? { ...lesson, isLinked: false, resourceID: null }
+              : lesson
           ),
         }));
       } else {
@@ -110,29 +91,6 @@ export default function Videos({ course, setCourse }) {
       console.error("Error unlinking lesson:", error);
       showSnackbar("Failed to unlink resource", "error", "", "3000");
     }
-  };
-  
-
-  const onAddLesson = async () => {
-    await apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ courseID: course.id }),
-      }
-    ).then((data) => {
-      if (data.success) {
-        showSnackbar(data.message, "success", "", "3000");
-        // console.log(data);
-        fetchLesson();
-      } else {
-        console.log(data);
-        showSnackbar(data.message, "error", "", "3000");
-      }
-    });
   };
 
   const fetchLesson = () => {
@@ -147,7 +105,6 @@ export default function Videos({ course, setCourse }) {
       }
     ).then((data) => {
       if (data.success) {
-        // console.log(data);
         setCourse((prev) => ({
           ...prev,
           lessonIDs: data.data.map((lesson) => ({
@@ -155,6 +112,9 @@ export default function Videos({ course, setCourse }) {
             title: lesson.title || "",
             path: lesson.path || "",
             courseID: lesson.courseID || "",
+            isLinked: lesson.isLinked || "",
+            isPreview: lesson.isPreview || "",
+            resourceID: lesson.resourceID || "",
           })),
         }));
       }
@@ -164,6 +124,71 @@ export default function Videos({ course, setCourse }) {
   useEffect(() => {
     fetchLesson();
   }, []);
+
+  const onAddLesson = async () => {
+    await apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ courseID: course.id }),
+      }
+    ).then((data) => {
+      if (data.success) {
+        showSnackbar(data.message, "success", "", "3000");
+        fetchLesson();
+      } else {
+        console.log(data);
+        showSnackbar(data.message, "error", "", "3000");
+      }
+    });
+  };
+
+  const deleteLesson = ({ lessonID, goalID }) => {
+    apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/delete`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ courseID: course.id, lessonID, goalID }),
+      }
+    ).then((data) => {
+      if (data.success) {
+        showSnackbar(data.message, "success", "", "3000");
+        fetchLesson();
+      } else {
+        showSnackbar(data.message, "error", "", "3000");
+      }
+    });
+  };
+
+  const reorderLesson = (updatedLessonIDs) => {
+    console.log(updatedLessonIDs.map((IDs) => IDs.id));
+    apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/reorder`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courseID: course.courseID,
+          goalID: course.goalID,
+          lessonIDs: updatedLessonIDs.map((IDs) => IDs.id),
+        }),
+      }
+    ).then((data) => {
+      if (data.success) {
+        showSnackbar(data.message, "success", "", "3000");
+      } else {
+        showSnackbar(data.message, "error", "", "3000");
+      }
+    });
+  };
 
   return (
     <Stack marginTop="20px" gap="20px">
@@ -199,6 +224,7 @@ export default function Videos({ course, setCourse }) {
                   setCourse={setCourse}
                   handleLessonUpdate={handleLessonUpdate}
                   handleUnlink={handleUnlik}
+                  deleteLesson={deleteLesson}
                   moveCard={moveCard}
                 />
               ))

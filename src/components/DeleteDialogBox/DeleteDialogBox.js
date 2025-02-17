@@ -45,7 +45,9 @@ export default function DeleteDialogBox({ isOpen, actionButton, name }) {
           This action cannot be undone
         </Typography>
       </DialogContent>
-      <DialogActions>{actionButton}</DialogActions>
+      <DialogActions>{actionButton}
+      
+      </DialogActions>
     </Dialog>
   );
 }

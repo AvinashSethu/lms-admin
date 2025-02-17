@@ -1,5 +1,5 @@
 "use client";
-import { duration, Skeleton, Stack } from "@mui/material";
+import { Skeleton, Stack } from "@mui/material";
 import CustomTabs from "@/src/components/CustomTabs/CustomTabs";
 import Basic from "../Components/Basic";
 import Videos from "../Components/Videos";

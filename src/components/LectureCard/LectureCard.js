@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { Delete, Link, LinkOff, Menu } from "@mui/icons-material";
-import { IconButton, Stack, Typography } from "@mui/material";
+import { Button, IconButton, Stack, Typography } from "@mui/material";
 import LinkDialog from "@/src/app/dashboard/goals/[id]/courses/Components/LinkDialog";
 import StyledTextField from "../StyledTextField/StyledTextField";
-import StyledSwitchButton from "../StyledSwitch/StyledSwitch";
 import StyledSwitch from "../StyledSwitch/StyledSwitch";
+import DeleteDialogBox from "../DeleteDialogBox/DeleteDialogBox";
 
 const ItemType = {
   CARD: "lectureCard",
@@ -20,10 +20,14 @@ export default function LectureCard({
   handleLessonUpdate,
   handleUnlink,
   lesson,
+  deleteLesson,
 }) {
   const [isDialogOpen, setIsDialogOPen] = useState(false);
   const dialogOpen = () => setIsDialogOPen(true);
   const dialogClose = () => setIsDialogOPen(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const delteDialogOpen = () => setIsDeleteDialogOpen(true);
+  const deleteDialogClose = () => setIsDeleteDialogOpen(false);
   // console.log(lesson);
   // console.log(course);
 
@@ -117,28 +121,10 @@ export default function LectureCard({
             >
               Preview
             </Typography>
-            {/* <StyledSwitchButton
-              checked={course.isPreview}
-              onFocus
-              onChange={(e) => {
-                const updatePreview = !course.isPreview;
-                handleLessonUpdate(e, lesson.id, lesson.courseID, {
-                  isPreview: updatePreview,
-                });
-                setCourse((prev) => ({
-                  ...prev,
-                  lessonIDs: prev.lessonIDs.map((l) =>
-                    l.id === lesson.id ? { ...l, isPreview: updatePreview } : l
-                  ),
-                }));
-              }}
-            />
-             */}
             <StyledSwitch
+              checked={lesson.isPreview}
               onChange={(e) => {
                 const updatePreview = !lesson.isPreview;
-
-                console.log("Hello", e.target.checked);
                 handleLessonUpdate(e, lesson.id, lesson.courseID, {
                   isPreview: updatePreview,
                 });
@@ -155,14 +141,9 @@ export default function LectureCard({
           <IconButton
             onClick={(e) => {
               if (lesson.isLinked) {
-                handleUnlink(
-                  e,
-                  lesson.id,
-                  lesson.courseID,
-                  lesson.resourceID
-                ); 
+                handleUnlink(e, lesson.id, lesson.courseID, lesson.resourceID);
               } else {
-                dialogOpen(); 
+                dialogOpen();
               }
             }}
             disableRipple
@@ -170,20 +151,10 @@ export default function LectureCard({
             {lesson.isLinked ? (
               <LinkOff sx={{ color: "var(--sec-color)" }} />
             ) : (
-              <Link
-                // onClick={(e) => {
-                //   handleUnlink(
-                //     e,
-                //     lesson.id,
-                //     lesson.courseID,
-                //     course.resourceID
-                //   );
-                // }}
-                sx={{ color: "var(--sec-color)" }}
-              />
+              <Link sx={{ color: "var(--sec-color)" }} />
             )}
           </IconButton>
-          <IconButton disableRipple>
+          <IconButton onClick={delteDialogOpen} disableRipple>
             <Delete sx={{ color: "var(--delete-color)" }} />
           </IconButton>
         </Stack>
@@ -196,6 +167,48 @@ export default function LectureCard({
         setCourse={setCourse}
         handleLessonUpdate={handleLessonUpdate}
       />
+      <DeleteDialogBox
+        isOpen={isDeleteDialogOpen}
+        actionButton={
+          <Stack
+            flexDirection="row"
+            justifyContent="center"
+            sx={{ gap: "20px", width: "100%" }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => {
+                deleteLesson({ lessonID: lesson.id, goalID: course.goalID });
+                deleteDialogClose();
+              }}
+              sx={{
+                textTransform: "none",
+                backgroundColor: "var(--delete-color)",
+                borderRadius: "5px",
+                width: "130px",
+              }}
+              disableElevation
+            >
+              Delete
+            </Button>
+            <Button
+              variant="contained"
+              onClick={deleteDialogClose}
+              sx={{
+                textTransform: "none",
+                borderRadius: "5px",
+                backgroundColor: "white",
+                color: "var(--text2)",
+                border: "1px solid var(--border-color)",
+                width: "130px",
+              }}
+              disableElevation
+            >
+              Cancel
+            </Button>
+          </Stack>
+        }
+      ></DeleteDialogBox>
     </Stack>
   );
 }
