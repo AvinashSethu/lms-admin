@@ -49,12 +49,14 @@ export async function updateLesson({
     };
 
     const resourceResult = await dynamoDB.query(resourceQueryParams).promise();
+    console.log("Resource result:", resourceResult);
+
     if (!resourceResult.Items || resourceResult.Items.length === 0) {
       return { success: false, message: "Resource not found" };
     }
     resourceItem = resourceResult.Items[0];
 
-    if (!resourceItem.linkedLessons.includes(lessonID)) {
+    if (resourceItem.linkedLessons.includes(lessonID)) {
       return { success: false, message: "Resource already linked" };
     }
 
