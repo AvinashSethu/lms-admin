@@ -81,7 +81,6 @@ export default function Videos({ course, setCourse }) {
   };
 
   const handleLessonUpdate = async (e, id, courseID, params = {}) => {
-    console.log(params.title);
     const data = await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/update`,
       {

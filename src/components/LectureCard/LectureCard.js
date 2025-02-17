@@ -94,10 +94,15 @@ export default function LectureCard({
     }
   };
 
-  const playVideo = ({ videoID }) => {
-    const data = apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/get-file?resourceID=${videoID}`);
-    // console.log(data);
-    window.open(data)
+  const playVideo = async ({ videoID }) => {
+    const data = await apiFetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/get-video?resourceID=${videoID}`
+    );
+    if (data) {
+      console.log("Videoo");
+      // window.open(data.videoURL)
+      UploadVideo({ videoURL: data.videoURL });
+    }
   };
 
   const ref = React.useRef(null);
@@ -182,7 +187,7 @@ export default function LectureCard({
             (lesson.type === "VIDEO" ? (
               <IconButton
                 onClick={() => {
-                  playVideo({ videoID: lesson.resourceID  });
+                  playVideo({ videoID: lesson.resourceID });
                 }}
                 disableRipple
               >
@@ -273,3 +278,33 @@ export default function LectureCard({
     </Stack>
   );
 }
+
+export const UploadVideo = ({ videoURL }) => {
+  return (
+    <div
+      style={{
+        width: "800px",
+        // display: "flex",
+        // justifyContent: "center",
+        // alignItems: "center",
+        margin: "auto",
+      }}
+    >
+      <div style={{ position: "relative", paddingTop: "56.25%" }}>
+        <iframe
+          src={videoURL}
+          loading="lazy"
+          style={{
+            border: 0,
+            position: "absolute",
+            top: 0,
+            height: "100%",
+            width: "100%",
+          }}
+          allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
+          allowFullScreen={true}
+        ></iframe>
+      </div>
+    </div>
+  );
+};
