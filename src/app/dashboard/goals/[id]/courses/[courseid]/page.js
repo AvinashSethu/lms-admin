@@ -20,16 +20,16 @@ export default function CourseID() {
     lessonIDs: [],
     subscription: {},
     titleLower: "",
+    lessons: "",
   });
   const { id, courseID } = useParams();
+  console.log(course);
 
   useEffect(() => {
     fetchCourse();
   }, [courseID, id]);
 
   const fetchCourse = async () => {
-    console.log("fetching course", courseID, id);
-
     try {
       const data = await apiFetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/get`,
@@ -41,7 +41,6 @@ export default function CourseID() {
       );
       if (data.success) {
         setCourse(data.data);
-        console.log(data.data);
       }
     } catch (error) {}
   };

@@ -1,6 +1,7 @@
 "use client";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import LectureCard from "@/src/components/LectureCard/LectureCard";
+import LessonCardSkeleton from "@/src/components/LessonCardSkeleton/LessonCardSkeleton";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -211,7 +212,10 @@ export default function Videos({ course, setCourse }) {
       >
         <Button
           variant="contained"
-          onClick={onAddLesson}
+          onClick={() => {
+            <LessonCardSkeleton />
+            onAddLesson();
+          }}
           sx={{
             backgroundColor: "var(--sec-color-acc-1)",
             color: "var(--sec-color)",
@@ -226,22 +230,24 @@ export default function Videos({ course, setCourse }) {
       </Stack>
       <Stack gap="10px">
         <DndProvider backend={HTML5Backend}>
-          {course.lessonIDs && course.lessonIDs.length
-            ? course.lessonIDs.map((item, index) => (
-                <LectureCard
-                  key={item}
-                  index={index}
-                  lesson={item}
-                  course={course}
-                  setCourse={setCourse}
-                  handleLessonUpdate={handleLessonUpdate}
-                  handleUnlink={handleUnlik}
-                  deleteLesson={deleteLesson}
-                  moveCard={moveCard}
-                  reorderLessons={reorderLessons}
-                />
-              ))
-            : ""}
+          {course.lessonIDs && course.lessonIDs.length ? (
+            course.lessonIDs.map((item, index) => (
+              <LectureCard
+                key={item}
+                index={index}
+                lesson={item}
+                course={course}
+                setCourse={setCourse}
+                handleLessonUpdate={handleLessonUpdate}
+                handleUnlink={handleUnlik}
+                deleteLesson={deleteLesson}
+                moveCard={moveCard}
+                reorderLessons={reorderLessons}
+              />
+            ))
+          ) : (
+            <LessonCardSkeleton />
+          )}
         </DndProvider>
       </Stack>
     </Stack>

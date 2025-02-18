@@ -12,10 +12,10 @@ import {
 import {
   Button,
   CircularProgress,
-  Dialog,
   DialogContent,
   IconButton,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import LinkDialog from "@/src/app/dashboard/goals/[id]/courses/Components/LinkDialog";
@@ -54,10 +54,10 @@ export default function LectureCard({
 
   const videoPlayerOpen = () => {
     setIsVideoPlayerOpen(true);
-  }
+  };
   const videoPlayerClose = () => {
     setIsVideoPlayerOpen(false);
-  }
+  };
 
   const [{ isDragging }, dragRef] = useDrag({
     type: ItemType.CARD,
@@ -119,8 +119,6 @@ export default function LectureCard({
     );
     if (data) {
       console.log("Videoo");
-      // window.open(data.videoURL)
-      // UploadVideo({ videoURL: data.videoURL });
       setVideoURL(data.videoURL);
     }
   };
@@ -208,24 +206,28 @@ export default function LectureCard({
             </Stack>
             {lesson.isLinked &&
               (lesson.type === "VIDEO" ? (
-                <IconButton
-                  onClick={() => {
-                    playVideo({ videoID: lesson.resourceID });
-                    videoPlayerOpen();
-                  }}
-                  disableRipple
-                >
-                  <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
-                </IconButton>
+                <Tooltip title="Play Video">
+                  <IconButton
+                    onClick={() => {
+                      playVideo({ videoID: lesson.resourceID });
+                      videoPlayerOpen();
+                    }}
+                    disableRipple
+                  >
+                    <PlayCircleRounded sx={{ color: "var(--sec-color)" }} />
+                  </IconButton>
+                </Tooltip>
               ) : (
-                <IconButton
-                  onClick={() => {
-                    downloadFile({ path: lesson.path });
-                  }}
-                  disableRipple
-                >
-                  <SaveAlt sx={{ color: "var(--sec-color)" }} />
-                </IconButton>
+                <Tooltip title="Download File">
+                  <IconButton
+                    onClick={() => {
+                      downloadFile({ path: lesson.path });
+                    }}
+                    disableRipple
+                  >
+                    <SaveAlt sx={{ color: "var(--sec-color)" }} />
+                  </IconButton>
+                </Tooltip>
               ))}
 
             <IconButton
@@ -244,14 +246,20 @@ export default function LectureCard({
               disableRipple
             >
               {lesson.isLinked ? (
-                <LinkOff sx={{ color: "var(--sec-color)" }} />
+                <Tooltip title="Unlink">
+                  <LinkOff sx={{ color: "var(--sec-color)" }} />
+                </Tooltip>
               ) : (
-                <Link sx={{ color: "var(--sec-color)" }} />
+                <Tooltip title="Link">
+                  <Link sx={{ color: "var(--sec-color)" }} />
+                </Tooltip>
               )}
             </IconButton>
-            <IconButton onClick={delteDialogOpen} disableRipple>
-              <Delete sx={{ color: "var(--delete-color)" }} />
-            </IconButton>
+            <Tooltip title="Delete">
+              <IconButton onClick={delteDialogOpen} disableRipple>
+                <Delete sx={{ color: "var(--delete-color)" }} />
+              </IconButton>
+            </Tooltip>
           </Stack>
         </Stack>
 
@@ -320,7 +328,7 @@ export default function LectureCard({
       </Stack>
       <LongDialogBox isOpen={isVideoPlayerOpen} onClose={videoPlayerClose}>
         <DialogContent>
-        {videoURL && <UploadVideo videoURL={videoURL} />}
+          {videoURL && <UploadVideo videoURL={videoURL} />}
         </DialogContent>
       </LongDialogBox>
     </>
@@ -333,10 +341,10 @@ export const UploadVideo = ({ videoURL }) => {
       style={{
         display: "flex",
         width: "100%",
-        height: "70vh",
+        height: "80vh",
         justifyContent: "center",
         alignItems: "center",
-        padding:"0px 0px 0px 0px"
+        padding: "0px 0px 0px 0px",
       }}
     >
       <div
@@ -350,13 +358,11 @@ export const UploadVideo = ({ videoURL }) => {
           src={videoURL}
           loading="lazy"
           style={{
-            border:"1px solid var(--border-color)",
+            border: "1px solid var(--border-color)",
             borderRadius: "10px",
             position: "absolute",
-            top: 0,
             minHeight: "100%",
             minWidth: "100%",
-            // left: 0,
           }}
           allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
           allowFullScreen={true}

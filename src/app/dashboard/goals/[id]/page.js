@@ -20,7 +20,6 @@ export default function Goals() {
         
         if (json.success) {
           setGoal(json.data);
-          // console.log(json.data.coursesList);
         } else {
           showSnackbar("No Goal Found","error","","3000");
           router.push(`/404`);

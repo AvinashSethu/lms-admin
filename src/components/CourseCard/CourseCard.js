@@ -14,11 +14,14 @@ export default function CourseCard({
   title,
   thumbnail,
   Language,
-  Lesson,
+  lessons,
   hours,
   actionButton,
   progress,
+  course
 }) {
+  console.log(course);
+  
   return (
     <Card
       sx={{
@@ -81,7 +84,10 @@ export default function CourseCard({
             ))}
         </Stack>
         <Stack flexDirection="row" alignItems="center" gap="10px">
-          {Lesson}
+          <Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
+          {lessons}
+          </Typography>
+          
           <Circle sx={{ fontSize: "10px", color: "var(--border-color)" }} />
           <Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
             {hours}
