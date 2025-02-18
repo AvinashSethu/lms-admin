@@ -2,7 +2,7 @@ import { updateBasicCourseInfo } from "@/src/util/courses/updateCourse";
 import checkUUID from "@/src/lib/checkUUID";
 
 export async function POST(request) {
-  const { courseID, goalID, title, description, thumbnail, language, duration } =
+  const { courseID, goalID, title, description, language, duration } =
     await request.json();
 
   // Validate required fields.
@@ -37,6 +37,7 @@ export async function POST(request) {
       description,
       thumbnail,
       language,
+      duration
     });
     return Response.json(result, { status: 200 });
   } catch (error) {
