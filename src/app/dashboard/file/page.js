@@ -3,9 +3,6 @@ const UploadVideo = () => {
     <div
       style={{
         width: "800px",
-        // display: "flex",
-        // justifyContent: "center",
-        // alignItems: "center",
         margin: "auto",
       }}
     >
