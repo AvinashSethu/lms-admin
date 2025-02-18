@@ -17,8 +17,8 @@ export async function updateBasicCourseInfo({
   goalID,
   title,
   description,
-  thumbnail,
   language,
+  duration
 }) {
   const params = {
     TableName: `${process.env.AWS_DB_NAME}master`,
@@ -27,7 +27,7 @@ export async function updateBasicCourseInfo({
       sKey: `COURSES@${goalID}`,
     },
     UpdateExpression:
-      "SET title = :t, titleLower = :tl, description = :d, thumbnail = :th, #lang = :l, updatedAt = :u",
+      "SET title = :t, titleLower = :tl, description = :d, #lang = :l, updatedAt = :u, duration = :dur",
     ExpressionAttributeNames: {
       "#lang": "language",
     },
@@ -35,8 +35,8 @@ export async function updateBasicCourseInfo({
       ":t": title,
       ":tl": title.toLowerCase(),
       ":d": !description ? "" : description,
-      ":th": !thumbnail ? "" : thumbnail,
       ":l": !language ? [] : language,
+      ":dur": !duration ? 0 : duration,
       ":u": Date.now(),
     },
   };
@@ -48,8 +48,8 @@ export async function updateBasicCourseInfo({
       courseID,
       goalID,
       title,
-      thumbnail,
       language,
+      duration
     });
     return {
       success: true,
@@ -112,13 +112,7 @@ export async function updateCourseSubscription({
  * @param {Array} params.language - The updated languages array.
  * @returns {Promise<void>}
  */
-async function updateGoalCoursesList({
-  courseID,
-  goalID,
-  title,
-  thumbnail,
-  language,
-}) {
+async function updateGoalCoursesList({ courseID, goalID, title, language, duration }) {
   // 1. Retrieve the goal record.
   const getParams = {
     TableName: `${process.env.AWS_DB_NAME}master`,
@@ -148,8 +142,8 @@ async function updateGoalCoursesList({
         id: courseID,
         title,
         titleLower: title.toLowerCase(),
-        thumbnail: thumbnail || coursesList[index].thumbnail,
         language: language || coursesList[index].language,
+        duration: duration || coursesList[index].duration,
       };
       // Otherwise, update the existing course information.
       coursesList[index] = updatedCourseInfo;
