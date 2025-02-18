@@ -8,43 +8,49 @@ export default async function createThumbnail({
   fileName,
   goalID,
 }) {
-  const awsFileName = `${
-    process.env.AWS_THUMB_PATH
-  }${randomUUID()}-${courseID}.${fileName.split(".")?.pop()}`;
-  const signedUrl = await s3FileUpload({
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: fileName,
-    fileType,
-    Expires: 60 * 60,
-  });
-//   console.log("signedUrl: ", signedUrl);
-  
-  //update the course record in DynamoDB with the thumbnail URL
-
-  const courseUpdateParams = {
-    TableName: `${process.env.AWS_DB_NAME}content`,
-    Key: { pKey: `COURSE#${courseID}`, sKey: `COURSES@${goalID}` },
-    UpdateExpression: "set thumbnail = :thumbnail",
-    ExpressionAttributeValues: {
-      ":thumbnail":
-        `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/` +
-        awsFileName,
-    },
-  };
-
-  try {
-    await dynamoDB.update(courseUpdateParams).promise();
-  } catch (err) {
-    console.log("Error updating course record:", err);
-    
-    throw new Error("Internal server error");
+  if (!courseID || !fileType || !fileName || !goalID) {
+    throw new Error("Missing required parameters");
   }
 
-  return {
-    success: true,
-    message: "Thumbnail created successfully",
-    data: {
-      url: signedUrl,
-    },
-  };
+  // Extract file extension and generate a unique S3 key for the thumbnail.
+  const fileExtension = fileName.split(".").pop();
+  const awsFileName = `${
+    process.env.AWS_THUMB_PATH
+  }${randomUUID()}-${courseID}.${fileExtension}`;
+
+  try {
+    // Get a signed URL for uploading the file using the unique awsFileName.
+    const signedUrl = await s3FileUpload({
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: awsFileName,
+      fileType,
+      Expires: 60 * 60,
+    });
+
+    // Update the course record in DynamoDB with the new thumbnail URL.
+    const thumbnailURL = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${awsFileName}`;
+    const courseUpdateParams = {
+      TableName: `${process.env.AWS_DB_NAME}master`,
+      Key: {
+        pKey: `COURSE#${courseID}`,
+        sKey: `COURSES@${goalID}`,
+      },
+      UpdateExpression: "SET thumbnail = :thumbnail, updatedAt = :u",
+      ExpressionAttributeValues: {
+        ":thumbnail": thumbnailURL,
+        ":u": Date.now(),
+      },
+    };
+
+    await dynamoDB.update(courseUpdateParams).promise();
+
+    return {
+      success: true,
+      message: "Thumbnail created successfully",
+      data: { url: signedUrl },
+    };
+  } catch (err) {
+    console.error("Error creating thumbnail:", err);
+    throw new Error("Internal server error");
+  }
 }
