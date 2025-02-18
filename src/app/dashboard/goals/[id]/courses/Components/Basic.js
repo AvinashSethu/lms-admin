@@ -1,6 +1,7 @@
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import MarkdownEditor from "@/src/components/MarkdownEditor/MarkdownEditor";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
+import ThumbnailUpload from "@/src/components/ThumbnailUpload/ThumbnailUpload";
 import { apiFetch } from "@/src/lib/apiFetch";
 import {
   Autocomplete,
@@ -9,56 +10,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useRef, useState } from "react";
 
 export default function Basic({ course, setCourse }) {
   const { showSnackbar } = useSnackbar();
-  const [thumbnail, setThumbnail] = useState(null);
-  const [thumbnailPreview, setThumbnailPreview] = useState(null);
-  const thumbnailInputRef = useRef(null);
-  console.log(course.lessons);
-  
-  const handleThumbnailUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setThumbnail(file);
-
-      const reader = new FileReader();
-      reader.onloadend = () => setThumbnailPreview(reader.result);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const uploadThumbnail = async () => {
-    if (!thumbnail) {
-      showSnackbar("Select a thumbnail", "error", "", "3000");
-      return;
-    }
-    // const formData = new FormData();
-    // formData.append("thumbnail", thumbnail);
-    const fileType = thumbnail.type;
-    const fileName = thumbnail.name;
-
-    await apiFetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/create-thumb`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          courseID: course.id,
-          goalID: course.goalID,
-          fileType,
-          fileName,
-        }),
-      }
-    ).then((data) => {
-      if (data.success) {
-        showSnackbar(data.message, "success", "", "3000");
-        setCourse((prev) => ({ ...prev, thumbnail: url }));
-      } else {
-        console.log("Not upload");
-      }
-    });
-  };
 
   const handleSave = async () => {
     try {
@@ -134,60 +88,8 @@ export default function Basic({ course, setCourse }) {
               >
                 Thumbnail
               </Typography>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleThumbnailUpload}
-                ref={thumbnailInputRef}
-                style={{ visibility: "hidden", position: "absolute" }}
-              />
-              <Stack
-                flexDirection="row"
-                justifyContent="space-between"
-                sx={{
-                  border: "1px solid var(--border-color)",
-                  borderRadius: "4px",
-                  height: "40px",
-                  alignItems: "center",
-                }}
-              >
-                {thumbnail ? (
-                  <Typography sx={{ paddingLeft: "5px" }}>
-                    {thumbnail.name}
-                  </Typography>
-                ) : (
-                  <Typography sx={{ paddingLeft: "5px" }}>
-                    Select an image
-                  </Typography>
-                )}
-                <Button
-                  variant="text"
-                  onClick={() => thumbnailInputRef.current.click()}
-                  sx={{
-                    color: "var(--sec-color)",
-                    textTransform: "none",
-                    height: "30px",
-                  }}
-                  disableElevation
-                >
-                  Choose Thumbnail
-                </Button>
-              </Stack>
-              <Button
-                variant="contained"
-                onClick={uploadThumbnail}
-                sx={{
-                  backgroundColor: "var(--primary-color)",
-                  color: "#fff",
-                  textTransform: "none",
-                  height: "30px",
-                  width: "100px",
-                  marginLeft: "auto",
-                }}
-                disableElevation
-              >
-                Upload
-              </Button>
+
+              <ThumbnailUpload course={course} setCourse={setCourse} />
             </Stack>
             <Stack gap="8px">
               <Typography
