@@ -56,10 +56,13 @@ CustomTabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function CustomTabs({ tabs, customStyles,width ,back}) {
+export default function CustomTabs({ tabs, customStyles,width ,back,onChange}) {
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if(onChange) {
+      onchange(event,newValue)
+    }
   };
 const router = useRouter();
 

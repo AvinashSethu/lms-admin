@@ -82,6 +82,17 @@ export default function Videos({ course, setCourse }) {
   };
 
   const handleLessonUpdate = async (e, id, courseID, params = {}) => {
+    if (params.title) {
+      const existingLesson = course.lessonIDs.find((l) => l.id === id);
+      console.log(existingLesson.title);
+      console.log(old);
+
+      if (existingLesson.title === params.title) {
+        console.log("No changes detected for title");
+        return;
+      }
+    }
+
     const data = await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/update`,
       {
@@ -97,12 +108,6 @@ export default function Videos({ course, setCourse }) {
       }
     );
     if (data) {
-      const old = params.title;
-      if (params.title === old) {
-        console.log("olddd");
-        return;
-      }
-
       setCourse((prev) => ({
         ...prev,
         lessonIDs: prev.lessonIDs.map((l) =>
@@ -213,7 +218,7 @@ export default function Videos({ course, setCourse }) {
         <Button
           variant="contained"
           onClick={() => {
-            <LessonCardSkeleton />
+            <LessonCardSkeleton />;
             onAddLesson();
           }}
           sx={{

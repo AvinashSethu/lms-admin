@@ -30,27 +30,34 @@ export default function Basic({ course, setCourse }) {
   };
 
   const uploadThumbnail = async () => {
-    console.log("thumbbnnnn");
-
     if (!thumbnail) {
       showSnackbar("Select a thumbnail", "error", "", "3000");
       return;
     }
     const formData = new FormData();
     formData.append("thumbnail", thumbnail);
+    const fileType = thumbnail.type;
+    const fileName = thumbnail.name;
 
-    const data = await apiFetch(
+    await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/create-thumb`,
       {
         method: "POST",
-        body: formData,
+        body: JSON.stringify({
+          courseID: course.id,
+          goalID: course.goalID,
+          fileType,
+          fileName,
+        }),
       }
-    );
-    if (data.success) {
-      console.log("Thumbnial uploadddd");
-    } else {
-      console.log("Not uploadddd");
-    }
+    ).then((data) => {
+      if (data.success) {
+        console.log("Thumbnial uploadddd");
+        setCourse((prev) => ({ ...prev, thumbnail: data.thumbnailURL }));
+      } else {
+        console.log("Not uploadddd");
+      }
+    });
   };
 
   const handleSave = async () => {

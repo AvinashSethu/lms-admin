@@ -8,7 +8,7 @@ export default function NoDataFound({ info }) {
       justifyContent="center"
       alignItems="center"
       width="100%"
-      height="80vh"
+      // height="80vh"
       gap="15px"
     >
       <Image src={noDataFound.src} alt="noData" width={150} height={80} />

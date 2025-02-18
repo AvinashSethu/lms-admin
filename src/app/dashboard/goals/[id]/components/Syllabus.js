@@ -7,6 +7,7 @@ import {
   Delete,
   East,
   InsertDriveFile,
+  RemoveCircle,
   TrendingFlat,
 } from "@mui/icons-material";
 import {
@@ -27,6 +28,7 @@ import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/Second
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import CourseCardSkeleton from "@/src/components/CourseCardSkeleton/CourseCardSkeleton";
 import defaultThumbnail from "@/public/Images/defaultThumbnail.svg";
+import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 
 export default function Syllabus({ goal, fetchGoal }) {
   const router = useRouter();
@@ -78,12 +80,32 @@ export default function Syllabus({ goal, fetchGoal }) {
     }).then((json) => {
       if (json.success) {
         showSnackbar(json.message, "success", "", "3000");
-        fetchAllSubjects();
+        fetchGoal()
         setIsDialogOPen(false);
+        setSelectedSubject(null);
       } else {
         showSnackbar(json.message, "error", "", "3000");
       }
     });
+  };
+
+  const removeSubject = (subjectID) => {
+    apiFetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/remove-subject`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ goalID: goal.goalID, subjectID }),
+    }).then((data) => {
+      if(data.success) {
+        showSnackbar(data.message,"success","","3000");
+        fetchGoal();
+      }
+      else{
+        showSnackbar(data.message,"error","","3000");
+        
+      }
+    })
   };
 
   const onCourseCreate = async () => {
@@ -214,21 +236,22 @@ export default function Syllabus({ goal, fetchGoal }) {
                 options={[
                   <MenuItem
                     key={index}
+                    onClick={() => removeSubject(item.subjectID)}
                     sx={{
                       gap: "5px",
                       padding: "5px 12px",
                       fontSize: "13px",
-                      color: "red",
+                      color: "var(--delete-color)",
                     }}
                   >
-                    <Delete fontSize="small" sx={{ fontSize: "16px" }} />
-                    Delete
+                    <RemoveCircle fontSize="small" sx={{ fontSize: "16px" }} />
+                    Remove
                   </MenuItem>,
                 ]}
               />
             ))
           ) : (
-            <Typography sx={{ color: "var(--text4)" }}>Add subjects</Typography>
+            <NoDataFound info="No subject added here" />
           )
         ) : (
           [...Array(3)].map((_, index) => <SecondaryCardSkeleton key={index} />)
