@@ -1,4 +1,5 @@
 import s3FileUpload from "@/src/lib/s3FileUpload";
+import { dynamoDB } from "@/src/util/awsAgent";
 import { randomUUID } from "crypto";
 
 export default async function createThumbnail({
@@ -16,7 +17,8 @@ export default async function createThumbnail({
     fileType,
     Expires: 60 * 60,
   });
-
+//   console.log("signedUrl: ", signedUrl);
+  
   //update the course record in DynamoDB with the thumbnail URL
 
   const courseUpdateParams = {
@@ -33,6 +35,8 @@ export default async function createThumbnail({
   try {
     await dynamoDB.update(courseUpdateParams).promise();
   } catch (err) {
+    console.log("Error updating course record:", err);
+    
     throw new Error("Internal server error");
   }
 

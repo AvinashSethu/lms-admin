@@ -1,7 +1,11 @@
 import createThumbnail from "@/src/util/courses/createThumbnail";
 
 export async function POST(request) {
-  const { courseID, fileType, fileName, goalID } = request.body;
+  const { courseID, fileType, fileName, goalID } = await request.json();
+//   console.log("courseID: ", courseID);
+//   console.log("fileType: ", fileType);
+//   console.log("fileName: ", fileName);
+//   console.log("goalID: ", goalID);
 
   try {
     const result = await createThumbnail({
