@@ -321,12 +321,9 @@ export default function Syllabus({ goal, fetchGoal }) {
                     Edit
                   </Button>
                 }
-                Lesson={
-                  <Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
-                    {` ${course.lessons} Lessons`}
-                  </Typography>
-                }
+                lessons={course.lessons}
                 hours={`${course.duration} Hours`}
+                course={goal.coursesList}
               />
             ))
           : [...Array(4)].map((_, index) => <CourseCardSkeleton key={index} />)}
