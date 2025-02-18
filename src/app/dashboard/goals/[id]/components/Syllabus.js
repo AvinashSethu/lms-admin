@@ -40,6 +40,8 @@ export default function Syllabus({ goal, fetchGoal }) {
   const [allSubjects, setAllSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [title, setTitle] = useState("");
+  console.log(goal.coursesList);
+  
 
   const fetchAllSubjects = () => {
     apiFetch(
@@ -322,7 +324,7 @@ export default function Syllabus({ goal, fetchGoal }) {
               <CourseCard
                 key={index}
                 title={course.title}
-                thumbnail={defaultThumbnail.src || course.thumbnail}
+                thumbnail={course.thumbnail.src || defaultThumbnail.src}
                 Language={course.language}
                 actionButton={
                   <Button
@@ -344,7 +346,7 @@ export default function Syllabus({ goal, fetchGoal }) {
                     Edit
                   </Button>
                 }
-                lessons={course.lessons}
+                lessons={course.lesson}
                 hours={`${course.duration} Hours`}
                 course={goal.coursesList}
               />

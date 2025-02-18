@@ -7,7 +7,7 @@ import Subscription from "../Components/Subscription";
 import { useEffect, useState } from "react";
 import Header from "@/src/components/Header/Header";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export default function CourseID() {
   const [course, setCourse] = useState({
@@ -22,18 +22,7 @@ export default function CourseID() {
     titleLower: "",
     lessons: "",
   });
-
   const { id, courseID } = useParams();
-  const router = useRouter();
-
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
-
-  useEffect(() => {
-    const queryTab = new URLSearchParams(window.location.search).get("tab");
-    if (queryTab) {
-      setActiveTabIndex(parseInt(queryTab, 10)); 
-    }
-  }, []);
 
   useEffect(() => {
     fetchCourse();
@@ -52,21 +41,7 @@ export default function CourseID() {
       if (data.success) {
         setCourse(data.data);
       }
-    } catch (error) {
-      console.log("Error fetching course:", error);
-    }
-  };
-
-  const handleTabChange = (event, newValue) => {
-    console.log("hiiii");
-    
-    setActiveTabIndex(newValue);
-
-    router.push(
-      `?tab=${newValue}`,
-      undefined,
-      { shallow: true } 
-    );
+    } catch (error) {}
   };
 
   const tabs = [
@@ -108,12 +83,7 @@ export default function CourseID() {
           backgroundColor: "var(--white)",
         }}
       >
-        <CustomTabs
-          tabs={tabs}
-          fetchCourse={fetchCourse}
-          value={activeTabIndex} 
-          onChange={handleTabChange} 
-        />
+        <CustomTabs tabs={tabs} fetchCourse={fetchCourse} />
       </Stack>
     </Stack>
   );

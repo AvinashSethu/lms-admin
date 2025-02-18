@@ -2,6 +2,7 @@
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import LectureCard from "@/src/components/LectureCard/LectureCard";
 import LessonCardSkeleton from "@/src/components/LessonCardSkeleton/LessonCardSkeleton";
+import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { Button, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -13,6 +14,8 @@ export default function Videos({ course, setCourse }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const dialogOpen = () => setIsDialogOpen(true);
   const dialogClose = () => setIsDialogOpen(false);
+  console.log(course.lessonIDs.length);
+  
 
   const moveCard = (fromIndex, toIndex) => {
     setCourse((prev) => {
@@ -235,23 +238,27 @@ export default function Videos({ course, setCourse }) {
       </Stack>
       <Stack gap="10px">
         <DndProvider backend={HTML5Backend}>
-          {course.lessonIDs && course.lessonIDs.length ? (
-            course.lessonIDs.map((item, index) => (
-              <LectureCard
-                key={item}
-                index={index}
-                lesson={item}
-                course={course}
-                setCourse={setCourse}
-                handleLessonUpdate={handleLessonUpdate}
-                handleUnlink={handleUnlik}
-                deleteLesson={deleteLesson}
-                moveCard={moveCard}
-                reorderLessons={reorderLessons}
-              />
-            ))
+          {course.lessonIDs ? (
+            course.lessonIDs && course.lessonIDs.length ? (
+              course.lessonIDs.map((item, index) => (
+                <LectureCard
+                  key={item}
+                  index={index}
+                  lesson={item}
+                  course={course}
+                  setCourse={setCourse}
+                  handleLessonUpdate={handleLessonUpdate}
+                  handleUnlink={handleUnlik}
+                  deleteLesson={deleteLesson}
+                  moveCard={moveCard}
+                  reorderLessons={reorderLessons}
+                />
+              ))
+            ) : (
+              <LessonCardSkeleton />
+            )
           ) : (
-            <LessonCardSkeleton />
+            <NoDataFound info="No lesson created" />
           )}
         </DndProvider>
       </Stack>

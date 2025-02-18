@@ -20,6 +20,7 @@ export default function CourseCard({
   progress,
   course
 }) {
+  console.log(lessons);
   
   return (
     <Card

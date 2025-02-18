@@ -8,7 +8,7 @@ export default function PrimaryCardSkeleton() {
         height: "210px",
         padding: "20px 0px 20px 0px",
         borderRadius: "10px",
-        // backgroundColor:"var(--text4)"
+        border: "1px solid var(--border-color)",
       }}
       elevation={0}
     >
@@ -21,6 +21,7 @@ export default function PrimaryCardSkeleton() {
               width: "75px",
               height: "75px",
               borderRadius: "15px",
+              backgroundColor: "var(--sec-color-acc-1)",
             }}
           />
           <Skeleton variant="text" width={60} />

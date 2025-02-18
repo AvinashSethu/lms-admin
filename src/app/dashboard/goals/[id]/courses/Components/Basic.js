@@ -13,11 +13,11 @@ import { useRef, useState } from "react";
 
 export default function Basic({ course, setCourse }) {
   const { showSnackbar } = useSnackbar();
-  const fileInputRef = useRef(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const thumbnailInputRef = useRef(null);
-
+  console.log(course.lessons);
+  
   const handleThumbnailUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -34,8 +34,8 @@ export default function Basic({ course, setCourse }) {
       showSnackbar("Select a thumbnail", "error", "", "3000");
       return;
     }
-    const formData = new FormData();
-    formData.append("thumbnail", thumbnail);
+    // const formData = new FormData();
+    // formData.append("thumbnail", thumbnail);
     const fileType = thumbnail.type;
     const fileName = thumbnail.name;
 
@@ -52,10 +52,10 @@ export default function Basic({ course, setCourse }) {
       }
     ).then((data) => {
       if (data.success) {
-        console.log("Thumbnial uploadddd");
-        setCourse((prev) => ({ ...prev, thumbnail: data.thumbnailURL }));
+        showSnackbar(data.message, "success", "", "3000");
+        setCourse((prev) => ({ ...prev, thumbnail: url }));
       } else {
-        console.log("Not uploadddd");
+        console.log("Not upload");
       }
     });
   };
@@ -151,6 +151,15 @@ export default function Basic({ course, setCourse }) {
                   alignItems: "center",
                 }}
               >
+                {thumbnail ? (
+                  <Typography sx={{ paddingLeft: "5px" }}>
+                    {thumbnail.name}
+                  </Typography>
+                ) : (
+                  <Typography sx={{ paddingLeft: "5px" }}>
+                    Select an image
+                  </Typography>
+                )}
                 <Button
                   variant="text"
                   onClick={() => thumbnailInputRef.current.click()}
@@ -161,22 +170,24 @@ export default function Basic({ course, setCourse }) {
                   }}
                   disableElevation
                 >
-                  Select Thumbnail
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={uploadThumbnail}
-                  sx={{
-                    backgroundColor: "var(--primary-color)",
-                    color: "#fff",
-                    textTransform: "none",
-                    height: "30px",
-                  }}
-                  disableElevation
-                >
-                  Upload
+                  Choose Thumbnail
                 </Button>
               </Stack>
+              <Button
+                variant="contained"
+                onClick={uploadThumbnail}
+                sx={{
+                  backgroundColor: "var(--primary-color)",
+                  color: "#fff",
+                  textTransform: "none",
+                  height: "30px",
+                  width: "100px",
+                  marginLeft: "auto",
+                }}
+                disableElevation
+              >
+                Upload
+              </Button>
             </Stack>
             <Stack gap="8px">
               <Typography

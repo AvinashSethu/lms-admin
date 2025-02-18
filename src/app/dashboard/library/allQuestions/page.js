@@ -26,6 +26,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PreviewStepper from "./addQuestion/Components/PreviewStepper";
 import LongDialogBox from "@/src/components/LongDialogBox/LongDialogBox";
+import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 
 export default function AllQuestions() {
   const router = useRouter();
@@ -45,10 +46,10 @@ export default function AllQuestions() {
 
   const previewDialogOpen = () => {
     setIsPreviewDialog(true);
-  }
+  };
   const previewDialogClose = () => {
     setIsPreviewDialog(false);
-  }
+  };
 
   const fetchQuestions = async () => {
     try {
@@ -162,8 +163,9 @@ export default function AllQuestions() {
           select_3="Sort Marks"
         />
       </Stack>
-      {questionList.length > 0
-        ? questionList.map((item, index) => (
+      {questionList ? (
+        questionList.length > 0 ? (
+          questionList.map((item, index) => (
             <QuestionCard
               key={index}
               questionNumber={`Q${index + 1}`}
@@ -205,9 +207,13 @@ export default function AllQuestions() {
               ]}
             />
           ))
-        : [...Array(4)].map((item, index) => (
-            <QuestionCardSkeleton key={index} questionCard />
-          ))}
+        ) : (
+          <NoDataFound />
+        )
+      ) : (
+        <QuestionCardSkeleton />
+      )}
+
       <DeleteDialogBox
         isOpen={isDialogDelete}
         onClose={dialogDeleteClose}
@@ -268,12 +274,15 @@ export default function AllQuestions() {
         </Typography>
         <Pagination count={9} shape="rounded" variant="outlined" />
       </Stack>
-      <LongDialogBox isOpen={isPreviewDialog} onClose={previewDialogClose} title="Preview">
+      <LongDialogBox
+        isOpen={isPreviewDialog}
+        onClose={previewDialogClose}
+        title="Preview"
+      >
         <DialogContent>
           {/* <PreviewStepper fetchQuestions={fetchQuestions} question={question} /> */}
         </DialogContent>
       </LongDialogBox>
-      
     </Stack>
   );
 }

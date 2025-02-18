@@ -8,6 +8,7 @@ import Header from "@/src/components/Header/Header";
 import GoalDialogBox from "./goals/[id]/components/GoalDialogBox/GoalDialogBox";
 import { apiFetch } from "@/src/lib/apiFetch";
 import PrimaryCardSkeleton from "@/src/components/PrimaryCardSkeleton/PrimaryCardSkeleton";
+import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 
 export default function Home() {
   const router = useRouter();
@@ -53,7 +54,7 @@ export default function Home() {
             sx={{
               backgroundColor: "var(--primary-color)",
               textTransform: "none",
-            }}  
+            }}
             disableElevation
           >
             Goal
@@ -65,28 +66,34 @@ export default function Home() {
           isOpen={isDialogOpen}
           onClose={dialogClose}
           actionButton={
-            <Button variant="text" endIcon={<East />} sx={{textTransform:"none",color:"var(--primary-color)"}}>
+            <Button
+              variant="text"
+              endIcon={<East />}
+              sx={{ textTransform: "none", color: "var(--primary-color)" }}
+            >
               Create
             </Button>
           }
         />
       </Stack>
       <Stack flexDirection="row" gap="20px" flexWrap="wrap">
-        {goalList.length > 0
-          ? goalList.map((item, index) => (
-              <PrimaryCard
-                key={index}
-                icon={`/Icons/gate_cse.svg`}
-                title={item.title}
-                actionButton="View"
-                onClick={() => {
-                  router.push(`dashboard/goals/${item.goalID}`);
-                }}
-              />
-            ))
-          : [...Array(4)].map((_, index) => (
-              <PrimaryCardSkeleton key={index} />
-            ))}
+        {goalList
+          ? goalList.length > 0
+            ? goalList.map((item, index) => (
+                <PrimaryCard
+                  key={index}
+                  icon={`/Icons/gate_cse.svg`}
+                  title={item.title}
+                  actionButton="View"
+                  onClick={() => {
+                    router.push(`dashboard/goals/${item.goalID}`);
+                  }}
+                />
+              ))
+            : [...Array(4)].map((_, index) => (
+                <PrimaryCardSkeleton key={index} />
+              ))
+          : <NoDataFound info="No goal Created yet" />}
       </Stack>
     </Stack>
   );

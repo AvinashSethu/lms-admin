@@ -5,6 +5,7 @@ import FileUpload from "@/src/components/FileUpload/FileUpload";
 import Header from "@/src/components/Header/Header";
 import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
+import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import VideoUpload from "@/src/components/VideoUpload/VideoUpload";
 import { apiFetch } from "@/src/lib/apiFetch";
 import {
@@ -52,7 +53,7 @@ export default function CourseBankId() {
       console.error("Error fetching course data:", error);
     }
   };
-  
+
   const handleDelete = async (resourceID, bankID) => {
     try {
       const data = await apiFetch(
@@ -151,75 +152,98 @@ export default function CourseBankId() {
         fetchCourse={fetchCourse}
       />
       <Stack flexDirection="row" columnGap="40px" rowGap="15px" flexWrap="wrap">
-        {resourceList.length > 0 ? (
-          resourceList.map((item, index) => (
-            <SecondaryCard
-              key={index}
-              icon={
-                item.type === "VIDEO" ? (
-                  <PlayCircle
-                    sx={{ color: "var(--sec-color)" }}
-                    fontSize="large"
-                  />
-                ) : (
-                  <InsertDriveFile
-                    sx={{ color: "var(--sec-color)" }}
-                    fontSize="large"
-                  />
-                )
-              }
-              title={item.name}
-              options={[
-                item.type === "VIDEO" ? <MenuItem
-                  key="one"
-                  sx={{ gap: "10px", padding: "5px 12px", fontSize: "13px" }}
-                >
-                  <PlayArrowRounded
-                    fontSize="small"
-                    sx={{ fontSize: "16px" }}
-                  />
-                  Play
-                </MenuItem> : <MenuItem
-                  key="one"
-                  sx={{ gap: "10px", padding: "5px 12px", fontSize: "13px" }}
-                >
-                  <FileDownloadRounded
-                    fontSize="small"
-                    sx={{ fontSize: "16px" }}
-                  />
-                  Download
-                </MenuItem>,
-                <MenuItem
-                  key="one"
-                  sx={{ gap: "10px", padding: "5px 12px", fontSize: "13px" }}
-                >
-                  <DriveFileRenameOutlineRounded sx={{ fontSize: "15px" }} />
-                  Rename
-                </MenuItem>,
-                <Divider key="2" />,
-                <MenuItem
-                  key="two"
-                  onClick={() => {
-                    dialogOpenDelete(item.resourceID, item.name);
-                  }}
-                  sx={{
-                    gap: "10px",
-                    color: "var(--delete-color)",
-                    padding: "5px 12px",
-                    fontSize: "13px",
-                  }}
-                  name={item.name}
-                  disableRipple
-                >
-                  <Delete fontSize="small" sx={{ fontSize: "16px" }} /> Delete
-                </MenuItem>,
-              ]}
-              cardWidth="350px"
-            />
-          ))
+        {resourceList ? (
+          resourceList.length > 0 ? (
+            resourceList.map((item, index) => (
+              <SecondaryCard
+                key={index}
+                icon={
+                  item.type === "VIDEO" ? (
+                    <PlayCircle
+                      sx={{ color: "var(--sec-color)" }}
+                      fontSize="large"
+                    />
+                  ) : (
+                    <InsertDriveFile
+                      sx={{ color: "var(--sec-color)" }}
+                      fontSize="large"
+                    />
+                  )
+                }
+                title={item.name}
+                options={[
+                  item.type === "VIDEO" ? (
+                    <MenuItem
+                      key="one"
+                      sx={{
+                        gap: "10px",
+                        padding: "5px 12px",
+                        fontSize: "13px",
+                      }}
+                    >
+                      <PlayArrowRounded
+                        fontSize="small"
+                        sx={{ fontSize: "16px" }}
+                      />
+                      Play
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      key="one"
+                      sx={{
+                        gap: "10px",
+                        padding: "5px 12px",
+                        fontSize: "13px",
+                      }}
+                    >
+                      <FileDownloadRounded
+                        fontSize="small"
+                        sx={{ fontSize: "16px" }}
+                      />
+                      Download
+                    </MenuItem>
+                  ),
+                  <MenuItem
+                    key="one"
+                    sx={{
+                      gap: "10px",
+                      padding: "5px 12px",
+                      fontSize: "13px",
+                    }}
+                  >
+                    <DriveFileRenameOutlineRounded sx={{ fontSize: "15px" }} />
+                    Rename
+                  </MenuItem>,
+                  <Divider key="2" />,
+                  <MenuItem
+                    key="two"
+                    onClick={() => {
+                      dialogOpenDelete(item.resourceID, item.name);
+                    }}
+                    sx={{
+                      gap: "10px",
+                      color: "var(--delete-color)",
+                      padding: "5px 12px",
+                      fontSize: "13px",
+                    }}
+                    name={item.name}
+                    disableRipple
+                  >
+                    <Delete fontSize="small" sx={{ fontSize: "16px" }} /> Delete
+                  </MenuItem>,
+                ]}
+                cardWidth="350px"
+              />
+            ))
+          ) : (
+            [...Array(3)].map((_, index) => (
+              <SecondaryCardSkeleton key={index} />
+            ))
+          )
         ) : (
-          <NoDataFound info="No Resources are created yet" />
+          <NoDataFound />
         )}
+
         <DeleteDialogBox
           isOpen={isDialogDeleteOpen}
           onClose={dialogCloseDelete}

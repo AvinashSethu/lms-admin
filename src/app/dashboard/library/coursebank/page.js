@@ -2,6 +2,7 @@
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import Header from "@/src/components/Header/Header";
+import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
@@ -131,7 +132,7 @@ export default function Coursebank() {
         </DialogContent>
       </DialogBox>
       <Stack flexDirection="row" columnGap="40px" rowGap="15px" flexWrap="wrap">
-        {courseList.length > 0
+        {courseList ? (courseList.length > 0
           ? courseList.map((item, index) => (
               <SecondaryCard
                 key={index}
@@ -169,7 +170,7 @@ export default function Coursebank() {
             ))
           : [...Array(4)].map((_, index) => (
               <SecondaryCardSkeleton key={index} />
-            ))}
+            ))) : <NoDataFound info="No Bank Created yet" />}
       </Stack>
     </Stack>
   );
