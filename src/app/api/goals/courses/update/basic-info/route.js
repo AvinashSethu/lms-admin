@@ -2,7 +2,7 @@ import { updateBasicCourseInfo } from "@/src/util/courses/updateCourse";
 import checkUUID from "@/src/lib/checkUUID";
 
 export async function POST(request) {
-  const { courseID, goalID, title, description, thumbnail, language } =
+  const { courseID, goalID, title, description, thumbnail, language, duration } =
     await request.json();
 
   // Validate required fields.
