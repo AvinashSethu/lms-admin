@@ -324,7 +324,7 @@ export default function Syllabus({ goal, fetchGoal }) {
               <CourseCard
                 key={index}
                 title={course.title}
-                thumbnail={course.thumbnail.src || defaultThumbnail.src}
+                thumbnail={course.thumbnail || defaultThumbnail.src}
                 Language={course.language}
                 actionButton={
                   <Button

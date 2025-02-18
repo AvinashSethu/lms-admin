@@ -10,6 +10,9 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    domains: ["tma-dev-resource.s3.ap-south-1.amazonaws.com"],
+  },
 };
 
 export default nextConfig;
