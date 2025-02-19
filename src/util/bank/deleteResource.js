@@ -15,6 +15,10 @@ export async function deleteResource({ resourceID, bankID }) {
     if (!response.Item) {
       return { success: false, message: "Resource not found" };
     }
+
+    if (response.Item.linkedLessons.length > 0) {
+      return { success: false, message: "Resource is linked to lessons" };
+    }
     const { type } = response.Item;
     if (type === "FILE") {
       const fileParams = {
