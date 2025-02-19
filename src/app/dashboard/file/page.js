@@ -53,40 +53,52 @@ async function uploadToS3(file, setResponseMessage) {
 
     const { url } = await response.json();
 
-    const fileStream = file.stream();
-    const reader = fileStream.getReader();
-    let uploadedBytes = 0;
-
-    const uploadChunk = async (value) => {
-      const uploadResponse = await fetch(url, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: value,
-      });
-
-      if (uploadResponse.ok) {
-        uploadedBytes += value.length;
-        const percent = ((uploadedBytes / file.size) * 100).toFixed(2);
+    await axios.put(url, file, {
+      headers: { "Content-Type": file.type },
+      onUploadProgress: (progressEvent) => {
+        // Calculate the progress percentage.
+        const percent = ((progressEvent.loaded / progressEvent.total) * 100).toFixed(2);
         setResponseMessage(`Upload progress: ${percent}%`);
         console.log(`Upload progress: ${percent}%`);
-      } else {
-        setResponseMessage("Upload failed");
-        console.error("Upload failed");
-      }
-    };
+      },
+    });
 
-    const readChunks = async () => {
-      const { done, value } = await reader.read();
-      if (done) {
-        setResponseMessage("Upload completed");
-        console.log("Upload completed");
-        return;
-      }
-      await uploadChunk(value);
-      readChunks(); // Continue with the next chunk
-    };
+    setResponseMessage("Upload completed");
 
-    readChunks(); // Start reading and uploading
+    // const fileStream = file.stream();
+    // const reader = fileStream.getReader();
+    // let uploadedBytes = 0;
+
+    // const uploadChunk = async (value) => {
+    //   const uploadResponse = await fetch(url, {
+    //     method: "PUT",
+    //     headers: { "Content-Type": file.type },
+    //     body: value,
+    //   });
+
+    //   if (uploadResponse.ok) {
+    //     uploadedBytes += value.length;
+    //     const percent = ((uploadedBytes / file.size) * 100).toFixed(2);
+    //     setResponseMessage(`Upload progress: ${percent}%`);
+    //     console.log(`Upload progress: ${percent}%`);
+    //   } else {
+    //     setResponseMessage("Upload failed");
+    //     console.error("Upload failed");
+    //   }
+    // };
+
+    // const readChunks = async () => {
+    //   const { done, value } = await reader.read();
+    //   if (done) {
+    //     setResponseMessage("Upload completed");
+    //     console.log("Upload completed");
+    //     return;
+    //   }
+    //   await uploadChunk(value);
+    //   readChunks(); // Continue with the next chunk
+    // };
+
+    // readChunks(); // Start reading and uploading
   } catch (error) {
     setResponseMessage("Error during file upload");
     console.error("Error during file upload:", error);

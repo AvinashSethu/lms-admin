@@ -35,7 +35,6 @@ export async function POST(request) {
       goalID,
       title,
       description,
-      thumbnail,
       language,
       duration
     });
