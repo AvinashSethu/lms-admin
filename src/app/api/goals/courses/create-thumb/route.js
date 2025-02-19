@@ -1,4 +1,4 @@
-import createThumbnail from "@/src/util/courses/createThumbnail";
+import { createThumbnail } from "@/src/util/courses/courseThumbnail";
 
 export async function POST(request) {
   const { courseID, fileType, fileName, goalID } = await request.json();

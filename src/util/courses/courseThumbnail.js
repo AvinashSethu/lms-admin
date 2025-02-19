@@ -1,5 +1,5 @@
 import s3FileUpload from "@/src/lib/s3FileUpload";
-import { dynamoDB } from "@/src/util/awsAgent";
+import { dynamoDB, s3 } from "@/src/util/awsAgent";
 import { randomUUID } from "crypto";
 
 export default async function createThumbnail({
@@ -60,14 +60,82 @@ export default async function createThumbnail({
   }
 }
 
-async function updateGoalCourseListThumb({ courseID, goalID, thumbnail }) {
-  if (!courseID || !goalID || !thumbnail) {
-    throw new Error("courseID, goalID, and thumbnail are required");
+export async function deleteThumbnail({ courseID, goalID }) {
+  if (!courseID || !goalID) {
+    throw new Error("courseID and goalID are required");
   }
 
   const TABLE = `${process.env.AWS_DB_NAME}master`;
 
-  // 1. Retrieve the goal record.
+  // 1. Retrieve the course record.
+  const getParams = {
+    TableName: TABLE,
+    Key: {
+      pKey: `COURSE#${courseID}`,
+      sKey: `COURSES@${goalID}`,
+    },
+  };
+
+  try {
+    const result = await dynamoDB.get(getParams).promise();
+    if (!result.Item) {
+      throw new Error("Course not found");
+    }
+    const thumbnailURL = result.Item.thumbnail;
+    if (!thumbnailURL || thumbnailURL === "") {
+      return { success: true, message: "No thumbnail to delete" };
+    }
+    let s3Key = "";
+    if (thumbnailURL) {
+      // Assume URL format: https://{bucket}.s3.{region}.amazonaws.com/{s3Key}
+      // Extract the s3Key: take everything after the third '/'.
+      const parts = thumbnailURL.split("/");
+      s3Key = parts.slice(3).join("/");
+    }
+
+    // 2. Delete the thumbnail file from S3 if s3Key is available.
+    if (s3Key) {
+      const s3DeleteParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: s3Key,
+      };
+      await s3.deleteObject(s3DeleteParams).promise();
+    }
+
+    // 3. Update the course record in DynamoDB to remove the thumbnail.
+    // Use a combined UpdateExpression: SET updatedAt then REMOVE thumbnail.
+    const updateParams = {
+      TableName: TABLE,
+      Key: {
+        pKey: `COURSE#${courseID}`,
+        sKey: `COURSES@${goalID}`,
+      },
+      UpdateExpression: "SET updatedAt = :u REMOVE thumbnail",
+      ExpressionAttributeValues: {
+        ":u": Date.now(),
+      },
+    };
+
+    await dynamoDB.update(updateParams).promise();
+
+    // 4. Update the goal record's coursesList to clear the thumbnail.
+    await updateGoalCourseListThumb({ courseID, goalID, thumbnail: "" });
+
+    return { success: true, message: "Thumbnail deleted successfully" };
+  } catch (error) {
+    console.error("Error deleting thumbnail:", error);
+    throw new Error("Internal server error");
+  }
+}
+
+async function updateGoalCourseListThumb({ courseID, goalID, thumbnail }) {
+  if (!courseID || !goalID) {
+    throw new Error("courseID and goalID are required");
+  }
+
+  const TABLE = `${process.env.AWS_DB_NAME}master`;
+
+  // Retrieve the goal record.
   const getParams = {
     TableName: TABLE,
     Key: {
@@ -81,19 +149,14 @@ async function updateGoalCourseListThumb({ courseID, goalID, thumbnail }) {
     if (!result.Item) {
       throw new Error("Goal not found");
     }
-
-    // 2. Update the coursesList array.
     let coursesList = result.Item.coursesList || [];
     const index = coursesList.findIndex((course) => course.id === courseID);
-
     if (index === -1) {
       throw new Error("Course not found in goal courses list");
     }
+    // Update the thumbnail field; if thumbnail is falsy (e.g. null), set it to an empty string.
+    coursesList[index].thumbnail = thumbnail || "";
 
-    // Update only the thumbnail for the matching course.
-    coursesList[index].thumbnail = thumbnail;
-
-    // 3. Update the goal record with the modified coursesList.
     const updateParams = {
       TableName: TABLE,
       Key: {
@@ -108,8 +171,7 @@ async function updateGoalCourseListThumb({ courseID, goalID, thumbnail }) {
     };
 
     await dynamoDB.update(updateParams).promise();
-
-    return { success: true, message: "Thumbnail updated successfully" };
+    return { success: true, message: "Goal courses list updated successfully" };
   } catch (error) {
     console.error("Error updating goal courses list thumbnail:", error);
     throw new Error("Error updating goal courses list thumbnail");
