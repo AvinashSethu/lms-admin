@@ -28,7 +28,7 @@ export async function uploadThumbnailToS3({
 }) {
   setProgressVariant("determinate");
   console.log(fileData.data.url);
-  
+
   await axios.put(fileData.data.url, file, {
     headers: { "Content-Type": file.type },
     onUploadProgress: (progressEvent) => {
@@ -45,45 +45,4 @@ export async function uploadThumbnailToS3({
   setResponseMessage("Upload completed");
   setUploading(false);
   setCourse((prev) => ({ ...prev, thumbnail: fileData.data.url }));
-
-
-  // const data = fileData.data;
-  // const fileStream = file.stream();
-  // const reader = fileStream.getReader();
-  // let uploadedBytes = 0;
-
-  // const uploadChunk = async (chunk) => {
-  //   const response = await fetch(data.url, {
-  //     method: "PUT",
-  //     headers: { "Content-Type": file.type },
-  //     body: chunk,
-  //   });
-
-  //   if (!response.ok) throw new Error("Upload failed");
-
-  //   uploadedBytes += chunk.length;
-  //   const percent = Math.round((uploadedBytes / file.size) * 100);
-  //   setProgress(percent);
-  //   setResponseMessage(`Uploading ${percent}%`);
-  // };
-
-  // const readChunks = async () => {
-  //   try {
-  //     const { done, value } = await reader.read();
-  //     if (done) {
-  //       setResponseMessage("Upload completed");
-  //       setUploading(false);
-  //       setCourse((prev) => ({ ...prev, thumbnail: data.url }));
-  //       return;
-  //     }
-  //     await uploadChunk(value);
-  //     readChunks(); // Continue uploading next chunk
-  //   } catch (error) {
-  //     setResponseMessage("Error during upload");
-  //     console.error("Upload error:", error);
-  //     setUploading(false);
-  //   }
-  // };
-
-  // readChunks(); // Start uploading
 }

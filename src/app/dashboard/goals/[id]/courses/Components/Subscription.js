@@ -1,50 +1,17 @@
 "use client";
 import DialogBox from "@/src/components/DialogBox/DialogBox";
 import SecondaryCard from "@/src/components/SecondaryCard/SecondaryCard";
-import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
+import StyledSwitch from "@/src/components/StyledSwitch/StyledSwitch";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import { Add, Close, East, PlaylistAddCheck } from "@mui/icons-material";
 import {
   Button,
   DialogContent,
-  FormControl,
   IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-
-const SelectField = ({ label, name, value, onChange, options }) => {
-  return (
-    <FormControl sx={{ width: "100%" }} size="small">
-      <InputLabel>{label}</InputLabel>
-      <Select
-        name={name}
-        label={label}
-        size="small"
-        value={value}
-        onChange={onChange}
-        sx={{
-          "&:hover .MuiOutlinedInput-notchedOutline": {
-            borderColor: "var(--sec-color)",
-          },
-          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-            borderColor: "var(--sec-color)",
-          },
-        }}
-      >
-        {options.map((option, index) => (
-          <MenuItem key={index} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-};
 
 export default function Subscription() {
   const menuOptions = ["Remove"];
@@ -60,10 +27,9 @@ export default function Subscription() {
 
   const dialogOpen = () => setIsDialogOPen(true);
   const dialogClose = () => setIsDialogOPen(false);
-  
+
   const discountOpen = () => setIsDiscountOpen(true);
   const discountClose = () => setIsDiscountOpen(false);
-  
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -104,113 +70,29 @@ export default function Subscription() {
 
   return (
     <Stack marginTop="20px" gap="20px">
-      <Stack flexDirection="row" justifyContent="space-between">
+      <Typography
+        sx={{
+          fontFamily: "Lato",
+          fontSize: "18px",
+          fontWeight: "700",
+          color: "var(--text3)",
+        }}
+      >
+        Subscription
+      </Typography>
+
+      <Stack gap="5px">
         <Typography
           sx={{
             fontFamily: "Lato",
-            fontSize: "16px",
+            fontSize: "15px",
             fontWeight: "700",
             color: "var(--text3)",
           }}
         >
-          Subscription
+          Is free
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<Add />}
-          onClick={dialogOpen}
-          sx={{
-            backgroundColor: "var(--primary-color)",
-            textTransform: "none",
-          }}
-          disableElevation
-        >
-          Create
-        </Button>
-      </Stack>
-
-      <DialogBox
-        isOpen={isDialogOpen}
-        title="Create Subscription"
-        actionButton={
-          <Button
-            variant="text"
-            sx={{ textTransform: "none", color: "var(--primary-color)" }}
-            endIcon={<East />}
-          >
-            Create
-          </Button>
-        }
-        icon={
-          <IconButton
-            onClick={dialogClose}
-            sx={{ borderRadius: "5px", padding: "4px" }}
-          >
-            <Close />
-          </IconButton>
-        }
-      >
-        <DialogContent>
-          <Stack gap="20px">
-            <SelectField
-              label="Select type"
-              name="subscriptionType"
-              value={selectValues.subscriptionType}
-              onChange={handleChange}
-              options={subscriptionTypeOptions}
-            />
-            {/* <StyledSelect title="Select type"  /> */}
-            <SelectField
-              label="Select Duration"
-              name="subscriptionDuration"
-              value={selectValues.subscriptionDuration}
-              onChange={handleChange}
-              options={subscriptionDurationOptions}
-            />
-            <Stack
-              flexDirection="row"
-              justifyContent="space-between"
-              gap="10px"
-            >
-              <SelectField
-                label="No of type"
-                name="subscriptionCount"
-                value={selectValues.subscriptionCount}
-                onChange={handleChange}
-                options={subscriptionCountOptions}
-              />
-              <StyledTextField
-                placeholder="Enter Price"
-                sx={{ width: "260px" }}
-              />
-            </Stack>
-          </Stack>
-        </DialogContent>
-      </DialogBox>
-
-      <Stack flexDirection="row" flexWrap="wrap" rowGap="10px" columnGap="40px">
-        <SecondaryCard
-          icon={
-            <PlaylistAddCheck
-              sx={{ color: "var(--sec-color)", fontSize: "30px" }}
-            />
-          }
-          title="Monthly Subscription (1 month)"
-          options={menuOptions}
-          cardWidth="500px"
-          subTitle="₹299"
-        />
-        <SecondaryCard
-          icon={
-            <PlaylistAddCheck
-              sx={{ color: "var(--sec-color)", fontSize: "30px" }}
-            />
-          }
-          title="Free"
-          options={menuOptions}
-          cardWidth="500px"
-          subTitle="Pro users"
-        />
+        <StyledSwitch />
       </Stack>
 
       <Stack
@@ -226,7 +108,7 @@ export default function Subscription() {
             color: "var(--text3)",
           }}
         >
-          Discount
+          Plans
         </Typography>
         <Button
           variant="contained"
@@ -265,7 +147,7 @@ export default function Subscription() {
       >
         <DialogContent>
           <Stack gap="20px">
-            <SelectField
+            {/* <SelectField
               label="Select mode"
               name="discountMode"
               value={selectValues.discountMode}
@@ -279,7 +161,7 @@ export default function Subscription() {
               value={selectValues.discountValidity}
               onChange={handleChange}
               options={discountValidityOptions}
-            />
+            /> */}
           </Stack>
         </DialogContent>
       </DialogBox>

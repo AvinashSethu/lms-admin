@@ -4,7 +4,7 @@ import LectureCard from "@/src/components/LectureCard/LectureCard";
 import LessonCardSkeleton from "@/src/components/LessonCardSkeleton/LessonCardSkeleton";
 import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
 import { apiFetch } from "@/src/lib/apiFetch";
-import { Button, CircularProgress, Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -14,6 +14,7 @@ export default function Videos({ course, setCourse }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const dialogOpen = () => setIsDialogOpen(true);
   const dialogClose = () => setIsDialogOpen(false);
+  const [isLoading, setIsLoading] = useState(false);
   console.log(course.lessonIDs.length);
 
   const moveCard = (fromIndex, toIndex) => {
@@ -108,16 +109,10 @@ export default function Videos({ course, setCourse }) {
         ),
       }));
       showSnackbar(data.message, "success", "", "3000");
-      setIsDialogOpen(false);
-
-      if (params.resourceID) {
-        setIsDialogOpen(false);
-      }
     } else {
       showSnackbar(data.message, "error", "", "3000");
       console.log(data.message);
     }
-    setIsDialogOpen(false);
   };
 
   const handleUnlik = async (e, lessonID, courseID, resourceID) => {
@@ -156,6 +151,7 @@ export default function Videos({ course, setCourse }) {
   };
 
   const onAddLesson = async () => {
+    setIsLoading(true);
     await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/create`,
       {
@@ -174,9 +170,15 @@ export default function Videos({ course, setCourse }) {
         showSnackbar(data.message, "error", "", "3000");
       }
     });
+    setIsLoading(false);
   };
 
-  const deleteLesson = async ({ lessonID, goalID, setLoading }) => {
+  const deleteLesson = async ({
+    lessonID,
+    goalID,
+    setLoading,
+    deleteDialogClose,
+  }) => {
     setLoading(true);
     await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/delete`,
@@ -190,7 +192,7 @@ export default function Videos({ course, setCourse }) {
     ).then((data) => {
       if (data.success) {
         showSnackbar(data.message, "success", "", "3000");
-
+        deleteDialogClose();
         fetchLesson();
       } else {
         showSnackbar(data.message, "error", "", "3000");
@@ -209,7 +211,6 @@ export default function Videos({ course, setCourse }) {
         <Button
           variant="contained"
           onClick={() => {
-            <LessonCardSkeleton />;
             onAddLesson();
           }}
           sx={{
@@ -248,6 +249,7 @@ export default function Videos({ course, setCourse }) {
           ) : (
             <NoDataFound info="No lesson created" />
           )}
+          {isLoading && <LessonCardSkeleton />}
         </DndProvider>
       </Stack>
     </Stack>

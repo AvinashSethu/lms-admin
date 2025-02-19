@@ -51,6 +51,7 @@ export default function LectureCard({
   const [loading, setLoading] = useState(false);
   const [videoURL, setVideoURL] = useState(null);
   const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
+  const [initialTitle, setInitialTitle] = useState(lesson.title);
 
   const videoPlayerOpen = () => {
     setIsVideoPlayerOpen(true);
@@ -154,12 +155,17 @@ export default function LectureCard({
               <StyledTextField
                 placeholder="Enter Lesson Title"
                 value={lesson.title}
-                onFocus={(e) => e.target.select()}
+                onFocus={(e) => {
+                  setInitialTitle(e.target.value);
+                  e.target.select();
+                }}
                 onBlur={(e) => {
                   const newTitle = e.target.value;
-                  handleLessonUpdate(e, lesson.id, lesson.courseID, {
-                    title: newTitle,
-                  });
+                  if (newTitle !== initialTitle) {
+                    handleLessonUpdate(e, lesson.id, lesson.courseID, {
+                      title: newTitle,
+                    });
+                  }
                 }}
                 onChange={(e) => {
                   const newTitle = e.target.value;
@@ -286,8 +292,9 @@ export default function LectureCard({
                     lessonID: lesson.id,
                     goalID: course.goalID,
                     setLoading,
+                    deleteDialogClose
                   });
-                  deleteDialogClose();
+                  // deleteDialogClose();
                 }}
                 sx={{
                   textTransform: "none",

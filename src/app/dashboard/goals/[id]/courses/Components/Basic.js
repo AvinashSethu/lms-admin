@@ -1,3 +1,4 @@
+"use client";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import MarkdownEditor from "@/src/components/MarkdownEditor/MarkdownEditor";
 import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
@@ -10,13 +11,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 
 export default function Basic({ course, setCourse }) {
+  console.log(course);
+  
   const { showSnackbar } = useSnackbar();
+  const [initialBasic, setInitialBasic] = useState({});
+  const [isChanged, setIsChanged] = useState(false);
+
+  useEffect(() => {
+    setInitialBasic(course);
+  }, []);
+
+  useEffect(() => {
+    setIsChanged(JSON.stringify(course) !== JSON.stringify(initialBasic));
+  }, [course, initialBasic]);
 
   const handleSave = async () => {
     try {
-      const data = await apiFetch(
+      await apiFetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/update/basic-info`,
         {
           method: "POST",
@@ -32,14 +46,17 @@ export default function Basic({ course, setCourse }) {
             language: course.language,
           }),
         }
-      );
-      if (data) {
-        console.log(course);
-        setCourse(course);
-        showSnackbar(data.message, "success", "", "3000");
-      } else {
-        console.log(data.message);
-      }
+      ).then((data) => {
+        if (data) {
+          console.log(course);
+          setInitialBasic(course);
+          // setCourse(course);
+          showSnackbar(data.message, "success", "", "3000");
+          setIsChanged(false);
+        } else {
+          console.log(data.message);
+        }
+      });
     } catch (error) {
       console.error(data.message);
     }
@@ -91,7 +108,7 @@ export default function Basic({ course, setCourse }) {
 
               <ThumbnailUpload course={course} setCourse={setCourse} />
             </Stack>
-            <Stack gap="8px">
+            <Stack gap="12px">
               <Typography
                 sx={{ fontFamily: "Lato", fontSize: "14px", fontWeight: "700" }}
               >
@@ -106,10 +123,33 @@ export default function Basic({ course, setCourse }) {
                   <TextField
                     {...params}
                     label="Select the language of the video"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": {
+                          borderColor: "var(--sec-color)",
+                        },
+                        "&.Mui-focused fieldset, &.Mui-focusedWithPopper fieldset":
+                          {
+                            borderColor: "var(--sec-color) !important",
+                            borderWidth: "1px",
+                          },
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "gray",
+                      },
+                      "& .MuiInputLabel-root.Mui-focused": {
+                        color: "var(--sec-color)",
+                      },
+                    }}
                   />
                 )}
                 onChange={(_, newValue) => {
                   setCourse((prev) => ({ ...prev, language: newValue }));
+                }}
+                sx={{
+                  "& .MuiChip-root": {
+                    height: "26px",
+                  },
                 }}
               />
             </Stack>
@@ -138,6 +178,7 @@ export default function Basic({ course, setCourse }) {
           }}
           onClick={handleSave}
           disableElevation
+          disabled={!isChanged}
         >
           Save
         </Button>

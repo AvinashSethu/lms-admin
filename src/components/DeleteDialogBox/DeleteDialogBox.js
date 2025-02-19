@@ -11,7 +11,12 @@ import {
 
 export default function DeleteDialogBox({ isOpen, actionButton, name, title }) {
   return (
-    <Dialog open={isOpen} TransitionComponent={Slide} PaperProps={{sx:{borderRadius:"15px",padding:"10px"}}} disableScrollLock={true} >
+    <Dialog
+      open={isOpen}
+      TransitionComponent={Slide}
+      PaperProps={{ sx: { borderRadius: "15px", padding: "10px" } }}
+      disableScrollLock={true}
+    >
       <DialogTitle sx={{ width: "350px" }}>
         <Stack alignItems="center" gap="10px">
           <Stack
@@ -22,14 +27,20 @@ export default function DeleteDialogBox({ isOpen, actionButton, name, title }) {
               borderRadius: "50px",
             }}
           >
-            <RemoveCircleRoundedIcon/>
+            <RemoveCircleRoundedIcon />
           </Stack>
           <Typography sx={{ fontSize: "14px" }}>Delete {title}</Typography>
         </Stack>
       </DialogTitle>
       <DialogContent>
         <Typography
-          sx={{ textAlign: "center", fontFamily: "Lato", fontSize: "12px",fontWeight:"700" , color: "var(--text4)",}}
+          sx={{
+            textAlign: "center",
+            fontFamily: "Lato",
+            fontSize: "12px",
+            fontWeight: "700",
+            color: "var(--text4)",
+          }}
         >
           {name}
         </Typography>
@@ -45,9 +56,7 @@ export default function DeleteDialogBox({ isOpen, actionButton, name, title }) {
           This action cannot be undone
         </Typography>
       </DialogContent>
-      <DialogActions>{actionButton}
-      
-      </DialogActions>
+      <DialogActions>{actionButton}</DialogActions>
     </Dialog>
   );
 }

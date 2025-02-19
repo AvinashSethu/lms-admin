@@ -18,15 +18,13 @@ export default function CourseCard({
   hours,
   actionButton,
   progress,
-  course
+  course,
 }) {
-  console.log(lessons);
-  
   return (
     <Card
       sx={{
         width: "200px",
-        maxHeight: "250px",
+        minHeight: "250px",
         border: "1px solid",
         borderColor: "var(--border-color)",
         borderRadius: "10px",
@@ -34,7 +32,7 @@ export default function CourseCard({
       }}
       elevation={0}
     >
-      <Stack gap="8px">
+      <Stack gap="10px">
         <Box position="relative">
           <Image
             src={thumbnail}
@@ -85,9 +83,9 @@ export default function CourseCard({
         </Stack>
         <Stack flexDirection="row" alignItems="center" gap="10px">
           <Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
-          {lessons}
+            {`${0} Lessons`}
           </Typography>
-          
+
           <Circle sx={{ fontSize: "10px", color: "var(--border-color)" }} />
           <Typography sx={{ fontFamily: "Lato", fontSize: "12px" }}>
             {hours}

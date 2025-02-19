@@ -74,7 +74,7 @@ export default function LinkDialog({
   return (
     <LongDialogBox isOpen={isOpen} onClose={onClose} title="Link resources">
       <DialogContent>
-        <Stack flexDirection="row" gap="10px">
+        <Stack flexDirection="row" gap="10px" marginBottom="20px">
           <Stack width="30%">
             <StyledSelect
               title="Select Course"
@@ -116,7 +116,6 @@ export default function LinkDialog({
                           ),
                         }));
                       }}
-                      onClose={onClose}
                       sx={{
                         backgroundColor: "var(--sec-color-acc-1)",
                         color: "var(--sec-color)",

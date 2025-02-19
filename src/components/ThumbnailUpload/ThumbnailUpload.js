@@ -1,10 +1,12 @@
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import { Button, LinearProgress, Stack, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   createThumbnail,
   uploadThumbnailToS3,
 } from "@/src/lib/uploadThumbnail";
+import defaultThumbnail from "@/public/Images/defaultThumbnail.svg";
+import Image from "next/image";
 
 export default function ThumbnailUpload({ course, setCourse }) {
   const { showSnackbar } = useSnackbar();
@@ -13,9 +15,18 @@ export default function ThumbnailUpload({ course, setCourse }) {
   const [progress, setProgress] = useState(0);
   const [progressVariant, setProgressVariant] = useState("indeterminate");
   const [responseMessage, setResponseMessage] = useState("No file selected");
+  const [thumbnailPreview, setThumbnailPreview] = useState(
+    course.thumbnail || defaultThumbnail
+  );
   const thumbnailInputRef = useRef(null);
 
   const MAX_THUMBNAIL_SIZE_MB = 5 * 1024 * 1024;
+
+  useEffect(() => {
+    if (course.thumbnail) {
+      setThumbnailPreview(course.thumbnail || "");
+    }
+  }, [course.thumbnail]);
 
   const handleThumbnailChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -26,6 +37,7 @@ export default function ThumbnailUpload({ course, setCourse }) {
         return;
       }
       setThumbnail(selectedFile);
+      setThumbnailPreview(URL.createObjectURL(selectedFile));
       setResponseMessage("Thumbnail ready for upload.");
     }
   };
@@ -61,6 +73,7 @@ export default function ThumbnailUpload({ course, setCourse }) {
         setProgressVariant,
         setCourse,
       });
+      setThumbnailPreview(fileData.data.url);
     } catch (error) {
       setResponseMessage("Upload failed. Please try again.");
       setUploading(false);
@@ -81,6 +94,11 @@ export default function ThumbnailUpload({ course, setCourse }) {
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
+        sx={{
+          border: "1px solid var(--border-color)",
+          borderRadius: "6px",
+          padding: "3px 4px 3px 5px",
+        }}
       >
         {thumbnail ? (
           <Typography>{thumbnail.name}</Typography>
@@ -99,6 +117,16 @@ export default function ThumbnailUpload({ course, setCourse }) {
           Choose File
         </Button>
       </Stack>
+      {thumbnailPreview && (
+        <Stack>
+          <Image
+            src={thumbnailPreview}
+            alt="preview"
+            width={200}
+            height={100}
+          />
+        </Stack>
+      )}
 
       {!uploading && <Typography>{responseMessage}</Typography>}
 
@@ -108,15 +136,32 @@ export default function ThumbnailUpload({ course, setCourse }) {
           <Typography>{responseMessage}</Typography>
         </Stack>
       )}
-
-      <Button
-        variant="contained"
-        onClick={handleThumbnailUpload}
-        sx={{ backgroundColor: "var(--primary-color)", textTransform: "none" }}
-        disabled={!thumbnail || uploading}
-      >
-        Upload Thumbnail
-      </Button>
+      <Stack flexDirection="row">
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "var(--delete-color)",
+            textTransform: "none",
+            width: "120px",
+          }}
+          disabled={!thumbnailPreview}
+        >
+          Delete
+        </Button>
+        <Button
+          variant="contained"
+          onClick={handleThumbnailUpload}
+          sx={{
+            backgroundColor: "var(--primary-color)",
+            textTransform: "none",
+            width: "180px",
+            marginLeft: "auto",
+          }}
+          disabled={!thumbnail || uploading}
+        >
+          Upload Thumbnail
+        </Button>
+      </Stack>
     </Stack>
   );
 }

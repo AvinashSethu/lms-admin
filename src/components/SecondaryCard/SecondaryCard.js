@@ -113,8 +113,8 @@ export default function SecondaryCard({
                     style: {
                       border: "1px solid",
                       borderColor:"var(--border-color)",
-                      borderRadius:"8px",
-                      padding:"0px"
+                      borderRadius:"7px",
+                      padding:"0px",
                     },
                   },
                 }}

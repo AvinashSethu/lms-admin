@@ -4,7 +4,6 @@ import CourseCard from "@/src/components/CourseCard/CourseCard";
 import {
   Add,
   Close,
-  Delete,
   East,
   InsertDriveFile,
   RemoveCircle,
@@ -25,10 +24,10 @@ import StyledSelect from "@/src/components/StyledSelect/StyledSelect";
 import { apiFetch } from "@/src/lib/apiFetch";
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import SecondaryCardSkeleton from "@/src/components/SecondaryCardSkeleton/SecondaryCardSkeleton";
-import StyledTextField from "@/src/components/StyledTextField/StyledTextField";
 import CourseCardSkeleton from "@/src/components/CourseCardSkeleton/CourseCardSkeleton";
 import defaultThumbnail from "@/public/Images/defaultThumbnail.svg";
 import NoDataFound from "@/src/components/NoDataFound/NoDataFound";
+import VideoDialog from "./VideoDialog";
 
 export default function Syllabus({ goal, fetchGoal }) {
   const router = useRouter();
@@ -41,7 +40,6 @@ export default function Syllabus({ goal, fetchGoal }) {
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [title, setTitle] = useState("");
   console.log(goal.coursesList);
-  
 
   const fetchAllSubjects = () => {
     apiFetch(
@@ -82,7 +80,7 @@ export default function Syllabus({ goal, fetchGoal }) {
     }).then((json) => {
       if (json.success) {
         showSnackbar(json.message, "success", "", "3000");
-        fetchGoal()
+        fetchGoal();
         setIsDialogOPen(false);
         setSelectedSubject(null);
       } else {
@@ -99,15 +97,13 @@ export default function Syllabus({ goal, fetchGoal }) {
       },
       body: JSON.stringify({ goalID: goal.goalID, subjectID }),
     }).then((data) => {
-      if(data.success) {
-        showSnackbar(data.message,"success","","3000");
+      if (data.success) {
+        showSnackbar(data.message, "success", "", "3000");
         fetchGoal();
+      } else {
+        showSnackbar(data.message, "error", "", "3000");
       }
-      else{
-        showSnackbar(data.message,"error","","3000");
-        
-      }
-    })
+    });
   };
 
   const onCourseCreate = async () => {
@@ -283,41 +279,13 @@ export default function Syllabus({ goal, fetchGoal }) {
           Video courses
         </Button>
       </Stack>
-      <DialogBox
+      <VideoDialog
         isOpen={videoDialog}
-        title="Add Course"
-        actionText="Create"
-        icon={
-          <IconButton
-            sx={{ borderRadius: "10px", padding: "6px" }}
-            onClick={videoDialogClose}
-          >
-            <Close />
-          </IconButton>
-        }
-        actionButton={
-          <Button
-            variant="text"
-            endIcon={<East />}
-            sx={{ textTransform: "none", color: "var(--primary-color)" }}
-            onClick={() => {
-              onCourseCreate();
-            }}
-          >
-            Add Video
-          </Button>
-        }
-      >
-        <DialogContent>
-          <StyledTextField
-            placeholder="Enter video Title"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
-        </DialogContent>
-      </DialogBox>
+        title={title}
+        setTitle={setTitle}
+        onCourseCreate={onCourseCreate}
+        videoDialogClose={videoDialogClose}
+      />
       <Stack flexDirection="row" flexWrap="wrap" rowGap="20px" columnGap="30px">
         {goal.coursesList && goal.coursesList.length
           ? goal.coursesList.map((course, index) => (
@@ -336,6 +304,7 @@ export default function Syllabus({ goal, fetchGoal }) {
                       fontFamily: "Lato",
                       fontSize: "12px",
                       fontWeight: "400",
+                      marginTop: "auto",
                     }}
                     onClick={() => {
                       router.push(
