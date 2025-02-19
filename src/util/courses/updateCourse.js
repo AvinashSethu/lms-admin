@@ -27,9 +27,10 @@ export async function updateBasicCourseInfo({
       sKey: `COURSES@${goalID}`,
     },
     UpdateExpression:
-      "SET title = :t, titleLower = :tl, description = :d, #lang = :l, updatedAt = :u, duration = :dur",
+      "SET title = :t, titleLower = :tl, description = :d, #lang = :l, updatedAt = :u, #dur = :dur",
     ExpressionAttributeNames: {
       "#lang": "language",
+      "#dur": "duration",
     },
     ExpressionAttributeValues: {
       ":t": title,
