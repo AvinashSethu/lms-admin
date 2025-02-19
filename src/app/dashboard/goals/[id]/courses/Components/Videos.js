@@ -15,7 +15,6 @@ export default function Videos({ course, setCourse }) {
   const dialogOpen = () => setIsDialogOpen(true);
   const dialogClose = () => setIsDialogOpen(false);
   console.log(course.lessonIDs.length);
-  
 
   const moveCard = (fromIndex, toIndex) => {
     setCourse((prev) => {
@@ -85,17 +84,6 @@ export default function Videos({ course, setCourse }) {
   };
 
   const handleLessonUpdate = async (e, id, courseID, params = {}) => {
-    if (params.title) {
-      const existingLesson = course.lessonIDs.find((l) => l.id === id);
-      console.log(existingLesson.title);
-      console.log(old);
-
-      if (existingLesson.title === params.title) {
-        console.log("No changes detected for title");
-        return;
-      }
-    }
-
     const data = await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/goals/courses/lesson/update`,
       {

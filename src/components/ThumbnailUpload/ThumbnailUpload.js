@@ -1,7 +1,10 @@
 import { useSnackbar } from "@/src/app/context/SnackbarContext";
 import { Button, LinearProgress, Stack, Typography } from "@mui/material";
 import { useRef, useState } from "react";
-import { createThumbnail, uploadThumbnailToS3 } from "@/src/lib/uploadThumbnail";
+import {
+  createThumbnail,
+  uploadThumbnailToS3,
+} from "@/src/lib/uploadThumbnail";
 
 export default function ThumbnailUpload({ course, setCourse }) {
   const { showSnackbar } = useSnackbar();
@@ -12,7 +15,7 @@ export default function ThumbnailUpload({ course, setCourse }) {
   const [responseMessage, setResponseMessage] = useState("No file selected");
   const thumbnailInputRef = useRef(null);
 
-  const MAX_THUMBNAIL_SIZE_MB = 5 * 1024 * 1024; 
+  const MAX_THUMBNAIL_SIZE_MB = 5 * 1024 * 1024;
 
   const handleThumbnailChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -58,7 +61,6 @@ export default function ThumbnailUpload({ course, setCourse }) {
         setProgressVariant,
         setCourse,
       });
-
     } catch (error) {
       setResponseMessage("Upload failed. Please try again.");
       setUploading(false);
@@ -71,11 +73,15 @@ export default function ThumbnailUpload({ course, setCourse }) {
         type="file"
         accept="image/*"
         ref={thumbnailInputRef}
-        style={{ display: "none" }}
+        style={{ visibility: "hidden", position: "absolute" }}
         onChange={handleThumbnailChange}
       />
 
-      <Stack flexDirection="row" justifyContent="space-between" alignItems="center">
+      <Stack
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         {thumbnail ? (
           <Typography>{thumbnail.name}</Typography>
         ) : (
@@ -85,7 +91,10 @@ export default function ThumbnailUpload({ course, setCourse }) {
         <Button
           variant="contained"
           onClick={triggerFileInput}
-          sx={{ backgroundColor: "var(--primary-color)", textTransform: "none" }}
+          sx={{
+            backgroundColor: "var(--primary-color)",
+            textTransform: "none",
+          }}
         >
           Choose File
         </Button>

@@ -1,4 +1,5 @@
 import { apiFetch } from "./apiFetch";
+import axios from "axios";
 
 export async function createThumbnail({ file, courseID, goalID }) {
   return await apiFetch(
@@ -26,44 +27,63 @@ export async function uploadThumbnailToS3({
   setCourse,
 }) {
   setProgressVariant("determinate");
+  console.log(fileData.data.url);
+  
+  await axios.put(fileData.data.url, file, {
+    headers: { "Content-Type": file.type },
+    onUploadProgress: (progressEvent) => {
+      console.log("Uploading thumbnail...");
+      const percent = (
+        (progressEvent.loaded / progressEvent.total) *
+        100
+      ).toFixed(2);
+      setResponseMessage(`Uploading ${percent}%`);
+      setProgress(percent);
+    },
+  });
 
-  const data = fileData.data;
-  const fileStream = file.stream();
-  const reader = fileStream.getReader();
-  let uploadedBytes = 0;
+  setResponseMessage("Upload completed");
+  setUploading(false);
+  setCourse((prev) => ({ ...prev, thumbnail: fileData.data.url }));
 
-  const uploadChunk = async (chunk) => {
-    const response = await fetch(data.url, {
-      method: "PUT",
-      headers: { "Content-Type": file.type },
-      body: chunk,
-    });
 
-    if (!response.ok) throw new Error("Upload failed");
+  // const data = fileData.data;
+  // const fileStream = file.stream();
+  // const reader = fileStream.getReader();
+  // let uploadedBytes = 0;
 
-    uploadedBytes += chunk.length;
-    const percent = Math.round((uploadedBytes / file.size) * 100);
-    setProgress(percent);
-    setResponseMessage(`Uploading ${percent}%`);
-  };
+  // const uploadChunk = async (chunk) => {
+  //   const response = await fetch(data.url, {
+  //     method: "PUT",
+  //     headers: { "Content-Type": file.type },
+  //     body: chunk,
+  //   });
 
-  const readChunks = async () => {
-    try {
-      const { done, value } = await reader.read();
-      if (done) {
-        setResponseMessage("Upload completed");
-        setUploading(false);
-        setCourse((prev) => ({ ...prev, thumbnail: data.url }));
-        return;
-      }
-      await uploadChunk(value);
-      readChunks(); // Continue uploading next chunk
-    } catch (error) {
-      setResponseMessage("Error during upload");
-      console.error("Upload error:", error);
-      setUploading(false);
-    }
-  };
+  //   if (!response.ok) throw new Error("Upload failed");
 
-  readChunks(); // Start uploading
+  //   uploadedBytes += chunk.length;
+  //   const percent = Math.round((uploadedBytes / file.size) * 100);
+  //   setProgress(percent);
+  //   setResponseMessage(`Uploading ${percent}%`);
+  // };
+
+  // const readChunks = async () => {
+  //   try {
+  //     const { done, value } = await reader.read();
+  //     if (done) {
+  //       setResponseMessage("Upload completed");
+  //       setUploading(false);
+  //       setCourse((prev) => ({ ...prev, thumbnail: data.url }));
+  //       return;
+  //     }
+  //     await uploadChunk(value);
+  //     readChunks(); // Continue uploading next chunk
+  //   } catch (error) {
+  //     setResponseMessage("Error during upload");
+  //     console.error("Upload error:", error);
+  //     setUploading(false);
+  //   }
+  // };
+
+  // readChunks(); // Start uploading
 }

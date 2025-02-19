@@ -1,4 +1,5 @@
 import { apiFetch } from "./apiFetch";
+import axios from "axios";
 
 export async function createFile({ file, title, bankID }) {
   const json = await apiFetch(
@@ -17,8 +18,8 @@ export async function createFile({ file, title, bankID }) {
   return json;
 }
 
-export async function uploadToS3(
-  {file,
+export async function uploadToS3({
+  file,
   setProgress,
   setResponseMessage,
   fileData,
@@ -27,58 +28,35 @@ export async function uploadToS3(
   onClose,
   setTitle,
   setFile,
-  
-fetchCourse}
-) {
+  fetchCourse,
+}) {
   setProgressVariant("determinate");
-  const data = fileData.data;
-  const fileStream = file.stream();
-  const reader = fileStream.getReader();
-  let uploadedBytes = 0;
-
-  const uploadChunk = async (value) => {
-    const uploadResponse = await fetch(data.url, {
-      method: "PUT",
-      headers: { "Content-Type": file.type },
-      body: value,
-    });
-
-    if (!uploadResponse.ok) throw new Error("Upload failed");
-
-    uploadedBytes += value.length;
-    const percent = Math.round((uploadedBytes / file.size) * 100);
-    setProgress(percent);
-    setResponseMessage(`Uploading ${percent}%`);
-  };
-
-  const readChunks = async () => {
-    try {
-      const { done, value } = await reader.read();
-      if (done) {
-        setResponseMessage("Upload completed");
-        await verifyFile(
-          data.resourceID,
-          setResponseMessage,
-          setUploading,
-          setProgressVariant,
-          data.path
-        );
-        setFile(null);
-        setResponseMessage("No file selected");
-        onClose();
-        fetchCourse();
-        setTitle("");
-        return;
-      }
-      await uploadChunk(value);
-      readChunks(); // Continue with the next chunk
-    } catch (error) {
-      setResponseMessage("Error during file upload");
-      console.error("Error during file upload:", error);
-      throw error;
-    }
-  };
-  readChunks(); // Start reading and uploading
+  await axios.put(fileData.data.url, file, {
+    headers: { "Content-Type": file.type },
+    onUploadProgress: (progressEvent) => {
+      console.log("uploading...");
+      const percent = (
+        (progressEvent.loaded / progressEvent.total) *
+        100
+      ).toFixed(2);
+      setResponseMessage(`Uploading ${percent}%`);
+      setProgress(percent);
+    },
+  });
+  setResponseMessage("Upload completed");
+  await verifyFile(
+    fileData.data.resourceID,
+    setResponseMessage,
+    setUploading,
+    setProgressVariant,
+    fileData.data.path
+  );
+  setFile(null);
+  setResponseMessage("No file selected");
+  onClose();
+  fetchCourse();
+  setTitle("");
+  return;
 }
 
 async function verifyFile(
@@ -92,7 +70,7 @@ async function verifyFile(
   setResponseMessage("Verifying File...");
 
   try {
-    const data = await apiFetch(
+    await apiFetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/api/bank/resource/verify-file`,
       {
         method: "POST",
@@ -102,9 +80,12 @@ async function verifyFile(
           path,
         }),
       }
-    );
-    setResponseMessage("File verified");
-    setUploading(false);
+    ).then((data) => {
+      if (data.success) {
+        setResponseMessage("File verified");
+        setUploading(false);
+      }
+    });
   } catch (error) {
     setResponseMessage("Error verifying file.");
   }
